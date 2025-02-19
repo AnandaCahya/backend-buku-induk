@@ -8,25 +8,53 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet" />
+    <style>
+        *{
+            font-size: 12px;
+        }
+        .main table, .main td, .main tr, .main th{
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        .jenis-mapel{
+            text-align: start;
+        }
+        .nilai {
+            text-align: center;
+        }
+        .keterangan {
+            vertical-align: top;
+            text-align: justify;
+            padding: 2px;
+        }
+        .mata-pelajaran {
+            width: 200px; 
+            font-size: 15px;
+        }
+        .no {
+            width: 15px;
+            text-align: center;
+        }
+        @media print {
+            @page {
+                size: A3;
+                margin: 20mm;
+            }
+        }
+    </style>
 </head>
-<style>
-    .main table, .main td, .main tr, .main th{
-        border: 1px solid black;
-        border-collapse: collapse;
-    }
-</style>
 <body style="margin: 20px;">
     <div style="width: 100%; display: flex;">
         <table style="width: 50%;">
             <tr>
                 <td>Nama</td>
                 <td>:</td>
-                <td><b>Daris Nur Rahmat</b></td>
+                <td><b><%= element.data_diri.nama_lengkap %></b></td>
             </tr>
             <tr>
                 <td>Nomor Induk</td>
                 <td>:</td>
-                <td>5792/2137012</td>
+                <td><%= element.nisn %></td>
             </tr>
             <tr>
                 <td>Nama Sekolah</td>
@@ -38,29 +66,37 @@
             <tr>
                 <td>Bidang Keahlian</td>
                 <td>:</td>
-                <td>Teknologi Informasi</td>
+                <td><%= element.jurusan.nama %></td>
             </tr>
             <tr>
                 <td>Program Keahlian</td>
                 <td>:</td>
-                <td>Teknik Komputer dan Informatika</td>
+                <td><%= element.pendidikan.diterima_di_program_keahlian %></td>
             </tr>
             <tr>
                 <td>Kompetensi Keahlian</td>
                 <td>:</td>
-                <td>Rekayasa Perangkat Lunak</td>
+                <td><%= element.pendidikan.diterima_di_paket_keahlian %></td>
             </tr>
         </table>
     </div>
     <div class="main">
         <table style="border: 1px solid black; width: 100%;">
             <tr>
-                <th rowspan="4" colspan="2">Mata Pelajaran</th>
+                <th rowspan="4" colspan="2" class="mata-pelajaran">Mata Pelajaran</th>
             </tr>
             <tr>
-                <th colspan="4">Tahun Pelajaran 2020/2021</th>
-                <th colspan="4">Tahun Pelajaran 2021/2022</th>
-                <th colspan="4">Tahun Pelajaran 2022/2023</th>
+                <% 
+                    const tahunPelajaran = [];
+                    for (let i = 1; i <= 3; i++) {
+                        const startYear = parseInt(element.angkatan.tahun) + i - 1;
+                        const endYear = startYear + 1;
+                        tahunPelajaran.push(`${startYear}/${endYear}`);
+                    }
+                %>
+                <th colspan="4">Tahun Pelajaran <%= tahunPelajaran[0] %></th>
+                <th colspan="4">Tahun Pelajaran <%= tahunPelajaran[1] %></th>
+                <th colspan="4">Tahun Pelajaran <%= tahunPelajaran[2] %></th>
             </tr>
             <tr>
                 <th colspan="2">Semester 1</th>
@@ -85,15 +121,61 @@
                 <th>Keterangan</th>
             </tr>
 
+            <% 
+                const muatanNasional = ['pendidikan agama dan budi pekerti', 'pendidikan pancasila dan kewarganegaraan', 'bahasa indonesia', 'matematika', 'sejarah indonesia', 'bahasa inggris'];
+                const muatanKewilayahan = ['seni budaya', 'pendidikan jasmani, olahraga, dan kesehatan'];
+                const muatanLokal = ['bahasa jawa', 'bahasa jepang'];
+                const groupedByMapel = {
+                    'A. Muatan Nasional': [],
+                    'B. Muatan Kewilayahan': [],
+                    'Muatan Lokal': [],
+                    'C. Muatan Peminatan Kejuruan': []
+                };
 
-            <tr>
-                <td>1.</td>
-                <td>Matematika</td>
-                <% Array.from({ length : 6}).forEach(function(book) { %>
-                    <td>98</td>
-                    <td>Sangat Bagus</td>
+                Object.keys(nilaiPerSemester).forEach(function(semester) {
+                    nilaiPerSemester[semester].forEach(function(nilai) {
+                        const mapelNama = nilai.mapel ? nilai.mapel.nama.toLowerCase() : 'N/A';
+                        let category = 'C. Muatan Peminatan Kejuruan'; // Default category
+             
+                        if (muatanNasional.includes(mapelNama)) {
+                            category = 'A. Muatan Nasional';
+                        } else if (muatanKewilayahan.includes(mapelNama)) {
+                            category = 'B. Muatan Kewilayahan';
+                        } else if (muatanLokal.includes(mapelNama)) {
+                            category = 'Muatan Lokal';
+                        }
+             
+                        if (!groupedByMapel[category][mapelNama]) {
+                            groupedByMapel[category][mapelNama] = Array(6).fill({ nilai: '', keterangan: '' });
+                        }
+                        const semesterIndex = parseInt(semester.replace('Semester ', '')) - 1;
+                        groupedByMapel[category][mapelNama][semesterIndex] = {
+                            nilai: nilai.r,
+                            keterangan: nilai.keterangan
+                        };
+                    });
+                });
+            %>
+
+            <% Object.keys(groupedByMapel).forEach(function(category) { %>
+                <tr>
+                    <th colspan="14" class="jenis-mapel"><%= category %></th>
+                </tr>
+                <% let index = 1; %>
+                <% Object.keys(groupedByMapel[category]).forEach(function(mapel) { %>
+                    <tr>
+                        <td class="no"><%= index++ %>.</td>
+                        <td class="mata-pelajaran"><%= mapel %></td>
+                        <% 
+                            const entries = groupedByMapel[category][mapel];
+                            entries.forEach(function(entry) { 
+                        %>
+                            <td class="nilai"><%= entry.nilai %></td>
+                            <td class="keterangan"><%= entry.keterangan %></td>
+                        <% }); %>
+                    </tr>
                 <% }); %>
-            </tr>
+            <% }); %>
 
             <tr>
                 <th colspan="13" style="text-align: start;">Kehadiran</th>
@@ -121,7 +203,6 @@
                 <% }); %>
             </tr>
 
-            
             
         </table>
     </div>

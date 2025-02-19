@@ -215,9 +215,66 @@ app.get('/view-pdf', async (req, res) => {
   res.render('export-pdf-bulk', { elements: data })
 })
 
-app.get('/view-raport', async (req, res) => {
-  res.render('export-halaman-belakang')
-})
+app.get('/view-raport/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await Models.user.findOne({
+      where: { id: id },
+      include: [
+        {
+          model: Models.jurusan,
+          as: 'jurusan',
+          attributes: ['nama'],
+        },
+        {
+          model: Models.angkatan,
+          as: 'angkatan',
+          attributes: ['tahun'],
+        },
+        {
+          model: Models.data_diri,
+          as: 'data_diri',
+          attributes: ['nama_lengkap', 'nama_panggilan'],
+        },
+        {
+          model: Models.pendidikan,
+          as: 'pendidikan',
+          attributes: ['diterima_di_program_keahlian', 'diterima_di_paket_keahlian'],
+        },
+      ],
+    });
+
+    const nilai = await Models.nilai.findAll({
+      where: { user_id: id },
+      include: [
+        {
+          model: Models.mapel,
+          as: 'mapel',
+          attributes: ['nama'],
+        },
+        {
+          model: Models.sia,
+          as: 'SIA',
+          attributes: ['sakit', 'izin', 'alpha'],
+        },
+      ],
+    });
+
+    const nilaiPerSemester = nilai.reduce((acc, curr) => {
+      const semesterKey = `Semester ${curr.semester}`;
+      if (!acc[semesterKey]) {
+        acc[semesterKey] = [];
+      }
+      acc[semesterKey].push(curr);
+      return acc;
+    }, {});
+
+    res.render('export-halaman-belakang', { element: user, nilaiPerSemester });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 const XLSX = require('xlsx')
 const upload = require('./middleware/upload')
 
@@ -366,6 +423,15 @@ app.post('/import-excel', upload.single('file'), async (req, res) => {
         user_id: newUser.id,
         melanjutkan_ke: row['Melanjutkan Ke'],
       })
+
+      // Setelah menyimpan data siswa, simpan data ke model sia
+      await Models.sia.create({
+        user_id: newUser.id,
+        sakit: row['Sakit'] || 0, // Ambil data sakit dari Excel, default 0 jika tidak ada
+        izin: row['Izin'] || 0, // Ambil data izin dari Excel, default 0 jika tidak ada
+        alpha: row['Tanpa Keterangan'] || 0, // Ambil data alpha dari Excel, default 0 jika tidak ada
+        semester: row['Semester'] || 1, // Ambil semester dari Excel, default 1 jika tidak ada
+      });
     }
 
     res.status(201).json({ message: 'Excel data imported successfully' })
