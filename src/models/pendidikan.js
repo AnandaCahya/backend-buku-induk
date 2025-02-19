@@ -92,7 +92,8 @@ module.exports = function (sequelize, DataTypes) {
       },
       status_perubahan: {
         type: DataTypes.ENUM('pending', 'approved'),
-        allowNull: true
+        allowNull: false,
+        defaultValue: "approved"
       }
     },
     {

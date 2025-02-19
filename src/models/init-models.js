@@ -89,7 +89,6 @@ function initModels(sequelize) {
 
   user.hasMany(sia, { as: 'sia', foreignKey: 'user_id' })
   sia.belongsTo(user, { as: 'user', foreignKey: 'user_id' })
-
   return {
     admin,
     angkatan,

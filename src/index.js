@@ -23,6 +23,7 @@ const nilaiController = require('./routes/Admin/AdminNilaiSiswa')
 const mapelController = require('./routes/Admin/AdminMapel')
 
 //* Route siswa
+const daftarDataController = require('./routes/Siswa/SiswaDaftar')
 const ubahDataController = require('./routes/Siswa/SiswaDataDiri')
 
 //* DEV MODE
@@ -75,17 +76,18 @@ app.use('/auth', authControllers)
 app.use('/siswa', userControllers)
 
 // ----- Admin
-app.use('/admin', AuthMiddlewareAdmin, akunControllers)
-app.use('/admin', AuthMiddlewareAdmin, dataSiswaController)
-app.use('/admin', AuthMiddlewareAdmin, jurusanController)
-app.use('/admin', AuthMiddlewareAdmin, angkatanController)
+app.use('', AuthMiddlewareAdmin, akunControllers)
+app.use('', AuthMiddlewareAdmin, dataSiswaController)
+app.use('', AuthMiddlewareAdmin, jurusanController)
+app.use('/', AuthMiddlewareAdmin, angkatanController)
 app.use('/admin', AuthMiddlewareAdmin, getExport)
-app.use('/admin', AuthMiddlewareAdmin, tahunpelajaranController)
+app.use('', AuthMiddlewareAdmin, tahunpelajaranController)
 
 app.use('/admin', AuthMiddlewareAdmin, nilaiController)
-app.use('/admin', AuthMiddlewareAdmin, mapelController)
+app.use('/', AuthMiddlewareAdmin, mapelController)
 
 // ------ Siswa
+app.use('/siswa', daftarDataController)
 app.use('/siswa', AuthMiddlewareSiswa, ubahDataController)
 
 // app.use("/", )

@@ -9,111 +9,13 @@
 */
 
 const { Router } = require('express')
-const { Models } = require('../../models')
+const { Models } = require('../../models');
+const { Op } = require('sequelize');
 
 const router = Router()
 
 /**
- * POST /siswa/data-diri
- * @summary Menambahkan data diri siswa beserta informasi terkait lainnya
- * @tags siswa
- * @param {object} request.body.request.required - Data yang akan ditambahkan
- * @param {object} request.body.data_diri - Data diri siswa
- * @param {object} request.body.hobi - Data hobi siswa
- * @param {object} request.body.ayah_kandung - Data ayah kandung siswa
- * @param {object} request.body.ibu_kandung - Data ibu kandung siswa
- * @param {object} request.body.kesehatan - Data kesehatan siswa
- * @param {object} request.body.pendidikan - Data pendidikan siswa
- * @param {object} request.body.setelah_pendidikan - Data setelah pendidikan siswa
- * @param {object} request.body.tempat_tinggal - Data tempat tinggal siswa
- * @param {object} request.body.wali - Data wali siswa
- * @param {object} request.body.siswa - Data siswa (termasuk NISN dan informasi lainnya)
- * @return {object} 201 - Data berhasil dibuat - application/json
- * @return {object} 400 - NISN sudah terpakai - application/json
- * @return {object} 500 - Terjadi kesalahan pada server - application/json
- * @example response - 201 - Data berhasil dibuat
- * {
- *   "message": "Data successfully created",
- *   "data": {
- *     "data_diri": { ... },
- *     "hobi": { ... },
- *     "ayah_kandung": { ... },
- *     "ibu_kandung": { ... },
- *     "kesehatan": { ... },
- *     "pendidikan": { ... },
- *     "setelah_pendidikan": { ... },
- *     "tempat_tinggal": { ... },
- *     "wali": { ... },
- *     "siswa": { ... }
- *   }
- * }
- * @example response - 400 - NISN sudah terpakai
- * {
- *   "message": "NISN sudah terpakai"
- * }
- * @example response - 500 - Kesalahan pada server
- * {
- *   "message": "Internal server error"
- * }
- */
-router.post('/data-diri', async (req, res) => {
-  try {
-    const {
-      data_diri,
-      hobi,
-      ayah_kandung,
-      ibu_kandung,
-      kesehatan,
-      pendidikan,
-      setelah_pendidikan,
-      tempat_tinggal,
-      wali,
-      siswa,
-    } = req.body
-
-    
-    const user = await Models.user.create(siswa)
-
-    
-    await Models.data_diri.create({ ...data_diri, user_id: user.id })
-    await Models.hobi_siswa.create({ ...hobi, user_id: user.id })
-    await Models.ayah_kandung.create({ ...ayah_kandung, user_id: user.id })
-    await Models.ibu_kandung.create({ ...ibu_kandung, user_id: user.id })
-    await Models.kesehatan.create({ ...kesehatan, user_id: user.id })
-    await Models.pendidikan.create({ ...pendidikan, user_id: user.id })
-    await Models.setelah_pendidikan.create({
-      ...setelah_pendidikan,
-      user_id: user.id,
-    })
-    await Models.tempat_tinggal.create({
-      ...tempat_tinggal,
-      user_id: user.id,
-    })
-
-    await Models.wali.create({ ...wali, user_id: user.id })
-
-    res.status(201).json({
-      message: 'Data successfully created',
-      data: req.body,
-    })
-  } catch (error) {
-    if (error instanceof Sequelize.UniqueConstraintError) {
-      res.status(400).json({ message: 'NISN sudah terpakai' })
-    } else {
-      
-      console.log(error)
-      res.status(500).json({ message: 'Internal server error' })
-    }
-    await Models.user.destroy({
-      where: {
-        nisn: req.body.siswa.nisn,
-      },
-    })
-  }
-})
-
-/**
- * GET /siswa/data-diri
+ * GET data-diri
  * @summary Mengambil data diri siswa beserta informasi terkait lainnya dan status perubahan "pending" jika ada
  * @tags siswa
  * @param {string} user_id.query.required - ID pengguna yang data dirinya ingin diambil
@@ -168,7 +70,7 @@ router.post('/data-diri', async (req, res) => {
  *   "error": "Internal server error"
  * }
  */
-router.get('/siswa/data-diri', async (req, res) => {
+router.get('/data-diri', async (req, res) => {
   try {
     const user = await Models.user.findOne({
       include: [
@@ -186,8 +88,8 @@ router.get('/siswa/data-diri', async (req, res) => {
           model: Models.data_diri,
           as: 'data_diri',
           where: {
-            status_perubahan: {
-              [Op.not]: 'pending',  
+            [Op.not]: {
+              status_perubahan: 'pending',  
             },
           },
         },
@@ -195,8 +97,8 @@ router.get('/siswa/data-diri', async (req, res) => {
           model: Models.perkembangan,
           as: 'perkembangan',
           where: {
-            status_perubahan: {
-              [Op.not]: 'pending',
+            [Op.not]: {
+              status_perubahan: 'pending',  
             },
           },
         },
@@ -204,8 +106,8 @@ router.get('/siswa/data-diri', async (req, res) => {
           model: Models.ayah_kandung,
           as: 'ayah_kandung',
           where: {
-            status_perubahan: {
-              [Op.not]: 'pending',
+            [Op.not]: {
+              status_perubahan: 'pending',  
             },
           },
         },
@@ -213,8 +115,8 @@ router.get('/siswa/data-diri', async (req, res) => {
           model: Models.ibu_kandung,
           as: 'ibu_kandung',
           where: {
-            status_perubahan: {
-              [Op.not]: 'pending',
+            [Op.not]: {
+              status_perubahan: 'pending',  
             },
           },
         },
@@ -222,8 +124,8 @@ router.get('/siswa/data-diri', async (req, res) => {
           model: Models.kesehatan,
           as: 'kesehatan',
           where: {
-            status_perubahan: {
-              [Op.not]: 'pending',
+            [Op.not]: {
+              status_perubahan: 'pending',  
             },
           },
         },
@@ -231,8 +133,8 @@ router.get('/siswa/data-diri', async (req, res) => {
           model: Models.pendidikan,
           as: 'pendidikan',
           where: {
-            status_perubahan: {
-              [Op.not]: 'pending',
+            [Op.not]: {
+              status_perubahan: 'pending',  
             },
           },
         },
@@ -240,8 +142,8 @@ router.get('/siswa/data-diri', async (req, res) => {
           model: Models.setelah_pendidikan,
           as: 'setelah_pendidikan',
           where: {
-            status_perubahan: {
-              [Op.not]: 'pending',
+            [Op.not]: {
+              status_perubahan: 'pending',  
             },
           },
         },
@@ -249,8 +151,8 @@ router.get('/siswa/data-diri', async (req, res) => {
           model: Models.tempat_tinggal,
           as: 'tempat_tinggal',
           where: {
-            status_perubahan: {
-              [Op.not]: 'pending',
+            [Op.not]: {
+              status_perubahan: 'pending',  
             },
           },
         },
@@ -258,8 +160,8 @@ router.get('/siswa/data-diri', async (req, res) => {
           model: Models.wali,
           as: 'wali',
           where: {
-            status_perubahan: {
-              [Op.not]: 'pending',
+            [Op.not]: {
+              status_perubahan: 'pending',  
             },
           },
         },
@@ -267,8 +169,8 @@ router.get('/siswa/data-diri', async (req, res) => {
           model: Models.hobi_siswa,
           as: 'hobi_siswa',
           where: {
-            status_perubahan: {
-              [Op.not]: 'pending',
+            [Op.not]: {
+              status_perubahan: 'pending',  
             },
           },
         },
@@ -346,7 +248,7 @@ router.get('/siswa/data-diri', async (req, res) => {
 });
 
 /**
- * GET /siswa/data-diri/pending
+ * GET data-diri/pending
  * @summary Mengambil data siswa yang status perubahannya "pending"
  * @tags siswa
  * @param {string} user_id.query.required - ID pengguna yang data dirinya ingin diperiksa
@@ -378,10 +280,10 @@ router.get('/siswa/data-diri', async (req, res) => {
  *   "error": "Internal server error"
  * }
  */
-router.get('/siswa/data-diri/pending', async (req, res) => {
+router.get('/data-diri/pending', async (req, res) => {
   try {
     
-    const userId = req.query.user_id;
+    const userId = req.user_id;
 
     const pendingData = await Models.user.findOne({
       where: {
@@ -464,7 +366,7 @@ router.get('/siswa/data-diri/pending', async (req, res) => {
 });
 
 /**
- * PUT /siswa/data-diri
+ * PUT data-diri
  * @summary Memperbarui data diri siswa
  * @tags siswa
  * @param {object} request.body.request.required - Data yang akan diperbarui
