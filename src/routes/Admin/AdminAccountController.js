@@ -58,92 +58,92 @@ routes.get('/akun', async (req, res) => {
       {
         model: Models.data_diri,
         as: 'data_diri',
-        where: {
-          status_perubahan: {
-            [Op.not]: 'pending',  
-          },
-        },    
+        // where: {
+        //   status_perubahan: {
+        //     [Op.not]: 'pending',  
+        //   },
+        // },    
       },
       {
         model: Models.perkembangan,
         as: 'perkembangan',
-        where: {
-          status_perubahan: {
-            [Op.not]: 'pending',  
-          },
-        },    
+        // where: {
+        //   status_perubahan: {
+        //     [Op.not]: 'pending',  
+        //   },
+        // },    
       },
       {
         model: Models.ayah_kandung,
         as: 'ayah_kandung',
-        where: {
-          status_perubahan: {
-            [Op.not]: 'pending',  
-          },
-        },    
+        // where: {
+        //   status_perubahan: {
+        //     [Op.not]: 'pending',  
+        //   },
+        // },    
       },
       {
         model: Models.ibu_kandung,
         as: 'ibu_kandung',
-        where: {
-          status_perubahan: {
-            [Op.not]: 'pending',  
-          },
-        },    
+        // where: {
+        //   status_perubahan: {
+        //     [Op.not]: 'pending',  
+        //   },
+        // },    
       },
       {
         model: Models.kesehatan,
         as: 'kesehatan',
-        where: {
-          status_perubahan: {
-            [Op.not]: 'pending',  
-          },
-        },    
+        // where: {
+        //   status_perubahan: {
+        //     [Op.not]: 'pending',  
+        //   },
+        // },    
       },
       {
         model: Models.pendidikan,
         as: 'pendidikan',
-        where: {
-          status_perubahan: {
-            [Op.not]: 'pending',  
-          },
-        },    
+        // where: {
+        //   status_perubahan: {
+        //     [Op.not]: 'pending',  
+        //   },
+        // },    
       },
       {
         model: Models.setelah_pendidikan,
         as: 'setelah_pendidikan',
-        where: {
-          status_perubahan: {
-            [Op.not]: 'pending',  
-          },
-        },    
+        // where: {
+        //   status_perubahan: {
+        //     [Op.not]: 'pending',  
+        //   },
+        // },    
       },
       {
         model: Models.tempat_tinggal,
         as: 'tempat_tinggal',
-        where: {
-          status_perubahan: {
-            [Op.not]: 'pending',  
-          },
-        },    
+        // where: {
+        //   status_perubahan: {
+        //     [Op.not]: 'pending',  
+        //   },
+        // },    
       },
       {
         model: Models.wali,
         as: 'wali',
-        where: {
-          status_perubahan: {
-            [Op.not]: 'pending',  
-          },
-        },    
+        // where: {
+        //   status_perubahan: {
+        //     [Op.not]: 'pending',  
+        //   },
+        // },    
       },
       {
         model: Models.hobi_siswa,
         as: 'hobi_siswa',
-        where: {
-          status_perubahan: {
-            [Op.not]: 'pending',  
-          },
-        },    
+        // where: {
+        //   status_perubahan: {
+        //     [Op.not]: 'pending',  
+        //   },
+        // },    
       },
     ],
   })
@@ -177,7 +177,7 @@ routes.get('/akun', async (req, res) => {
  * @return {object} 400 - Gagal membuat akun siswa, NISN sudah digunakan - application/json
  * @example response - 201 - Akun siswa berhasil dibuat
  * {
- *   "id": 1,
+ *   "id": 1, 
  *   "nisn": "1234567890",
  *   "username": "johndoe",
  *   "email": "johndoe@example.com",
@@ -279,92 +279,92 @@ routes.get('/akun/:id', async (req, res) => {
         {
           model: Models.data_diri,
           as: 'data_diri',
-          where: {
-            status_perubahan: {
-              [Op.not]: 'pending',  
-            },
-          },    
+          // where: {
+          //   status_perubahan: {
+          //     [Op.not]: 'pending',  
+          //   },
+          // },    
         },
         {
           model: Models.perkembangan,
           as: 'perkembangan',
-          where: {
-            status_perubahan: {
-              [Op.not]: 'pending',  
-            },
-          },    
+          // where: {
+          //   status_perubahan: {
+          //     [Op.not]: 'pending',  
+          //   },
+          // },    
         },
         {
           model: Models.ayah_kandung,
           as: 'ayah_kandung',
-          where: {
-            status_perubahan: {
-              [Op.not]: 'pending',  
-            },
-          },    
+          // where: {
+          //   status_perubahan: {
+          //     [Op.not]: 'pending',  
+          //   },
+          // },    
         },
         {
           model: Models.ibu_kandung,
           as: 'ibu_kandung',
-          where: {
-            status_perubahan: {
-              [Op.not]: 'pending',  
-            },
-          },    
+          // where: {
+          //   status_perubahan: {
+          //     [Op.not]: 'pending',  
+          //   },
+          // },    
         },
         {
           model: Models.kesehatan,
           as: 'kesehatan',
-          where: {
-            status_perubahan: {
-              [Op.not]: 'pending',  
-            },
-          },    
+          // where: {
+          //   status_perubahan: {
+          //     [Op.not]: 'pending',  
+          //   },
+          // },    
         },
         {
           model: Models.pendidikan,
           as: 'pendidikan',
-          where: {
-            status_perubahan: {
-              [Op.not]: 'pending',  
-            },
-          },    
+          // where: {
+          //   status_perubahan: {
+          //     [Op.not]: 'pending',  
+          //   },
+          // },    
         },
         {
           model: Models.setelah_pendidikan,
           as: 'setelah_pendidikan',
-          where: {
-            status_perubahan: {
-              [Op.not]: 'pending',  
-            },
-          },    
+          // where: {
+          //   status_perubahan: {
+          //     [Op.not]: 'pending',  
+          //   },
+          // },    
         },
         {
           model: Models.tempat_tinggal,
           as: 'tempat_tinggal',
-          where: {
-            status_perubahan: {
-              [Op.not]: 'pending',  
-            },
-          },    
+          // where: {
+          //   status_perubahan: {
+          //     [Op.not]: 'pending',  
+          //   },
+          // },    
         },
         {
           model: Models.wali,
           as: 'wali',
-          where: {
-            status_perubahan: {
-              [Op.not]: 'pending',  
-            },
-          },    
+          // where: {
+          //   status_perubahan: {
+          //     [Op.not]: 'pending',  
+          //   },
+          // },    
         },
         {
           model: Models.hobi_siswa,
           as: 'hobi_siswa',
-          where: {
-            status_perubahan: {
-              [Op.not]: 'pending',  
-            },
-          },    
+          // where: {
+          //   status_perubahan: {
+          //     [Op.not]: 'pending',  
+          //   },
+          // },    
         },
       ],
       where: {
