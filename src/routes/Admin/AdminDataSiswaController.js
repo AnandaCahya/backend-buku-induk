@@ -10,6 +10,7 @@
 
 const { Router } = require('express')
 const { Models } = require('../../models')
+const { Op } = require('sequelize')
 
 const router = Router()
 
@@ -269,8 +270,8 @@ router.post('/data-diri/pending/:id', async (req, res) => {
     await Models.data_diri.destroy({
       where: {
         user_id,
-        status_perubahan: {
-          [Op.not]: 'pending' 
+        [Op.not]: {
+          status_perubahan: 'pending' 
         }
       }
     });
@@ -278,8 +279,8 @@ router.post('/data-diri/pending/:id', async (req, res) => {
     await Models.ayah_kandung.destroy({
       where: {
         user_id,
-        status_perubahan: {
-          [Op.not]: 'pending' 
+        [Op.not]: {
+          status_perubahan: 'pending' 
         }
       }
     });
@@ -287,8 +288,8 @@ router.post('/data-diri/pending/:id', async (req, res) => {
     await Models.ibu_kandung.destroy({
       where: {
         user_id,
-        status_perubahan: {
-          [Op.not]: 'pending' 
+        [Op.not]: {
+          status_perubahan: 'pending' 
         }
       }
     });
@@ -296,8 +297,8 @@ router.post('/data-diri/pending/:id', async (req, res) => {
     await Models.hobi_siswa.destroy({
       where: {
         user_id,
-        status_perubahan: {
-          [Op.not]: 'pending' 
+        [Op.not]: {
+          status_perubahan: 'pending' 
         }
       }
     });
@@ -305,8 +306,8 @@ router.post('/data-diri/pending/:id', async (req, res) => {
     await Models.kesehatan.destroy({
       where: {
         user_id,
-        status_perubahan: {
-          [Op.not]: 'pending' 
+        [Op.not]: {
+          status_perubahan: 'pending' 
         }
       }
     });
@@ -314,8 +315,8 @@ router.post('/data-diri/pending/:id', async (req, res) => {
     await Models.pendidikan.destroy({
       where: {
         user_id,
-        status_perubahan: {
-          [Op.not]: 'pending' 
+        [Op.not]: {
+          status_perubahan: 'pending' 
         }
       }
     });
@@ -323,8 +324,8 @@ router.post('/data-diri/pending/:id', async (req, res) => {
     await Models.perkembangan.destroy({
       where: {
         user_id,
-        status_perubahan: {
-          [Op.not]: 'pending' 
+        [Op.not]: {
+          status_perubahan: 'pending' 
         }
       }
     });
@@ -332,8 +333,8 @@ router.post('/data-diri/pending/:id', async (req, res) => {
     await Models.setelah_pendidikan.destroy({
       where: {
         user_id,
-        status_perubahan: {
-          [Op.not]: 'pending' 
+        [Op.not]: {
+          status_perubahan: 'pending' 
         }
       }
     });
@@ -341,8 +342,8 @@ router.post('/data-diri/pending/:id', async (req, res) => {
     await Models.tempat_tinggal.destroy({
       where: {
         user_id,
-        status_perubahan: {
-          [Op.not]: 'pending' 
+        [Op.not]: {
+          status_perubahan: 'pending' 
         }
       }
     });
@@ -350,8 +351,8 @@ router.post('/data-diri/pending/:id', async (req, res) => {
     await Models.wali.destroy({
       where: {
         user_id,
-        status_perubahan: {
-          [Op.not]: 'pending' 
+        [Op.not]: {
+          status_perubahan: 'pending' 
         }
       }
     });

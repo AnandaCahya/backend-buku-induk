@@ -68,6 +68,7 @@ router.post('/data-diri', async (req, res) => {
         setelah_pendidikan,
         tempat_tinggal,
         wali,
+        perkembangan,
         siswa,
       } = req.body
   
@@ -88,6 +89,10 @@ router.post('/data-diri', async (req, res) => {
       await Models.tempat_tinggal.create({
         ...tempat_tinggal,
         user_id: user.id,
+      })
+      await Models.perkembangan.create({
+        ...perkembangan,
+        user_id: user.id
       })
   
       await Models.wali.create({ ...wali, user_id: user.id })

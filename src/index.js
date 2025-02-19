@@ -23,7 +23,7 @@ const nilaiController = require('./routes/Admin/AdminNilaiSiswa')
 const mapelController = require('./routes/Admin/AdminMapel')
 
 //* Route siswa
-const daftarDataController = require("./routes/Siswa/SiswaDaftar")
+const daftarDataController = require('./routes/Siswa/SiswaDaftar')
 const ubahDataController = require('./routes/Siswa/SiswaDataDiri')
 
 //* DEV MODE

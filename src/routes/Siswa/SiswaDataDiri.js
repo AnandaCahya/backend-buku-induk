@@ -9,7 +9,8 @@
 */
 
 const { Router } = require('express')
-const { Models } = require('../../models')
+const { Models } = require('../../models');
+const { Op } = require('sequelize');
 
 const router = Router()
 
@@ -87,8 +88,8 @@ router.get('/data-diri', async (req, res) => {
           model: Models.data_diri,
           as: 'data_diri',
           where: {
-            status_perubahan: {
-              [Op.not]: 'pending',  
+            [Op.not]: {
+              status_perubahan: 'pending',  
             },
           },
         },
@@ -96,82 +97,42 @@ router.get('/data-diri', async (req, res) => {
           model: Models.perkembangan,
           as: 'perkembangan',
           where: {
-            status_perubahan: {
-              [Op.not]: 'pending',
+            [Op.not]: {
+              status_perubahan: 'pending',  
             },
           },
         },
         {
           model: Models.ayah_kandung,
           as: 'ayah_kandung',
-          where: {
-            status_perubahan: {
-              [Op.not]: 'pending',
-            },
-          },
         },
         {
           model: Models.ibu_kandung,
           as: 'ibu_kandung',
-          where: {
-            status_perubahan: {
-              [Op.not]: 'pending',
-            },
-          },
         },
         {
           model: Models.kesehatan,
           as: 'kesehatan',
-          where: {
-            status_perubahan: {
-              [Op.not]: 'pending',
-            },
-          },
         },
         {
           model: Models.pendidikan,
           as: 'pendidikan',
-          where: {
-            status_perubahan: {
-              [Op.not]: 'pending',
-            },
-          },
         },
         {
           model: Models.setelah_pendidikan,
           as: 'setelah_pendidikan',
-          where: {
-            status_perubahan: {
-              [Op.not]: 'pending',
-            },
-          },
         },
         {
           model: Models.tempat_tinggal,
           as: 'tempat_tinggal',
-          where: {
-            status_perubahan: {
-              [Op.not]: 'pending',
-            },
-          },
         },
         {
           model: Models.wali,
           as: 'wali',
-          where: {
-            status_perubahan: {
-              [Op.not]: 'pending',
-            },
-          },
         },
         {
           model: Models.hobi_siswa,
           as: 'hobi_siswa',
-          where: {
-            status_perubahan: {
-              [Op.not]: 'pending',
-            },
-          },
         },
       ],
       where: {
