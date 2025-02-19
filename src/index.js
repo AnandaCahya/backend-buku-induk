@@ -214,8 +214,65 @@ app.get('/view-pdf', async (req, res) => {
 })
 
 app.get('/view-raport', async (req, res) => {
-  res.render('export-halaman-belakang')
-})
+  try {
+    const { id } = req.query;
+    const user = await Models.user.findOne({
+      where: { id: id },
+      include: [
+        {
+          model: Models.jurusan,
+          as: 'jurusan',
+          attributes: ['nama'],
+        },
+        {
+          model: Models.angkatan,
+          as: 'angkatan',
+          attributes: ['tahun'],
+        },
+        {
+          model: Models.data_diri,
+          as: 'data_diri',
+          attributes: ['nama_lengkap', 'nama_panggilan', 'jenis_kelamin', 'tempat_lahir', 'agama', 'kewarganegaraan', 'anak_ke', 'jml_saudara_kandung', 'jml_saudara_tiri', 'jml_saudara_angkat', 'kelengkapan_ortu', 'bahasa_sehari_hari', 'tanggal_lahir'],
+        },
+        {
+          model: Models.pendidikan,
+          as: 'pendidikan',
+          attributes: ['diterima_di_program_keahlian', 'diterima_di_paket_keahlian'],
+        },
+      ],
+    });
+
+    const nilai = await Models.nilai.findAll({
+      where: { user_id: id },
+      include: [
+        {
+          model: Models.mapel,
+          as: 'mapel',
+          attributes: ['nama'],
+        },
+        {
+          model: Models.sia,
+          as: 'SIA',
+          attributes: ['sakit', 'izin', 'alpha'],
+        },
+      ],
+    });
+
+    const nilaiPerSemester = nilai.reduce((acc, curr) => {
+      const semesterKey = `Semester ${curr.semester}`;
+      if (!acc[semesterKey]) {
+        acc[semesterKey] = [];
+      }
+      acc[semesterKey].push(curr);
+      return acc;
+    }, {});
+
+    res.render('export-halaman-belakang', { element: user, nilaiPerSemester });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 const XLSX = require('xlsx')
 const upload = require('./middleware/upload')
 
