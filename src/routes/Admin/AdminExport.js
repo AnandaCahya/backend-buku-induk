@@ -374,4 +374,44 @@ router.get('/export-pdf', async (req, res) => {
   }
 })
 
+/**
+ * GET /admin/export-raport-pdf
+ * @summary Mengekspor halaman view-raport menjadi file PDF
+ * @tags admin
+ * @return {file} 200 - Berhasil mengekspor halaman web ke file PDF - application/pdf
+ * @return {object} 500 - Terjadi kesalahan saat ekspor PDF - application/json
+ * @example response - 500 - Terjadi kesalahan saat ekspor PDF
+ * {
+ *   "error": "Terjadi kesalahan saat ekspor PDF"
+ * }
+ */
+router.get('/export-raport-pdf', async (req, res) => {
+  try {
+    const url = 'http://localhost:8080/view-raport'
+    const browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+    const page = await browser.newPage();
+
+    await page.goto(url, {
+      waitUntil: 'networkidle0',
+      timeout: 30000,
+    });
+
+    const pdf = await page.pdf({
+      format: 'A3',
+      landscape: true,
+    });
+
+    await browser.close();
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=raport.pdf');
+
+    res.send(pdf);
+  } catch (err) {
+    console.error('Terjadi kesalahan:', err);
+    res.status(500).send('Terjadi kesalahan saat ekspor PDF');
+  }
+});
+
 module.exports = router

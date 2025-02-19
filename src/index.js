@@ -232,7 +232,7 @@ app.get('/view-raport', async (req, res) => {
         {
           model: Models.data_diri,
           as: 'data_diri',
-          attributes: ['nama_lengkap', 'nama_panggilan', 'jenis_kelamin', 'tempat_lahir', 'agama', 'kewarganegaraan', 'anak_ke', 'jml_saudara_kandung', 'jml_saudara_tiri', 'jml_saudara_angkat', 'kelengkapan_ortu', 'bahasa_sehari_hari', 'tanggal_lahir'],
+          attributes: ['nama_lengkap', 'nama_panggilan'],
         },
         {
           model: Models.pendidikan,
