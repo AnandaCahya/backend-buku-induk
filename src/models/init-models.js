@@ -83,11 +83,8 @@ function initModels(sequelize) {
     foreignKey: 'tahun_pelajaran_id',
   })
 
-  nilai.hasOne(mapel, {
-    as: 'mapel',
-    foreignKey: 'id',
-  })
-
+  nilai.belongsTo(mapel, { as: 'mapel', foreignKey: 'mapel_id' })
+  mapel.hasMany(nilai, { as: 'nilai_merdeka', foreignKey: 'mapel_id' })
   return {
     admin,
     angkatan,
