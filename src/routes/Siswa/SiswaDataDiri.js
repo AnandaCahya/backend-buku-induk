@@ -280,10 +280,10 @@ router.get('/data-diri', async (req, res) => {
  *   "error": "Internal server error"
  * }
  */
-router.get('data-diri/pending', async (req, res) => {
+router.get('/data-diri/pending', async (req, res) => {
   try {
     
-    const userId = req.query.user_id;
+    const userId = req.user_id;
 
     const pendingData = await Models.user.findOne({
       where: {
