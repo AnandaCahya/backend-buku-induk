@@ -421,6 +421,15 @@ app.post('/import-excel', upload.single('file'), async (req, res) => {
         user_id: newUser.id,
         melanjutkan_ke: row['Melanjutkan Ke'],
       })
+
+      // Setelah menyimpan data siswa, simpan data ke model sia
+      await Models.sia.create({
+        user_id: newUser.id,
+        sakit: row['Sakit'] || 0, // Ambil data sakit dari Excel, default 0 jika tidak ada
+        izin: row['Izin'] || 0, // Ambil data izin dari Excel, default 0 jika tidak ada
+        alpha: row['Tanpa Keterangan'] || 0, // Ambil data alpha dari Excel, default 0 jika tidak ada
+        semester: row['Semester'] || 1, // Ambil semester dari Excel, default 1 jika tidak ada
+      });
     }
 
     res.status(201).json({ message: 'Excel data imported successfully' })

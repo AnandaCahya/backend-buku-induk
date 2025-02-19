@@ -473,6 +473,13 @@ router.get('/export-raport-excel', async (req, res) => {
       ],
     });
 
+    const siaData = await Models.sia.findAll({
+      where: {
+        user_id: users.map(user => user.id),
+        semester: semester,
+      },
+    });
+
     const allMapel = [...new Set(nilaiData.map(n => n.mapel.nama))];
 
     const workbook = new ExcelJS.Workbook();
@@ -482,15 +489,17 @@ router.get('/export-raport-excel', async (req, res) => {
     allMapel.forEach(mapel => {
       headerRow1.push(mapel, ''); 
     });
+    headerRow1.push('Ketidakhadiran', '', ''); 
     worksheet.addRow(headerRow1);
 
     let headerRow2 = ['', '', ''];
     allMapel.forEach(() => {
       headerRow2.push('Nilai R', 'Keterangan');
     });
+    headerRow2.push('Sakit', 'Izin', 'Tanpa Keterangan'); 
     worksheet.addRow(headerRow2);
 
-    worksheet.mergeCells('A1:A2');
+    worksheet.mergeCells('A1:A2'); 
     worksheet.mergeCells('B1:B2'); 
     worksheet.mergeCells('C1:C2'); 
 
@@ -499,6 +508,8 @@ router.get('/export-raport-excel', async (req, res) => {
       worksheet.mergeCells(1, colIndex, 1, colIndex + 1);
       colIndex += 2;
     });
+
+    worksheet.mergeCells(1, colIndex, 1, colIndex + 2);
 
     let index = 1;
     users.forEach(user => {
@@ -512,6 +523,9 @@ router.get('/export-raport-excel', async (req, res) => {
         const nilai = nilaiData.find(n => n.user_id === user.id && n.mapel.nama === mapel);
         row.push(nilai ? nilai.r : '-', nilai ? nilai.keterangan : '-');
       });
+
+      const sia = siaData.find(s => s.user_id === user.id);
+      row.push(sia ? sia.sakit : '-', sia ? sia.izin : '-', sia ? sia.alpha : '-'); 
 
       worksheet.addRow(row);
     });
