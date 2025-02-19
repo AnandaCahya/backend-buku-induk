@@ -136,7 +136,7 @@
                     nilaiPerSemester[semester].forEach(function(nilai) {
                         const mapelNama = nilai.mapel ? nilai.mapel.nama.toLowerCase() : 'N/A';
                         let category = 'C. Muatan Peminatan Kejuruan'; // Default category
-
+             
                         if (muatanNasional.includes(mapelNama)) {
                             category = 'A. Muatan Nasional';
                         } else if (muatanKewilayahan.includes(mapelNama)) {
@@ -144,15 +144,15 @@
                         } else if (muatanLokal.includes(mapelNama)) {
                             category = 'Muatan Lokal';
                         }
-
+             
                         if (!groupedByMapel[category][mapelNama]) {
-                            groupedByMapel[category][mapelNama] = [];
+                            groupedByMapel[category][mapelNama] = Array(6).fill({ nilai: '', keterangan: '' });
                         }
-                        groupedByMapel[category][mapelNama].push({
-                            semester: semester,
+                        const semesterIndex = parseInt(semester.replace('Semester ', '')) - 1;
+                        groupedByMapel[category][mapelNama][semesterIndex] = {
                             nilai: nilai.r,
                             keterangan: nilai.keterangan
-                        });
+                        };
                     });
                 });
             %>
@@ -168,8 +168,7 @@
                         <td class="mata-pelajaran"><%= mapel %></td>
                         <% 
                             const entries = groupedByMapel[category][mapel];
-                            const filledEntries = Array.from({ length: 6 }, (_, i) => entries[i] || { nilai: '', keterangan: '' });
-                            filledEntries.forEach(function(entry) { 
+                            entries.forEach(function(entry) { 
                         %>
                             <td class="nilai"><%= entry.nilai %></td>
                             <td class="keterangan"><%= entry.keterangan %></td>
