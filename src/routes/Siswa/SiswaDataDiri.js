@@ -105,34 +105,74 @@ router.get('/data-diri', async (req, res) => {
         {
           model: Models.ayah_kandung,
           as: 'ayah_kandung',
+          where: {
+            [Op.not]: {
+              status_perubahan: 'pending',  
+            },
+          },
         },
         {
           model: Models.ibu_kandung,
           as: 'ibu_kandung',
+          where: {
+            [Op.not]: {
+              status_perubahan: 'pending',  
+            },
+          },
         },
         {
           model: Models.kesehatan,
           as: 'kesehatan',
+          where: {
+            [Op.not]: {
+              status_perubahan: 'pending',  
+            },
+          },
         },
         {
           model: Models.pendidikan,
           as: 'pendidikan',
+          where: {
+            [Op.not]: {
+              status_perubahan: 'pending',  
+            },
+          },
         },
         {
           model: Models.setelah_pendidikan,
           as: 'setelah_pendidikan',
+          where: {
+            [Op.not]: {
+              status_perubahan: 'pending',  
+            },
+          },
         },
         {
           model: Models.tempat_tinggal,
           as: 'tempat_tinggal',
+          where: {
+            [Op.not]: {
+              status_perubahan: 'pending',  
+            },
+          },
         },
         {
           model: Models.wali,
           as: 'wali',
+          where: {
+            [Op.not]: {
+              status_perubahan: 'pending',  
+            },
+          },
         },
         {
           model: Models.hobi_siswa,
           as: 'hobi_siswa',
+          where: {
+            [Op.not]: {
+              status_perubahan: 'pending',  
+            },
+          },
         },
       ],
       where: {
