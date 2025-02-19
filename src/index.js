@@ -213,9 +213,9 @@ app.get('/view-pdf', async (req, res) => {
   res.render('export-pdf-bulk', { elements: data })
 })
 
-app.get('/view-raport', async (req, res) => {
+app.get('/view-raport/:id', async (req, res) => {
+  const { id } = req.params;
   try {
-    const { id } = req.query;
     const user = await Models.user.findOne({
       where: { id: id },
       include: [
