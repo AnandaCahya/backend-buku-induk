@@ -7,51 +7,67 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet" />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Roboto", sans-serif;
+      }
+
+      .row {
+        display: flex;
+        width: 100%;
+      }
+
+      .label {
+        width: 50%;
+        text-align: left;
+        padding-right: 10px;
+      }
+
+      .label::after {
+        content: ":";
+        padding-left: 5px;
+      }
+
+      .value {
+        flex-grow: 1;
+      }
+
+      .value-nisn,
+      .value-nomer-induk {
+        border-bottom: 1px solid #000;
+      }
+
+      .ol-cont {
+        margin-left: 20px;
+        list-style: upper-alpha;
+        font-weight: bold;
+      }
+
+      .ol-cont ol {
+        list-style: decimal;
+        font-weight: normal;
+      }
+
+      @page {
+        size: A3;
+        margin: 20mm;
+      }
+    </style>
   </head>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: "Roboto", sans-serif;
-    }
-
-    .row {
-      display: flex;
-      width: 100%;
-    }
-
-    .label {
-      width: 45%; /* Adjust as needed */
-    }
-
-    .value {
-      flex-grow: 1;
-    }
-
-    .ol-cont {
-      margin-left: 20px;
-      list-style: upper-alpha;
-      font-weight: bold;
-    }
-
-    .ol-cont ol {
-      list-style: upper-alpha;
-      font-weight: normal;
-      list-style: decimal;
-    }
-  </style>
   <body style="margin: 0px 30px">
     <div style="page-break-before: always; position: relative;">
       <h4 style="text-align: center; width: 100%">LEMBAR BUKU INDUK SISWA</h4>
-      <div style="width: 50%">
+      <div style="width: 50%" name="Bagian kiri">
         <div class="row">
           <div class="label">NISN</div>
-          <div class="value">: <%= element.nisn %></div>
+          <div class="value-nisn"><%= element.nisn %></div>
         </div>
         <div class="row" style="margin-bottom: 20px">
           <div class="label">Nomer Induk</div>
-          <div class="value">: <%= element.id %></div>
+          <div class="value-nomer-induk"><%= element.id %></div>
         </div>
       </div>
   
@@ -106,7 +122,7 @@
                 <li>
                   <div class="row">
                     <div class="label">Jumlah Saudara Kandung</div>
-                    <div class="value">: <%= element.data_diri.jml_saudara_kandung %></div>
+                    <div class="value"><%= element.data_diri.jml_saudara_kandung %></div>
                   </div>
                 </li>
                 <li>
@@ -565,7 +581,8 @@
           </ol>
         </li>
  
-        <div style="width: 2.79cm; height: 3.81cm; position: absolute; border: solid black 1px; bottom: 240px; right: 40px"></div>
+  
+        <div style="width: 2.79cm; height: 3.81cm; position: absolute; border: solid black 1px; top: 80px; right: 40px"></div>
         <div style="width: 2.79cm; height: 3.81cm; position: absolute; border: solid black 1px; bottom: 240px; right: 40px"></div>
     </div>
     
