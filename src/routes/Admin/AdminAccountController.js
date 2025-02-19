@@ -40,7 +40,7 @@ const routes = Router()
  *   }
  * ]
  */
-routes.get('/admin/akun', async (req, res) => {
+routes.get('/akun', async (req, res) => {
   const { jurusan, angkatan, search } = req.query
 
   const userData = await Models.user.findAll({
@@ -58,6 +58,92 @@ routes.get('/admin/akun', async (req, res) => {
       {
         model: Models.data_diri,
         as: 'data_diri',
+        where: {
+          status_perubahan: {
+            [Op.not]: 'pending',  
+          },
+        },    
+      },
+      {
+        model: Models.perkembangan,
+        as: 'perkembangan',
+        where: {
+          status_perubahan: {
+            [Op.not]: 'pending',  
+          },
+        },    
+      },
+      {
+        model: Models.ayah_kandung,
+        as: 'ayah_kandung',
+        where: {
+          status_perubahan: {
+            [Op.not]: 'pending',  
+          },
+        },    
+      },
+      {
+        model: Models.ibu_kandung,
+        as: 'ibu_kandung',
+        where: {
+          status_perubahan: {
+            [Op.not]: 'pending',  
+          },
+        },    
+      },
+      {
+        model: Models.kesehatan,
+        as: 'kesehatan',
+        where: {
+          status_perubahan: {
+            [Op.not]: 'pending',  
+          },
+        },    
+      },
+      {
+        model: Models.pendidikan,
+        as: 'pendidikan',
+        where: {
+          status_perubahan: {
+            [Op.not]: 'pending',  
+          },
+        },    
+      },
+      {
+        model: Models.setelah_pendidikan,
+        as: 'setelah_pendidikan',
+        where: {
+          status_perubahan: {
+            [Op.not]: 'pending',  
+          },
+        },    
+      },
+      {
+        model: Models.tempat_tinggal,
+        as: 'tempat_tinggal',
+        where: {
+          status_perubahan: {
+            [Op.not]: 'pending',  
+          },
+        },    
+      },
+      {
+        model: Models.wali,
+        as: 'wali',
+        where: {
+          status_perubahan: {
+            [Op.not]: 'pending',  
+          },
+        },    
+      },
+      {
+        model: Models.hobi_siswa,
+        as: 'hobi_siswa',
+        where: {
+          status_perubahan: {
+            [Op.not]: 'pending',  
+          },
+        },    
       },
     ],
   })
@@ -103,7 +189,7 @@ routes.get('/admin/akun', async (req, res) => {
  *   "message": "NISN sudah digunakan"
  * }
  */
-routes.post('/admin/akun', akunRequest, async (req, res) => {
+routes.post('/akun', akunRequest, async (req, res) => {
   try {
     const data = await Models.user.create(req.body)
     return res.status(201).json(data)
@@ -176,7 +262,7 @@ routes.post('/admin/akun', akunRequest, async (req, res) => {
  *   "message": "Internal server error"
  * }
  */
-routes.get('/admin/akun/:id', async (req, res) => {
+routes.get('/akun/:id', async (req, res) => {
   try {
     const userInstance = await Models.user.findOne({
       include: [
@@ -193,43 +279,92 @@ routes.get('/admin/akun/:id', async (req, res) => {
         {
           model: Models.data_diri,
           as: 'data_diri',
+          where: {
+            status_perubahan: {
+              [Op.not]: 'pending',  
+            },
+          },    
         },
         {
           model: Models.perkembangan,
           as: 'perkembangan',
+          where: {
+            status_perubahan: {
+              [Op.not]: 'pending',  
+            },
+          },    
         },
-        // Add the new associations below
         {
           model: Models.ayah_kandung,
           as: 'ayah_kandung',
+          where: {
+            status_perubahan: {
+              [Op.not]: 'pending',  
+            },
+          },    
         },
         {
           model: Models.ibu_kandung,
           as: 'ibu_kandung',
+          where: {
+            status_perubahan: {
+              [Op.not]: 'pending',  
+            },
+          },    
         },
         {
           model: Models.kesehatan,
           as: 'kesehatan',
+          where: {
+            status_perubahan: {
+              [Op.not]: 'pending',  
+            },
+          },    
         },
         {
           model: Models.pendidikan,
           as: 'pendidikan',
+          where: {
+            status_perubahan: {
+              [Op.not]: 'pending',  
+            },
+          },    
         },
         {
           model: Models.setelah_pendidikan,
           as: 'setelah_pendidikan',
+          where: {
+            status_perubahan: {
+              [Op.not]: 'pending',  
+            },
+          },    
         },
         {
           model: Models.tempat_tinggal,
           as: 'tempat_tinggal',
+          where: {
+            status_perubahan: {
+              [Op.not]: 'pending',  
+            },
+          },    
         },
         {
           model: Models.wali,
           as: 'wali',
+          where: {
+            status_perubahan: {
+              [Op.not]: 'pending',  
+            },
+          },    
         },
         {
           model: Models.hobi_siswa,
           as: 'hobi_siswa',
+          where: {
+            status_perubahan: {
+              [Op.not]: 'pending',  
+            },
+          },    
         },
       ],
       where: {
@@ -287,7 +422,7 @@ routes.get('/admin/akun/:id', async (req, res) => {
  *   "message": "User not found"
  * }
  */
-routes.put('/admin/akun/:id', async (req, res) => {
+routes.put('/akun/:id', async (req, res) => {
   try {
     const data = await Models.user.findOne({
       where: {

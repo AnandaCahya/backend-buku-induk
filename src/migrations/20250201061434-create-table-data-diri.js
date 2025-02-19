@@ -76,6 +76,11 @@ module.exports = {
         type: Sequelize.DATEONLY,
         allowNull: false,
       },
+      status_perubahan: {
+        type: Sequelize.ENUM('pending', 'approved'),
+        allowNull: false,
+        defaultValue: "approved"
+      },
     })
   },
 

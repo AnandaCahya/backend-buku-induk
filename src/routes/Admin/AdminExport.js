@@ -9,7 +9,7 @@
 */
 
 const { Router } = require('express')
-const { Models } = require('../../models') // Adjust the path as necessary
+const { Models } = require('../../models') 
 const ExcelJS = require('exceljs')
 const puppeteer = require('puppeteer')
 
@@ -272,7 +272,7 @@ router.get('/export-excel', async (req, res) => {
   )
   res.setHeader('Content-Disposition', 'attachment; filename=data-siswa.xlsx')
 
-  // Write the workbook to the response
+  
   await workbook.xlsx.write(res)
   res.end()
 })

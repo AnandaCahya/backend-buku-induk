@@ -84,8 +84,10 @@ PASSWORD = ""
 ## Documentation (Singkat)
 
 ### 1. Nilai
+
 Action : POST, GET, UPDATE, DELETE\
 url : /admin/nilai
+
 ```json
 body : {
     "semester" : int(1 - 5),
@@ -106,8 +108,10 @@ body : {
 ```
 
 ### 2. Mapel
+
 Action : POST, GET, UPDATE, DELETE\
 url : /admin/mapel
+
 ```json
 body : {
     "data" : [
@@ -121,34 +125,39 @@ body : {
 ```
 
 ### 3. All Siswa (Siswa)
+
 Action : GET, UPDATE, DELETE\
 url : /admin/akun\
-*Available Params*
+_Available Params_
 | params | value |
 |----------|----------|
-| jurusan   | jurusan_id   |
-| angkatan   | angkatan   |
-| search   | nama siswa   |
+| jurusan | jurusan_id |
+| angkatan | angkatan |
+| search | nama siswa |
 
 ### 4. Angakatan
+
 Action : POST, GET, UPDATE, DELETE\
 url : /admin/angkatan
+
 ```json
 body : {
     {
       "nama" : "2020"
-    }        
+    }
 }
 ```
 
 ### 5. Jurusan
+
 Action : POST, GET, UPDATE, DELETE\
-url : /admin/jurusan 
+url : /admin/jurusan
+
 ```json
 body : {
     {
       "nama" : "Rekayasa Perangkat Lunaak"
-    }        
+    }
 }
 ```
 

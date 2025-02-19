@@ -285,12 +285,10 @@ router.post('/login-siswa', loginSiswaRequest, async (req, res) => {
     })
 
     if (!data) {
-      return res
-        .status(200)
-        .json({
-          isMatch: false,
-          message: 'Data tidak ditemukan atau tidak cocok.',
-        })
+      return res.status(200).json({
+        isMatch: false,
+        message: 'Data tidak ditemukan atau tidak cocok.',
+      })
     }
 
     data.token = uuidv4()

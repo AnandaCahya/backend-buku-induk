@@ -29,17 +29,10 @@ module.exports = {
         username: 'JokoAiko',
       },
       {
-<<<<<<< HEAD
-        email: 'drscity20@gmail.com',
-        password: "pass",
-        username: "DarisNur"
-      }
-=======
         email: 'drscity20@gmail.comm',
         password: 'pass',
         username: 'DarisNur',
       },
->>>>>>> 983b7ab869c52869bd01a7f47f33e1bde5258bd4
     ])
   },
 

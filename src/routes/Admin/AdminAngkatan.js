@@ -9,7 +9,7 @@
 */
 
 const { Router } = require('express')
-const { Models } = require('../../models') // Adjust the path as necessary
+const { Models } = require('../../models') 
 
 const router = Router()
 const angkatan = Models.angkatan
@@ -33,7 +33,7 @@ const angkatan = Models.angkatan
  *   "error": "Validation error"
  * }
  */
-router.post('/admin/angkatan', async (req, res) => {
+router.post('/angkatan', async (req, res) => {
   try {
     const newAngkatan = await angkatan.create(req.body)
     res.status(201).json(newAngkatan)
@@ -64,7 +64,7 @@ router.post('/admin/angkatan', async (req, res) => {
  *   "error": "Database connection failed"
  * }
  */
-router.get('/admin/angkatan', async (req, res) => {
+router.get('/angkatan', async (req, res) => {
   try {
     const allAngkatan = await angkatan.findAll()
     res.status(200).json(allAngkatan)
@@ -95,7 +95,7 @@ router.get('/admin/angkatan', async (req, res) => {
  *   "error": "Database connection failed"
  * }
  */
-router.get('/admin/angkatan/:id', async (req, res) => {
+router.get('/angkatan/:id', async (req, res) => {
   try {
     const oneAngkatan = await angkatan.findByPk(req.params.id)
     if (oneAngkatan) {
@@ -131,7 +131,7 @@ router.get('/admin/angkatan/:id', async (req, res) => {
  *   "error": "Database update failed"
  * }
  */
-router.put('/admin/angkatan/:id', async (req, res) => {
+router.put('/angkatan/:id', async (req, res) => {
   try {
     console.log(req.body)
     const updatedAngkatan = await angkatan.update(

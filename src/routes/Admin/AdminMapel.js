@@ -32,7 +32,7 @@ const mapel = Models.mapel
  *   "error": "Data tidak valid"
  * }
  */
-router.post('/admin/mapel', async (req, res) => {
+router.post('/mapel', async (req, res) => {
   try {
     const newMapel = await mapel.create(req.body)
     res.status(201).json(newMapel)
@@ -63,7 +63,7 @@ router.post('/admin/mapel', async (req, res) => {
  *   "error": "Internal server error"
  * }
  */
-router.get('/admin/mapel', async (req, res) => {
+router.get('/mapel', async (req, res) => {
   try {
     const allMapel = await mapel.findAll()
     res.status(200).json(allMapel)
@@ -94,7 +94,7 @@ router.get('/admin/mapel', async (req, res) => {
  *   "error": "Internal server error"
  * }
  */
-router.get('/admin/mapel/:id', async (req, res) => {
+router.get('/mapel/:id', async (req, res) => {
   try {
     const oneMapel = await mapel.findByPk(req.params.id)
     if (oneMapel) {
@@ -130,7 +130,7 @@ router.get('/admin/mapel/:id', async (req, res) => {
  *   "error": "Internal server error"
  * }
  */
-router.put('/admin/mapel/:id', async (req, res) => {
+router.put('/mapel/:id', async (req, res) => {
   try {
     const updatedMapel = await mapel.update(req.body, {
       where: { id: req.params.id },

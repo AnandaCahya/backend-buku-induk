@@ -9,7 +9,7 @@
 */
 
 const { Router } = require('express')
-const { Models } = require('../../models') // Adjust the path as necessary
+const { Models } = require('../../models') 
 
 const router = Router()
 const jurusan = Models.jurusan
@@ -32,7 +32,7 @@ const jurusan = Models.jurusan
  *   "error": "Nama jurusan tidak boleh kosong"
  * }
  */
-router.post('/admin/jurusan', async (req, res) => {
+router.post('/jurusan', async (req, res) => {
   try {
     const newJurusan = await jurusan.create(req.body)
     res.status(201).json(newJurusan)
@@ -63,7 +63,7 @@ router.post('/admin/jurusan', async (req, res) => {
  *   "error": "Terjadi kesalahan pada server"
  * }
  */
-router.get('/admin/jurusan', async (req, res) => {
+router.get('/jurusan', async (req, res) => {
   try {
     const allJurusan = await jurusan.findAll()
     res.status(200).json(allJurusan)
@@ -94,7 +94,7 @@ router.get('/admin/jurusan', async (req, res) => {
  *   "error": "Terjadi kesalahan pada server"
  * }
  */
-router.get('/admin/jurusan/:id', async (req, res) => {
+router.get('/jurusan/:id', async (req, res) => {
   try {
     const oneJurusan = await jurusan.findByPk(req.params.id)
     if (oneJurusan) {
@@ -130,7 +130,7 @@ router.get('/admin/jurusan/:id', async (req, res) => {
  *   "error": "Terjadi kesalahan pada server"
  * }
  */
-router.put('/admin/jurusan/:id', async (req, res) => {
+router.put('/jurusan/:id', async (req, res) => {
   try {
     const updatedJurusan = await jurusan.update(req.body, {
       where: { id: req.params.id },

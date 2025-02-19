@@ -23,6 +23,7 @@ const nilaiController = require('./routes/Admin/AdminNilaiSiswa')
 const mapelController = require('./routes/Admin/AdminMapel')
 
 //* Route siswa
+const daftarDataController = require('./routes/Siswa/SiswaDaftar')
 const ubahDataController = require('./routes/Siswa/SiswaDataDiri')
 
 //* DEV MODE
@@ -34,7 +35,8 @@ if (process.env.NODE_ENV === 'development') {
     info: {
       version: package.version,
       title: 'Buku Induk',
-      description: "Aplikasi Buku Induk untuk melakukan pencatatan data siswa, jurusan, angkatan dan lainnya. API Ini dibangun diatas Nodejs dengan sistem autentikasi bearer. Gunakan API ini sebaik mungkin",
+      description:
+        'Aplikasi Buku Induk untuk melakukan pencatatan data siswa, jurusan, angkatan dan lainnya. API Ini dibangun diatas Nodejs dengan sistem autentikasi bearer. Gunakan API ini sebaik mungkin',
       license: {
         name: 'MIT',
       },
@@ -85,6 +87,7 @@ app.use('/admin', AuthMiddlewareAdmin, nilaiController)
 app.use('/', AuthMiddlewareAdmin, mapelController)
 
 // ------ Siswa
+app.use('/siswa', daftarDataController)
 app.use('/siswa', AuthMiddlewareSiswa, ubahDataController)
 
 // app.use("/", )
