@@ -76,21 +76,19 @@ app.use('/auth', authControllers)
 app.use('/siswa', userControllers)
 
 // ----- Admin
-app.use('', AuthMiddlewareAdmin, akunControllers)
-app.use('', AuthMiddlewareAdmin, dataSiswaController)
-app.use('', AuthMiddlewareAdmin, jurusanController)
-app.use('/', AuthMiddlewareAdmin, angkatanController)
+app.use('/admin', AuthMiddlewareAdmin, akunControllers)
+app.use('/admin', AuthMiddlewareAdmin, dataSiswaController)
+app.use('/admin', AuthMiddlewareAdmin, jurusanController)
+app.use('/admin', AuthMiddlewareAdmin, angkatanController)
 app.use('/admin', AuthMiddlewareAdmin, getExport)
-app.use('', AuthMiddlewareAdmin, tahunpelajaranController)
+app.use('/admin', AuthMiddlewareAdmin, tahunpelajaranController)
 
 app.use('/admin', AuthMiddlewareAdmin, nilaiController)
-app.use('/', AuthMiddlewareAdmin, mapelController)
+app.use('/admin', AuthMiddlewareAdmin, mapelController)
 
 // ------ Siswa
 app.use('/siswa', daftarDataController)
 app.use('/siswa', AuthMiddlewareSiswa, ubahDataController)
-
-// app.use("/", )
 
 app.get('/view-pdf/:id', async (req, res) => {
   const { jurusan, angkatan, search } = req.query
