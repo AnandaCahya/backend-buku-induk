@@ -244,6 +244,10 @@ app.get('/view-raport/:id', async (req, res) => {
       ],
     });
 
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
     const nilai = await Models.nilai.findAll({
       where: { user_id: id },
       include: [
@@ -252,12 +256,12 @@ app.get('/view-raport/:id', async (req, res) => {
           as: 'mapel',
           attributes: ['nama'],
         },
-        {
-          model: Models.sia,
-          as: 'SIA',
-          attributes: ['sakit', 'izin', 'alpha'],
-        },
       ],
+    });
+
+    const siaData = await Models.sia.findAll({
+      where: { user_id: id },
+      attributes: ['sakit', 'izin', 'alpha', 'semester'],
     });
 
     const nilaiPerSemester = nilai.reduce((acc, curr) => {
@@ -269,7 +273,7 @@ app.get('/view-raport/:id', async (req, res) => {
       return acc;
     }, {});
 
-    res.render('export-halaman-belakang', { element: user, nilaiPerSemester });
+    res.render('export-halaman-belakang', { element: user, nilaiPerSemester, sia: siaData });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });

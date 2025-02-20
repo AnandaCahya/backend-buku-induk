@@ -184,23 +184,32 @@
             <tr>
                 <td>1.</td>
                 <td>Sakit</td>
-                <% Array.from({ length : 6}).forEach(function(book) { %>
-                    <td colspan="2">2 Hari</td>
-                <% }); %>
+                <% for (let i = 1; i <= 6; i++) { %>
+                    <td colspan="2">
+                        <% const siaData = sia.find(s => s.semester === i); %>
+                        <%= siaData ? siaData.sakit : 0 %> Hari
+                    </td>
+                <% } %>
             </tr>
             <tr>
                 <td>2.</td>
                 <td>Ijin</td>
-                <% Array.from({ length : 6}).forEach(function(book) { %>
-                    <td colspan="2">2 Hari</td>
-                <% }); %>
+                <% for (let i = 1; i <= 6; i++) { %>
+                    <td colspan="2">
+                        <% const siaData = sia.find(s => s.semester === i); %>
+                        <%= siaData ? siaData.izin : 0 %> Hari
+                    </td>
+                <% } %>
             </tr>
             <tr>
                 <td>3.</td>
                 <td>Tanpa Keterangan</td>
-                <% Array.from({ length : 6}).forEach(function(book) { %>
-                    <td colspan="2">2 Hari</td>
-                <% }); %>
+                <% for (let i = 1; i <= 6; i++) { %>
+                    <td colspan="2">
+                        <% const siaData = sia.find(s => s.semester === i); %>
+                        <%= siaData ? siaData.alpha : 0 %> Hari
+                    </td>
+                <% } %>
             </tr>
 
             
