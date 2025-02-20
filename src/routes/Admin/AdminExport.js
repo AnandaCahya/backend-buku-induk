@@ -374,4 +374,173 @@ router.get('/export-pdf', async (req, res) => {
   }
 })
 
+/**
+ * GET /admin/export-raport-pdf/:id
+ * @summary Mengekspor halaman view-raport menjadi file PDF
+ * @tags admin
+ * @param {string} id.path.required - ID yang digunakan untuk membangun URL yang akan diekspor ke PDF
+ * @return {file} 200 - Berhasil mengekspor halaman web ke file PDF - application/pdf
+ * @return {object} 500 - Terjadi kesalahan saat ekspor PDF - application/json
+ * @example response - 500 - Terjadi kesalahan saat ekspor PDF
+ * {
+ *   "error": "Terjadi kesalahan saat ekspor PDF"
+ * }
+ */
+router.get('/export-raport-pdf/:id', async (req, res) => {
+  try {
+    const url = `http://localhost:8080/view-raport/${req.params.id}`;
+    const browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+    const page = await browser.newPage();
+
+    await page.goto(url, {
+      waitUntil: 'networkidle0',
+      timeout: 30000,
+    });
+
+    const pdf = await page.pdf({
+      format: 'A3',
+      landscape: true,
+    });
+
+    await browser.close();
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=raport.pdf');
+
+    res.send(pdf);
+  } catch (err) {
+    console.error('Terjadi kesalahan:', err);
+    res.status(500).send('Terjadi kesalahan saat ekspor PDF');
+  }
+});
+
+/**
+ * GET /admin/export-raport-excel
+ * @summary Mengekspor semua data raport berdasarkan angkatan, jurusan, dan semester
+ * @tags admin
+ * @return {file} 200 - Berhasil mengekspor halaman web ke file Excel - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+ * @return {object} 500 - Terjadi kesalahan saat ekspor Excel - application/json
+ * @example response - 500 - Terjadi kesalahan saat ekspor Excel
+ * {
+ *   "error": "Terjadi kesalahan saat ekspor Excel"
+ * }
+ */
+
+
+router.get('/export-raport-excel', async (req, res) => {
+  try {
+    const { angkatanId, jurusanId, semester } = req.query;
+
+    const users = await Models.user.findAll({
+      where: {
+        angkatan_id: angkatanId,
+        jurusan_id: jurusanId,
+      },
+      include: [
+        {
+          model: Models.jurusan,
+          as: 'jurusan',
+          attributes: ['nama'],
+        },
+        {
+          model: Models.angkatan,
+          as: 'angkatan',
+          attributes: ['tahun'],
+        },
+        {
+          model: Models.data_diri,
+          as: 'data_diri',
+        },
+      ],
+    });
+
+    if (!users.length) {
+      return res.status(404).json({ error: 'No users found for the specified angkatan and jurusan' });
+    }
+
+    const nilaiData = await Models.nilai.findAll({
+      where: {
+        user_id: users.map(user => user.id),
+        semester: semester,
+      },
+      include: [
+        {
+          model: Models.mapel,
+          as: 'mapel',
+          attributes: ['nama'],
+        },
+      ],
+    });
+
+    const siaData = await Models.sia.findAll({
+      where: {
+        user_id: users.map(user => user.id),
+        semester: semester,
+      },
+    });
+
+    const allMapel = [...new Set(nilaiData.map(n => n.mapel.nama))];
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Data Raport');
+
+    let headerRow1 = ['No', 'Nama Siswa', 'NISN'];
+    allMapel.forEach(mapel => {
+      headerRow1.push(mapel, ''); 
+    });
+    headerRow1.push('Ketidakhadiran', '', ''); 
+    worksheet.addRow(headerRow1);
+
+    let headerRow2 = ['', '', ''];
+    allMapel.forEach(() => {
+      headerRow2.push('Nilai R', 'Keterangan');
+    });
+    headerRow2.push('Sakit', 'Izin', 'Tanpa Keterangan'); 
+    worksheet.addRow(headerRow2);
+
+    worksheet.mergeCells('A1:A2'); 
+    worksheet.mergeCells('B1:B2'); 
+    worksheet.mergeCells('C1:C2'); 
+
+    let colIndex = 4; 
+    allMapel.forEach(() => {
+      worksheet.mergeCells(1, colIndex, 1, colIndex + 1);
+      colIndex += 2;
+    });
+
+    worksheet.mergeCells(1, colIndex, 1, colIndex + 2);
+
+    let index = 1;
+    users.forEach(user => {
+      const row = [
+        index++, 
+        user.data_diri.nama_lengkap, 
+        user.nisn,
+      ];
+
+      allMapel.forEach(mapel => {
+        const nilai = nilaiData.find(n => n.user_id === user.id && n.mapel.nama === mapel);
+        row.push(nilai ? nilai.r : '-', nilai ? nilai.keterangan : '-');
+      });
+
+      const sia = siaData.find(s => s.user_id === user.id);
+      row.push(sia ? sia.sakit : '-', sia ? sia.izin : '-', sia ? sia.alpha : '-'); 
+
+      worksheet.addRow(row);
+    });
+
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename=raport.xlsx');
+
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (err) {
+    console.error('Terjadi kesalahan:', err);
+    res.status(500).send('Terjadi kesalahan saat ekspor Excel');
+  }
+});
+
+
+
 module.exports = router

@@ -69,8 +69,24 @@ router.post('/nilai', async (req, res) => {
       return res.status(400).json({ error: 'Invalid data format' })
     }
 
-    
-    const nilaiEntries = data.map((item) => ({
+
+    const deleteNilai = await Models.nilai.destroy({
+      where : {
+        user_id : user_id,
+        semester : semester
+      }
+    })
+
+    const deleteSIA = await Models.sia.destroy({
+      where : {
+        user_id : user_id,
+        semester : semester
+      }
+    })
+
+    // Map data to include semester and user_id
+    const nilaiEntries = data.map(item => ({
+
       semester,
       user_id,
       r: item.r,
@@ -198,6 +214,7 @@ router.get('/nilai/:id', async (req, res) => {
 
       
       for (const item of oneNilai) {
+        
         const tahun_pelajaran = user.angkatan
           ? parseInt(user.angkatan.tahun) +
             Math.floor(item.semester / 2) +
@@ -212,9 +229,12 @@ router.get('/nilai/:id', async (req, res) => {
         const SIA = await Models.sia.findOne({
           where: {
             user_id: req.params.id,
-            semester: item.semester,
-          },
-        })
+
+            semester: item.semester
+          }
+        });
+        console.log(item)
+
 
         groupedBySemester[semesterKey].push({
           ...item.toJSON(),
