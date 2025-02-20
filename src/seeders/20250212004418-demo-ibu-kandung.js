@@ -12,7 +12,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
      */
-    return queryInterface.bulkInsert('ayah_kandung', [
+    return queryInterface.bulkInsert('ibu_kandung', [
       {
         nama: 'Suliastri',
         tempat_lahir: 'Surabaya',
