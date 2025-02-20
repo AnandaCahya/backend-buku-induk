@@ -41,7 +41,7 @@ const AuthMiddlewareSiswa = async (req, res, next) => {
         token,
       },
     })
-    console.log(token, data)
+    
     if (data == undefined || data == null) {
       return res.status(401).json({ message: 'Erorr role' })
     }
