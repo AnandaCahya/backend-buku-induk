@@ -15,8 +15,10 @@ module.exports = {
     return queryInterface.bulkInsert('pendidikan', [
       {
         sebelumnya_tamatan_dari: 'SMP Negeri 1 Malang',
-        sebelumnya_tanggal_dan_ijazah: '2022-06-12',
-        sebelumnya_tanggal_skhun_dan_: '2022-06-12',
+        sebelumnya_tanggal_ijazah: '2022-06-12',
+        sebelumnya_no_ijazah: '123456789',
+        sebelumnya_tanggal_skhun: '2022-06-12',
+        sebelumnya_no_skhun: '987654321',
         sebelumnya_lama_belajar: '3 Tahun',
         pindahan_dari_sekolah: null,
         pindahan_alasan: null,
