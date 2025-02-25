@@ -406,8 +406,10 @@ app.post('/import-excel', upload.single('file'), async (req, res) => {
       await Models.pendidikan.create({
         user_id: newUser.id,
         sebelumnya_tamatan_dari: row['Sebelumnya Tamatan Dari'],
-        sebelumnya_tanggal_dan_ijazah: row['Sebelumnya Tanggal dan Ijazah'],
-        sebelumnya_tanggal_skhun_dan_: row['Sebelumnya Tanggal SKHUN'],
+        sebelumnya_tanggal_ijazah: row['Sebelumnya Tanggal Ijazah'],
+        sebelumnya_no_ijazah: row['Sebelumnya No Ijazah'],
+        sebelumnya_tanggal_skhun: row['Sebelumnya Tanggal SKHUN'],
+        sebelumnya_no_skhun: row['Sebelumnya No SKHUN'],
         sebelumnya_lama_belajar: row['Sebelumnya Lama Belajar'],
         diterima_di_kelas: row['Diterima di Kelas'],
         diterima_di_bidang_keahlian: row['Diterima di Bidang Keahlian'],
@@ -446,6 +448,130 @@ app.post('/import-excel', upload.single('file'), async (req, res) => {
     res.status(500).json({ message: 'Internal server error' })
   }
 })
+
+app.post('/import-raport', upload.single('file'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    const { semester } = req.query; 
+    if (!semester) {
+      return res.status(400).json({ message: 'Semester is required' });
+    }
+
+    const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
+    const sheetName = workbook.SheetNames[0]; 
+    const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
+
+    const subjectNames = data[0]; 
+    const labels = data[1]; 
+    const rows = data.slice(2); 
+
+    const mapelColumns = [];
+    for (let i = 0; i < subjectNames.length; i++) {
+      if (labels[i] === 'Nilai R') { 
+        mapelColumns.push({
+          mapelName: subjectNames[i],
+          nilaiIndex: i,
+          keteranganIndex: i + 1,
+        });
+      }
+    }
+
+    console.log('Mapel found in Excel:', mapelColumns.map(col => col.mapelName));
+
+    for (const row of rows) {
+      const nisn = row[2]; 
+      console.log('Processing NISN:', nisn); 
+
+      if (!nisn) {
+        console.log('Skipping row with undefined NISN:', row);
+        continue;
+      }
+
+      const user = await Models.user.findOne({ where: { nisn } });
+
+      if (!user) {
+        console.log(`Skipping NISN not found in database: ${nisn}`);
+        continue;
+      }
+
+      for (const mapelColumn of mapelColumns) {
+        const mapel = await Models.mapel.findOne({ where: { nama: mapelColumn.mapelName } });
+
+        if (!mapel) {
+          console.log(`Skipping mapel not found: ${mapelColumn.mapelName}`);
+          continue;
+        }
+
+        const existingNilai = await Models.nilai.findOne({
+          where: {
+            mapel_id: mapel.id,
+            user_id: user.id,
+            semester: parseInt(semester, 10),
+          },
+        });
+
+        if (existingNilai) {
+          console.log(`Skipping existing nilai_merdeka for mapel: ${mapelColumn.mapelName}, user_id: ${user.id}, semester: ${semester}`);
+          continue;
+        }
+
+        const nilaiMerdeka = {
+          r: row[mapelColumn.nilaiIndex],
+          keterangan: row[mapelColumn.keteranganIndex],
+          mapel_id: mapel.id,
+          semester: parseInt(semester, 10), 
+          user_id: user.id,
+        };
+
+        try {
+          console.log('Upserting nilai_merdeka:', nilaiMerdeka);
+          await Models.nilai.upsert(nilaiMerdeka);
+        } catch (err) {
+          console.error('Error upserting nilai_merdeka:', err);
+        }
+      }
+
+      const parseInteger = (value) => {
+        const parsed = parseInt(value, 10);
+        return isNaN(parsed) ? 0 : parsed;
+      };
+
+      const existingSia = await Models.sia.findOne({
+        where: {
+          user_id: user.id,
+          semester: parseInt(semester, 10),
+        },
+      });
+
+      if (existingSia) {
+        console.log(`Skipping existing SIA data for user_id: ${user.id}, semester: ${semester}`);
+        continue;
+      }
+
+      const siaData = {
+        user_id: user.id,
+        sakit: parseInteger(row[row.length - 3]),
+        izin: parseInteger(row[row.length - 2]),
+        alpha: parseInteger(row[row.length - 1]),
+        semester: parseInt(semester, 10), 
+      };
+
+      try {
+        await Models.sia.upsert(siaData);
+      } catch (err) {
+        console.error('Error upserting SIA data:', err);
+      }
+    }
+
+    res.status(201).json({ message: 'Raport data imported successfully' });
+  } catch (error) {
+    console.error('Error during import:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 app.listen(8080, async () => {
   console.log('App listen on port 8080')

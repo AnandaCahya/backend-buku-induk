@@ -47,42 +47,72 @@ router.get('/export-excel', async (req, res) => {
       {
         model: Models.data_diri,
         as: 'data_diri',
+        where: {
+          status_perubahan: 'approved',
+        },
       },
       {
         model: Models.perkembangan,
         as: 'perkembangan',
+        where: {
+          status_perubahan: 'approved',
+        },
       },
       {
         model: Models.ayah_kandung,
         as: 'ayah_kandung',
+        where: {
+          status_perubahan: 'approved',
+        },
       },
       {
         model: Models.ibu_kandung,
         as: 'ibu_kandung',
+        where: {
+          status_perubahan: 'approved',
+        },
       },
       {
         model: Models.kesehatan,
         as: 'kesehatan',
+        where: {
+          status_perubahan: 'approved',
+        },
       },
       {
         model: Models.pendidikan,
         as: 'pendidikan',
+        where: {
+          status_perubahan: 'approved',
+        },
       },
       {
         model: Models.setelah_pendidikan,
         as: 'setelah_pendidikan',
+        where: {
+          status_perubahan: 'approved',
+        },
       },
       {
         model: Models.tempat_tinggal,
         as: 'tempat_tinggal',
+        where: {
+          status_perubahan: 'approved',
+        },
       },
       {
         model: Models.wali,
         as: 'wali',
+        where: {
+          status_perubahan: 'approved',
+        },
       },
       {
         model: Models.hobi_siswa,
         as: 'hobi_siswa',
+        where: {
+          status_perubahan: 'approved',
+        },
       },
     ],
   })
@@ -146,8 +176,10 @@ router.get('/export-excel', async (req, res) => {
     'Tinggi',
     'Berat Badan',
     'Sebelumnya Tamatan Dari',
-    'Sebelumnya Tanggal dan Ijazah',
+    'Sebelumnya Tanggal Ijazah',
+    'Sebelumnya No Ijazah',
     'Sebelumnya Tanggal SKHUN',
+    'Sebelumnya No SKHUN',
     'Sebelumnya Lama Belajar',
     'Pindahan Dari Sekolah',
     'Pindahan Alasan',
@@ -232,8 +264,10 @@ router.get('/export-excel', async (req, res) => {
       item.kesehatan.tinggi,
       item.kesehatan.berat_badan,
       item.pendidikan.sebelumnya_tamatan_dari,
-      item.pendidikan.sebelumnya_tanggal_dan_ijazah,
-      item.pendidikan.sebelumnya_tanggal_skhun_dan_,
+      item.pendidikan.sebelumnya_tanggal_ijazah,
+      item.pendidikan.sebelumnya_no_ijazah,
+      item.pendidikan.sebelumnya_tanggal_skhun,
+      item.pendidikan.sebelumnya_no_skhun,
       item.pendidikan.sebelumnya_lama_belajar,
       item.pendidikan.pindahan_dari_sekolah,
       item.pendidikan.pindahan_alasan,
@@ -452,6 +486,9 @@ router.get('/export-raport-excel', async (req, res) => {
         {
           model: Models.data_diri,
           as: 'data_diri',
+          where: {
+            status_perubahan: 'approved',
+          },
         },
       ],
     });
