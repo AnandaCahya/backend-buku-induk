@@ -22,6 +22,24 @@ module.exports = {
         akhir_pendidikan_no_tanggal_skhun: '2025-06-15',
         user_id: 1,
       },
+      {
+        menerima_bea_siswa_tahun_kelas_dari: null,
+        meninggalkan_sekolah_ini_tanggal: '2025-06-15',
+        meninggalkan_sekolah_ini_alasan: 'Lulus',
+        akhir_pendidikan_tamat_belajar_lulus_tahun: '2025',
+        akhir_pendidikan_no_tanggal_ijazah: '2025-06-15',
+        akhir_pendidikan_no_tanggal_skhun: '2025-06-15',
+        user_id: 2,
+      },
+      {
+        menerima_bea_siswa_tahun_kelas_dari: null,
+        meninggalkan_sekolah_ini_tanggal: '2025-06-15',
+        meninggalkan_sekolah_ini_alasan: 'Lulus',
+        akhir_pendidikan_tamat_belajar_lulus_tahun: '2025',
+        akhir_pendidikan_no_tanggal_ijazah: '2025-06-15',
+        akhir_pendidikan_no_tanggal_skhun: '2025-06-15',
+        user_id: 3,
+      },
     ])
   },
 

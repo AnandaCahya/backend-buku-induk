@@ -20,6 +20,20 @@ module.exports = {
         bekerja_penghasilan: null,
         user_id: 1,
       },
+      {
+        melanjutkan_ke: null,
+        bekerja_nama_perusahaan: null,
+        bekerja_tanggal_mulai: null,
+        bekerja_penghasilan: null,
+        user_id: 2,
+      },
+      {
+        melanjutkan_ke: null,
+        bekerja_nama_perusahaan: null,
+        bekerja_tanggal_mulai: null,
+        bekerja_penghasilan: null,
+        user_id: 3,
+      },
     ])
   },
 

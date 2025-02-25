@@ -21,6 +21,22 @@ module.exports = {
         berat_badan: 70,
         user_id: 1,
       },
+      {
+        gol_darah: 'O',
+        penyakit_pernah_diderita: 'Asma',
+        kelainan_jasmani: 'Tidak ada',
+        tinggi: 175,
+        berat_badan: 70,
+        user_id: 2,
+      },
+      {
+        gol_darah: 'O',
+        penyakit_pernah_diderita: 'Asma',
+        kelainan_jasmani: 'Tidak ada',
+        tinggi: 175,
+        berat_badan: 70,
+        user_id: 3,
+      },
     ])
   },
 

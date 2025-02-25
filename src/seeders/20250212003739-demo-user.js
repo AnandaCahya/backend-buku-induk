@@ -18,6 +18,16 @@ module.exports = {
         angkatan_id: 1,
         jurusan_id: 6,
       },
+      {
+        nisn: '00979334442',
+        angkatan_id: 1,
+        jurusan_id: 5,
+      },
+      {
+        nisn: '009793345232',
+        angkatan_id: 2,
+        jurusan_id: 5,
+      },
     ])
   },
 

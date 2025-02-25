@@ -20,6 +20,20 @@ module.exports = {
         jarak_ke_sekolah: '5 km',
         user_id: 1,
       },
+      {
+        alamat: 'JL Raya Tunjungtirto',
+        no_telepon: '081234567890',
+        tinggal_dengan: 'ortu',
+        jarak_ke_sekolah: '5 km',
+        user_id: 2,
+      },
+      {
+        alamat: 'JL Raya Tunjungtirto',
+        no_telepon: '081234567890',
+        tinggal_dengan: 'ortu',
+        jarak_ke_sekolah: '5 km',
+        user_id: 3,
+      },
     ])
   },
 
