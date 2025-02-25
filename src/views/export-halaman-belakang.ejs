@@ -12,9 +12,14 @@
         *{
             font-size: 12px;
         }
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
         .main table, .main td, .main tr, .main th{
             border: 1px solid black;
             border-collapse: collapse;
+            table-layout: auto;
         }
         .jenis-mapel{
             text-align: start;
@@ -23,23 +28,55 @@
             text-align: center;
         }
         .keterangan {
-            vertical-align: top;
-            text-align: justify;
-            padding: 2px;
+            vertical-align: center;
+            text-align: center;
+            font-size: 10px;
+            padding: 5px;
+            width: 140px;
+            min-width: 140px;
+            max-width: 140px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         .mata-pelajaran {
-            width: 200px; 
+            width: 250px;
             font-size: 15px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         .no {
-            width: 15px;
+            width: 20px;
             text-align: center;
+        }
+        .nilai {
+            width: 90px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .mata-pelajaran-jasmani {
+            font-size: 12px;
+        }
+        tr {
+            height: 30px;
         }
         @media print {
             @page {
-                size: A3;
+                size: A3 landscape;
                 margin: 20mm;
             }
+            body {
+                margin: 0;
+                padding: 0  ;
+            }
+        }
+        .large-text {
+            font-size: 16px;
+        }
+        .indent {
+            padding-left: 150px; /* Adjust the value as needed for desired indentation */
         }
     </style>
 </head>
@@ -47,45 +84,43 @@
     <div style="width: 100%; display: flex;">
         <table style="width: 50%;">
             <tr>
-                <td>Nama</td>
+                <td class="large-text">Nama</td>
                 <td>:</td>
-                <td><b><%= element.data_diri.nama_lengkap %></b></td>
+                <td><b class="large-text"><%= element.data_diri.nama_lengkap %></b></td>
             </tr>
             <tr>
-                <td>Nomor Induk</td>
+                <td class="large-text">Nomor Induk</td>
                 <td>:</td>
-                <td><%= element.nisn %></td>
+                <td class="large-text"><%= element.nisn %></td>
             </tr>
             <tr>
-                <td>Nama Sekolah</td>
+                <td class="large-text">Nama Sekolah</td>
                 <td>:</td>
-                <td><b>SMKN 2 SINGOSARI</b></td>
+                <td class="large-text"><b>SMKN 2 SINGOSARI</b></td>
             </tr>
         </table>
         <table style="width: 50%;">
             <tr>
-                <td>Bidang Keahlian</td>
+                <td class="large-text indent">Bidang Keahlian</td>
                 <td>:</td>
-                <td><%= element.jurusan.nama %></td>
+                <td class="large-text"><%= element.jurusan.nama %></td>
             </tr>
             <tr>
-                <td>Program Keahlian</td>
+                <td class="large-text indent">Program Keahlian</td>
                 <td>:</td>
-                <td><%= element.pendidikan.diterima_di_program_keahlian %></td>
+                <td class="large-text"><%= element.pendidikan.diterima_di_program_keahlian %></td>
             </tr>
             <tr>
-                <td>Kompetensi Keahlian</td>
+                <td class="large-text indent">Kompetensi Keahlian</td>
                 <td>:</td>
-                <td><%= element.pendidikan.diterima_di_paket_keahlian %></td>
+                <td class="large-text"><%= element.pendidikan.diterima_di_paket_keahlian %></td>
             </tr>
         </table>
     </div>
     <div class="main">
         <table style="border: 1px solid black; width: 100%;">
             <tr>
-                <th rowspan="4" colspan="2" class="mata-pelajaran">Mata Pelajaran</th>
-            </tr>
-            <tr>
+                <th rowspan="3" colspan="2" class="mata-pelajaran">Mata Pelajaran</th>
                 <% 
                     const tahunPelajaran = [];
                     for (let i = 1; i <= 3; i++) {
@@ -122,39 +157,12 @@
             </tr>
 
             <% 
-                const muatanNasional = ['pendidikan agama dan budi pekerti', 'pendidikan pancasila dan kewarganegaraan', 'bahasa indonesia', 'matematika', 'sejarah indonesia', 'bahasa inggris'];
-                const muatanKewilayahan = ['seni budaya', 'pendidikan jasmani, olahraga, dan kesehatan'];
-                const muatanLokal = ['bahasa jawa', 'bahasa jepang'];
+                const kelompokUmum = ['Pendidikan Agama dan Budi Pekerti', 'Pendidikan Pancasila', 'Bahasa Indonesia', 'Pendidikan Jasmani, Olahraga, dan Kesehatan', 'Sejarah', 'Seni Budaya', 'Bahasa Jawa'];
+                const kelompokKejuruan = ['Matematika', 'Bahasa Inggris', 'Informatika', 'Projek IPAS', 'Dasar Program Keahlian', 'Mata Pelajaran Konsentrasi Keahlian', 'Projek Kreatif dan Kewirausahaan', 'Mata Pelajaran Pilihan'];
                 const groupedByMapel = {
-                    'A. Muatan Nasional': [],
-                    'B. Muatan Kewilayahan': [],
-                    'Muatan Lokal': [],
-                    'C. Muatan Peminatan Kejuruan': []
+                    'Kelompok Mata Pelajaran Umum': kelompokUmum,
+                    'Kelompok Mata Pelajaran Kejuruan': kelompokKejuruan
                 };
-
-                Object.keys(nilaiPerSemester).forEach(function(semester) {
-                    nilaiPerSemester[semester].forEach(function(nilai) {
-                        const mapelNama = nilai.mapel ? nilai.mapel.nama.toLowerCase() : 'N/A';
-                        let category = 'C. Muatan Peminatan Kejuruan'; // Default category
-             
-                        if (muatanNasional.includes(mapelNama)) {
-                            category = 'A. Muatan Nasional';
-                        } else if (muatanKewilayahan.includes(mapelNama)) {
-                            category = 'B. Muatan Kewilayahan';
-                        } else if (muatanLokal.includes(mapelNama)) {
-                            category = 'Muatan Lokal';
-                        }
-             
-                        if (!groupedByMapel[category][mapelNama]) {
-                            groupedByMapel[category][mapelNama] = Array(6).fill({ nilai: '', keterangan: '' });
-                        }
-                        const semesterIndex = parseInt(semester.replace('Semester ', '')) - 1;
-                        groupedByMapel[category][mapelNama][semesterIndex] = {
-                            nilai: nilai.r,
-                            keterangan: nilai.keterangan
-                        };
-                    });
-                });
             %>
 
             <% Object.keys(groupedByMapel).forEach(function(category) { %>
@@ -162,23 +170,25 @@
                     <th colspan="14" class="jenis-mapel"><%= category %></th>
                 </tr>
                 <% let index = 1; %>
-                <% Object.keys(groupedByMapel[category]).forEach(function(mapel) { %>
+                <% groupedByMapel[category].forEach(function(mapel) { %>
                     <tr>
                         <td class="no"><%= index++ %>.</td>
-                        <td class="mata-pelajaran"><%= mapel %></td>
-                        <% 
-                            const entries = groupedByMapel[category][mapel];
-                            entries.forEach(function(entry) { 
-                        %>
-                            <td class="nilai"><%= entry.nilai %></td>
-                            <td class="keterangan"><%= entry.keterangan %></td>
-                        <% }); %>
+                        <td class="mata-pelajaran <%= mapel === 'Pendidikan Jasmani, Olahraga, dan Kesehatan' ? 'mata-pelajaran-jasmani' : '' %>"><%= mapel %></td>
+                        <% for (let i = 1; i <= 6; i++) { %>
+                            <% const semesterKey = `Semester ${i}`; %>
+                            <% const nilaiData = nilaiPerSemester[semesterKey] && nilaiPerSemester[semesterKey].find(n => n.mapel.nama === mapel); %>
+                            <% console.log('Processing mapel:', mapel); %>
+                            <% console.log('Semester Key:', semesterKey); %>
+                            <% console.log('Nilai Data:', nilaiData); %>
+                            <td class="nilai"><%= nilaiData ? nilaiData.dataValues.r : '' %></td>
+                            <td class="keterangan"><%= nilaiData ? nilaiData.dataValues.keterangan : '' %></td>
+                        <% } %>
                     </tr>
                 <% }); %>
             <% }); %>
 
             <tr>
-                <th colspan="13" style="text-align: start;">Kehadiran</th>
+                <th colspan="13" style="text-align: start;">Ketidakhadiran</th>
             </tr>
 
             <tr>
@@ -215,5 +225,6 @@
             
         </table>
     </div>
+    <% console.log('Data nilaiPerSemester:', nilaiPerSemester); %>
 </body>
 </html>
