@@ -13,15 +13,21 @@ module.exports = {
      * }], {});
      */
     return queryInterface.bulkInsert('mapel', [
-      {
-        nama: 'Matematika',
-      },
-      {
-        nama: 'Bahasa Indonesia',
-      },
-      {
-        nama: 'Bahasa Inggris',
-      },
+      { nama: 'Pendidikan Agama dan Budi Pekerti' },
+      { nama: 'Pendidikan Pancasila' },
+      { nama: 'Bahasa Indonesia' },
+      { nama: 'Pendidikan Jasmani, Olahraga, dan Kesehatan' },
+      { nama: 'Sejarah' },
+      { nama: 'Seni Budaya' },
+      { nama: 'Bahasa Jawa' },
+      { nama: 'Matematika' },
+      { nama: 'Bahasa Inggris' },
+      { nama: 'Informatika' },
+      { nama: 'Projek IPAS' },
+      { nama: 'DPK' },
+      { nama: 'MPKK' },
+      { nama: 'PKDK' },
+      { nama: 'MPP' },
     ])
   },
 
