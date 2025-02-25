@@ -252,7 +252,7 @@ app.get('/view-raport/:id', async (req, res) => {
         {
           model: Models.mapel,
           as: 'mapel',
-          attributes: ['nama'],
+          attributes: ['id', 'nama'],
         },
       ],
     });
@@ -270,6 +270,10 @@ app.get('/view-raport/:id', async (req, res) => {
       acc[semesterKey].push(curr);
       return acc;
     }, {});
+
+    console.log('User Data:', user);
+    console.log('Nilai Data:', nilai);
+    console.log('SIA Data:', siaData);
 
     res.render('export-halaman-belakang', { element: user, nilaiPerSemester, sia: siaData });
   } catch (error) {

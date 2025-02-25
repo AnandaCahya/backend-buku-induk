@@ -402,6 +402,7 @@ router.get('/export-raport-pdf/:id', async (req, res) => {
     const pdf = await page.pdf({
       format: 'A3',
       landscape: true,
+      margin: { top: '10px', right: '10px', bottom: '10px', left: '10px' }
     });
 
     await browser.close();
