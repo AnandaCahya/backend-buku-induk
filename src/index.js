@@ -287,31 +287,52 @@ const upload = require('./middleware/upload')
 app.post('/import-excel', upload.single('file'), async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ message: 'No file uploaded' })
+      return res.status(400).json({ message: 'No file uploaded' });
     }
 
     // Read the Excel file
-    const workbook = XLSX.read(req.file.buffer, { type: 'buffer' })
-    const sheetName = workbook.SheetNames[0] // Get first sheet
-    const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName])
+    const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
+    const sheetName = workbook.SheetNames[0]; // Get first sheet
+    const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
     // Process each row
     for (const row of data) {
+      // Find jurusan_id based on jurusan name
+      const jurusan = await Models.jurusan.findOne({
+        where: { nama: row.Jurusan }
+      });
+
+      if (!jurusan) {
+        console.log(`Jurusan not found: ${row.Jurusan}`);
+        continue;
+      }
+
+      // Find angkatan_id based on angkatan year
+      const angkatan = await Models.angkatan.findOne({
+        where: { tahun: row['Angkatan Tahun'] }
+      });
+
+      if (!angkatan) {
+        console.log(`Angkatan not found: ${row['Angkatan Tahun']}`);
+        continue;
+      }
+
       const siswa = {
         nisn: row.NISN,
-        angkatan_id: row['Angkatan Tahun'],
-        jurusan_id: row.Jurusan,
-      }
+        angkatan_id: angkatan.id,
+        jurusan_id: jurusan.id,
+      };
 
       const existingUser = await Models.user.findOne({
         where: { nisn: siswa.nisn },
-      })
+      });
+
       if (existingUser) {
-        console.log(`Skipping duplicate NISN: ${siswa.nisn}`)
-        continue
+        console.log(`Skipping duplicate NISN: ${siswa.nisn}`);
+        continue;
       }
 
-      const newUser = await Models.user.create(siswa)
+      const newUser = await Models.user.create(siswa);
 
       await Models.data_diri.create({
         user_id: newUser.id,
@@ -328,7 +349,7 @@ app.post('/import-excel', upload.single('file'), async (req, res) => {
         jml_saudara_angkat: row['Jumlah Saudara Angkat'],
         kelengkapan_ortu: row['Kelengkapan Ortu'],
         bahasa_sehari_hari: row['Bahasa Sehari-hari'],
-      })
+      });
 
       await Models.perkembangan.create({
         user_id: newUser.id,
@@ -435,19 +456,19 @@ app.post('/import-excel', upload.single('file'), async (req, res) => {
       // Setelah menyimpan data siswa, simpan data ke model sia
       await Models.sia.create({
         user_id: newUser.id,
-        sakit: row['Sakit'] || 0, // Ambil data sakit dari Excel, default 0 jika tidak ada
-        izin: row['Izin'] || 0, // Ambil data izin dari Excel, default 0 jika tidak ada
-        alpha: row['Tanpa Keterangan'] || 0, // Ambil data alpha dari Excel, default 0 jika tidak ada
-        semester: row['Semester'] || 1, // Ambil semester dari Excel, default 1 jika tidak ada
+        sakit: row['Sakit'] || 0,
+        izin: row['Izin'] || 0,
+        alpha: row['Tanpa Keterangan'] || 0,
+        semester: row['Semester'] || 1,
       });
     }
 
-    res.status(201).json({ message: 'Excel data imported successfully' })
+    res.status(201).json({ message: 'Excel data imported successfully' });
   } catch (error) {
-    console.error(error)
-    res.status(500).json({ message: 'Internal server error' })
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
-})
+});
 
 app.post('/import-raport', upload.single('file'), async (req, res) => {
   try {
