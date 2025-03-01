@@ -14,7 +14,7 @@ const { Models } = require('../../models')
 const router = Router()
 
 /**
- * POST data-diri
+ * POST /siswa/data-diri
  * @summary Menambahkan data diri siswa beserta informasi terkait lainnya
  * @tags siswa
  * @param {object} request.body.request.required - Data yang akan ditambahkan

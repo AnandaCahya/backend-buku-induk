@@ -15,7 +15,7 @@ const { Op } = require('sequelize');
 const router = Router()
 
 /**
- * GET data-diri
+ * GET /siswa/data-diri
  * @summary Mengambil data diri siswa beserta informasi terkait lainnya dan status perubahan "pending" jika ada
  * @tags siswa
  * @param {string} user_id.query.required - ID pengguna yang data dirinya ingin diambil
@@ -286,7 +286,7 @@ router.get('/data-diri', async (req, res) => {
 });
 
 /**
- * GET data-diri/pending
+ * GET /siswa/data-diri/pending
  * @summary Mengambil data siswa yang status perubahannya "pending"
  * @tags siswa
  * @param {string} user_id.query.required - ID pengguna yang data dirinya ingin diperiksa
