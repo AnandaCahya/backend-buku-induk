@@ -377,13 +377,14 @@ router.post('/data-diri/pending/:id', async (req, res) => {
       console.log(`Update result for ${model}:`, updateResult);
     }));
 
-    await Promise.all(models.map(model => {
-      return Models[model].destroy({
+    await Promise.all(models.map(async model => {
+      await Models[model].destroy({
         where: {
           user_id: user_id,
           status_perubahan: "pending"
         }
       });
+      console.log(`Deleted pending data ${model}`)
     }));
 
     return res.json({ message: 'Data successfully approved' });
