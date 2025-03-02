@@ -170,42 +170,72 @@ app.get('/view-pdf', async (req, res) => {
       {
         model: Models.data_diri,
         as: 'data_diri',
+        where: {
+          status_perubahan: 'approved',
+        },
       },
       {
         model: Models.perkembangan,
         as: 'perkembangan',
+        where: {
+          status_perubahan: 'approved',
+        },
       },
       {
         model: Models.ayah_kandung,
         as: 'ayah_kandung',
+        where: {
+          status_perubahan: 'approved',
+        },
       },
       {
         model: Models.ibu_kandung,
         as: 'ibu_kandung',
+        where: {
+          status_perubahan: 'approved',
+        },
       },
       {
         model: Models.kesehatan,
         as: 'kesehatan',
+        where: {
+          status_perubahan: 'approved',
+        },
       },
       {
         model: Models.pendidikan,
         as: 'pendidikan',
+        where: {
+          status_perubahan: 'approved',
+        },
       },
       {
         model: Models.setelah_pendidikan,
         as: 'setelah_pendidikan',
+        where: {
+          status_perubahan: 'approved',
+        },
       },
       {
         model: Models.tempat_tinggal,
         as: 'tempat_tinggal',
+        where: {
+          status_perubahan: 'approved',
+        },
       },
       {
         model: Models.wali,
         as: 'wali',
+        where: {
+          status_perubahan: 'approved',
+        },
       },
       {
         model: Models.hobi_siswa,
         as: 'hobi_siswa',
+        where: {
+          status_perubahan: 'approved',
+        },
       },
     ],
   })
@@ -581,7 +611,9 @@ app.post('/import-raport', upload.single('file'), async (req, res) => {
       };
 
       try {
-        await Models.sia.upsert(siaData);
+        const [siaRecord, created] = await Models.sia.upsert(siaData);
+        console.log(`SIA record ${created ? 'created' : 'updated'} for user_id: ${user.id}, semester: ${semester}`);
+        console.log('Upserting SIA data :', siaData)
       } catch (err) {
         console.error('Error upserting SIA data:', err);
       }
