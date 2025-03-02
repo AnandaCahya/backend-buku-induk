@@ -357,22 +357,24 @@ router.post('/data-diri/pending/:id', async (req, res) => {
         })
       ]);
 
-      
       if (!pendingData?.dataValues) return;
-      pendingData = pendingData.dataValues
-    
-      Object.keys(pendingData).forEach((k) => pendingData[k] == null && delete pendingData[k]);
-      delete pendingData["id"]
-      delete pendingData["status_perubahan"]
+      pendingData = pendingData.dataValues;
 
-      console.log(pendingData)
-    
-      return Models[model].update(pendingData, {
+      await Promise.all(Object.keys(pendingData).map((k) => {
+        if (pendingData[k] == null) delete pendingData[k];
+        delete pendingData["id"];
+        delete pendingData["status_perubahan"];
+      }));
+      console.log(`Updating model: ${model}, Data:`, pendingData);
+
+      const updateResult = await Models[model].update(pendingData, {
         where: {
           user_id: user_id,
           status_perubahan: "approved"
         }
       });
+
+      console.log(`Update result for ${model}:`, updateResult);
     }));
 
     await Promise.all(models.map(model => {
@@ -383,12 +385,10 @@ router.post('/data-diri/pending/:id', async (req, res) => {
         }
       });
     }));
-    
-
 
     return res.json({ message: 'Data successfully approved' });
   } catch (error) {
-    console.error(error);
+    console.error('Error:', error);
     return res.status(500).json({ error: 'An error occurred while approving the data' });
   }
 });
