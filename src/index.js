@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const path = require('path')
 const expressJSDocSwagger = require('express-jsdoc-swagger')
 const package = require('../package.json')
+const puppeteer = require('puppeteer')
 
 require('dotenv').config()
 
@@ -25,6 +26,8 @@ const mapelController = require('./routes/Admin/AdminMapel')
 //* Route siswa
 const daftarDataController = require('./routes/Siswa/SiswaDaftar')
 const ubahDataController = require('./routes/Siswa/SiswaDataDiri')
+const siswaRaportController = require('./routes/Siswa/SiswaRaport')
+
 
 //* DEV MODE
 
@@ -64,6 +67,7 @@ const {
 const morgan = require('morgan')
 const { Models } = require('./models')
 
+
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, '/views'))
 
@@ -89,6 +93,8 @@ app.use('/admin', AuthMiddlewareAdmin, mapelController)
 // ------ Siswa
 app.use('/siswa', daftarDataController)
 app.use('/siswa', AuthMiddlewareSiswa, ubahDataController)
+app.use('/siswa', AuthMiddlewareSiswa, siswaRaportController)
+
 
 app.get('/view-pdf/:id', async (req, res) => {
   const { jurusan, angkatan, search } = req.query
@@ -311,6 +317,68 @@ app.get('/view-raport/:id', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+app.get('/view-image-raport/:id', async (req, res) => {
+  const { id } = req.params;
+  const { semester = 1 } = req.query; // Default to semester 1 if not provided
+  try {
+    const user = await Models.user.findOne({
+      where: { id: id },
+      include: [
+        {
+          model: Models.jurusan,
+          as: 'jurusan',
+          attributes: ['nama'],
+        },
+        {
+          model: Models.angkatan,
+          as: 'angkatan',
+          attributes: ['tahun'],
+        },
+        {
+          model: Models.data_diri,
+          as: 'data_diri',
+          attributes: ['nama_lengkap', 'nama_panggilan'],
+        },
+        {
+          model: Models.pendidikan,
+          as: 'pendidikan',
+          attributes: ['diterima_di_program_keahlian', 'diterima_di_paket_keahlian'],
+        },
+      ],
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const nilai = await Models.nilai.findAll({
+      where: { user_id: id, semester: parseInt(semester, 10) }, 
+      include: [
+        {
+          model: Models.mapel,
+          as: 'mapel',
+          attributes: ['id', 'nama'],
+        },
+      ],
+    });
+
+    const siaData = await Models.sia.findAll({
+      where: { user_id: id, semester: parseInt(semester, 10) }, 
+      attributes: ['sakit', 'izin', 'alpha', 'semester'],
+    });
+
+    const nilaiPerSemester = {
+      [`Semester ${semester}`]: nilai,
+    };
+
+    res.render('image-raport', { element: user, nilaiPerSemester, sia: siaData, semester });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 const XLSX = require('xlsx')
 const upload = require('./middleware/upload')
 
@@ -327,7 +395,6 @@ app.post('/import-excel', upload.single('file'), async (req, res) => {
 
     // Process each row
     for (const row of data) {
-      // Find jurusan_id based on jurusan name
       const jurusan = await Models.jurusan.findOne({
         where: { nama: row.Jurusan }
       });
@@ -337,7 +404,6 @@ app.post('/import-excel', upload.single('file'), async (req, res) => {
         continue;
       }
 
-      // Find angkatan_id based on angkatan year
       const angkatan = await Models.angkatan.findOne({
         where: { tahun: row['Angkatan Tahun'] }
       });
