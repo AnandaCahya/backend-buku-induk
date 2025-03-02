@@ -72,7 +72,9 @@
                 <th rowspan="2" class="index">No</th>
                 <th rowspan="2" class="mata-pelajaran">Mata Pelajaran</th>
                 <% 
-                    const tahunPelajaran = `${element.angkatan.tahun}/${parseInt(element.angkatan.tahun) + 1}`;
+                    const startYear = parseInt(element.angkatan.tahun);
+                    const semesterYear = Math.floor((semester - 1) / 2);
+                    const tahunPelajaran = `${startYear + semesterYear}/${startYear + semesterYear + 1}`;
                 %>
                 <th colspan="2" class="tahun-pelajaran">Tahun Pelajaran <%= tahunPelajaran %></th>
             </tr>
