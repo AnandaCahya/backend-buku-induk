@@ -181,14 +181,22 @@ const validatePendidikan = () => [
     .isString()
     .notEmpty()
     .withMessage('Tamatan dari harus diisi'),
-  check('pendidikan.sebelumnya_tanggal_dan_ijazah')
+  check('pendidikan.sebelumnya_tanggal_ijazah')
+    .optional()
+    .isDate()
+    .withMessage('Tanggal ijazah sebelumnya harus berupa tanggal'),
+  check('pendidikan.sebelumnya_no_ijazah')
+    .optional()
     .isString()
-    .notEmpty()
-    .withMessage('Tanggal dan ijazah sebelumnya harus diisi'),
-  check('pendidikan.sebelumnya_tanggal_skhun_dan_')
+    .withMessage('Nomor ijazah sebelumnya harus berupa string'),
+  check('pendidikan.sebelumnya_tanggal_skhun')
+    .optional()
+    .isDate()
+    .withMessage('Tanggal SKHUN sebelumnya harus berupa tanggal'),
+  check('pendidikan.sebelumnya_no_skhun')
+    .optional()
     .isString()
-    .notEmpty()
-    .withMessage('Tanggal SKHUN sebelumnya harus diisi'),
+    .withMessage('Nomor SKHUN sebelumnya harus berupa string'),
   check('pendidikan.sebelumnya_lama_belajar')
     .isString()
     .notEmpty()
@@ -216,6 +224,10 @@ const validatePendidikan = () => [
     .isString()
     .notEmpty()
     .withMessage('Paket keahlian harus diisi'),
+  check('pendidikan.diterima_tanggal')
+    .optional()
+    .isDate()
+    .withMessage('Tanggal diterima harus berupa tanggal'),
 ]
 
 const validatePerkembangan = [
@@ -236,15 +248,19 @@ const validatePerkembangan = [
     .isString()
     .withMessage('Tahun tamat belajar/lulus harus berupa string'),
 
-  check('akhir_pendidikan_no_tanggal_ijazah')
-    .optional()
-    .isString()
-    .withMessage('Nomor dan tanggal ijazah harus berupa string'),
+  check('akhir_pendidikan_tanggal_ijazah').optional(),
 
-  check('akhir_pendidikan_no_tanggal_skhun')
+  check('akhir_pendidikan_no_ijazah')
     .optional()
     .isString()
-    .withMessage('Nomor dan tanggal SKHUN harus berupa string'),
+    .withMessage('Nomor ijazah harus berupa string'),
+
+  check('akhir_pendidikan_tanggal_skhun').optional(),
+
+  check('akhir_pendidikan_no_skhun')
+    .optional()
+    .isString()
+    .withMessage('Nomor SKHUN harus berupa string'),
   (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {

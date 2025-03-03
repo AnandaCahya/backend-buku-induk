@@ -14,8 +14,10 @@
  * @property {string} meninggalkan_sekolah_ini_tanggal - Tanggal meninggalkan sekolah ini (jika ada).
  * @property {string} meninggalkan_sekolah_ini_alasan - Alasan meninggalkan sekolah ini (jika ada).
  * @property {string} akhir_pendidikan_tamat_belajar_lulus_tahun - Tahun tamat atau lulus pendidikan akhir.
- * @property {string} akhir_pendidikan_no_tanggal_ijazah - Nomor dan tanggal ijazah pendidikan akhir.
- * @property {string} akhir_pendidikan_no_tanggal_skhun - Nomor dan tanggal SKHUN pendidikan akhir.
+ * @property {string} akhir_pendidikan_tanggal_ijazah - Tanggal ijazah pendidikan akhir.
+ * @property {string} akhir_pendidikan_no_ijazah - Nomor ijazah pendidikan akhir.
+ * @property {string} akhir_pendidikan_tanggal_skhun - Tanggal SKHUN pendidikan akhir.
+ * @property {string} akhir_pendidikan_no_skhun - Nomor SKHUN pendidikan akhir.
  * @property {number} user_id - ID pengguna yang terkait dengan perkembangan ini.
  */
 
@@ -49,11 +51,19 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.STRING(255),
         allowNull: true,
       },
-      akhir_pendidikan_no_tanggal_ijazah: {
+      akhir_pendidikan_tanggal_ijazah: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+      },
+      akhir_pendidikan_no_ijazah: {
         type: DataTypes.STRING(255),
         allowNull: true,
       },
-      akhir_pendidikan_no_tanggal_skhun: {
+      akhir_pendidikan_tanggal_skhun: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+      },
+      akhir_pendidikan_no_skhun: {
         type: DataTypes.STRING(255),
         allowNull: true,
       },

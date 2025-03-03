@@ -4,7 +4,6 @@ const bodyParser = require('body-parser')
 const path = require('path')
 const expressJSDocSwagger = require('express-jsdoc-swagger')
 const package = require('../package.json')
-const puppeteer = require('puppeteer')
 
 require('dotenv').config()
 
@@ -27,7 +26,6 @@ const mapelController = require('./routes/Admin/AdminMapel')
 const daftarDataController = require('./routes/Siswa/SiswaDaftar')
 const ubahDataController = require('./routes/Siswa/SiswaDataDiri')
 const siswaRaportController = require('./routes/Siswa/SiswaRaport')
-
 
 //* DEV MODE
 
@@ -67,7 +65,6 @@ const {
 const morgan = require('morgan')
 const { Models } = require('./models')
 
-
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, '/views'))
 
@@ -94,6 +91,7 @@ app.use('/admin', AuthMiddlewareAdmin, mapelController)
 app.use('/siswa', daftarDataController)
 app.use('/siswa', AuthMiddlewareSiswa, ubahDataController)
 app.use('/siswa', AuthMiddlewareSiswa, siswaRaportController)
+
 
 
 app.get('/view-pdf/:id', async (req, res) => {
@@ -176,72 +174,42 @@ app.get('/view-pdf', async (req, res) => {
       {
         model: Models.data_diri,
         as: 'data_diri',
-        where: {
-          status_perubahan: 'approved',
-        },
       },
       {
         model: Models.perkembangan,
         as: 'perkembangan',
-        where: {
-          status_perubahan: 'approved',
-        },
       },
       {
         model: Models.ayah_kandung,
         as: 'ayah_kandung',
-        where: {
-          status_perubahan: 'approved',
-        },
       },
       {
         model: Models.ibu_kandung,
         as: 'ibu_kandung',
-        where: {
-          status_perubahan: 'approved',
-        },
       },
       {
         model: Models.kesehatan,
         as: 'kesehatan',
-        where: {
-          status_perubahan: 'approved',
-        },
       },
       {
         model: Models.pendidikan,
         as: 'pendidikan',
-        where: {
-          status_perubahan: 'approved',
-        },
       },
       {
         model: Models.setelah_pendidikan,
         as: 'setelah_pendidikan',
-        where: {
-          status_perubahan: 'approved',
-        },
       },
       {
         model: Models.tempat_tinggal,
         as: 'tempat_tinggal',
-        where: {
-          status_perubahan: 'approved',
-        },
       },
       {
         model: Models.wali,
         as: 'wali',
-        where: {
-          status_perubahan: 'approved',
-        },
       },
       {
         model: Models.hobi_siswa,
         as: 'hobi_siswa',
-        where: {
-          status_perubahan: 'approved',
-        },
       },
     ],
   })
@@ -288,7 +256,7 @@ app.get('/view-raport/:id', async (req, res) => {
         {
           model: Models.mapel,
           as: 'mapel',
-          attributes: ['id', 'nama'],
+          attributes: ['nama'],
         },
       ],
     });
@@ -307,10 +275,6 @@ app.get('/view-raport/:id', async (req, res) => {
       return acc;
     }, {});
 
-    console.log('User Data:', user);
-    console.log('Nilai Data:', nilai);
-    console.log('SIA Data:', siaData);
-
     res.render('export-halaman-belakang', { element: user, nilaiPerSemester, sia: siaData });
   } catch (error) {
     console.error(error);
@@ -320,7 +284,7 @@ app.get('/view-raport/:id', async (req, res) => {
 
 app.get('/view-image-raport/:id', async (req, res) => {
   const { id } = req.params;
-  const { semester = 1 } = req.query; // Default to semester 1 if not provided
+  const { semester = 1 } = req.query;
   try {
     const user = await Models.user.findOne({
       where: { id: id },
@@ -385,50 +349,31 @@ const upload = require('./middleware/upload')
 app.post('/import-excel', upload.single('file'), async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ message: 'No file uploaded' });
+      return res.status(400).json({ message: 'No file uploaded' })
     }
 
     // Read the Excel file
-    const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
-    const sheetName = workbook.SheetNames[0]; // Get first sheet
-    const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+    const workbook = XLSX.read(req.file.buffer, { type: 'buffer' })
+    const sheetName = workbook.SheetNames[0] // Get first sheet
+    const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName])
 
     // Process each row
     for (const row of data) {
-      const jurusan = await Models.jurusan.findOne({
-        where: { nama: row.Jurusan }
-      });
-
-      if (!jurusan) {
-        console.log(`Jurusan not found: ${row.Jurusan}`);
-        continue;
-      }
-
-      const angkatan = await Models.angkatan.findOne({
-        where: { tahun: row['Angkatan Tahun'] }
-      });
-
-      if (!angkatan) {
-        console.log(`Angkatan not found: ${row['Angkatan Tahun']}`);
-        continue;
-      }
-
       const siswa = {
         nisn: row.NISN,
-        angkatan_id: angkatan.id,
-        jurusan_id: jurusan.id,
-      };
+        angkatan_id: row['Angkatan Tahun'],
+        jurusan_id: row.Jurusan,
+      }
 
       const existingUser = await Models.user.findOne({
         where: { nisn: siswa.nisn },
-      });
-
+      })
       if (existingUser) {
-        console.log(`Skipping duplicate NISN: ${siswa.nisn}`);
-        continue;
+        console.log(`Skipping duplicate NISN: ${siswa.nisn}`)
+        continue
       }
 
-      const newUser = await Models.user.create(siswa);
+      const newUser = await Models.user.create(siswa)
 
       await Models.data_diri.create({
         user_id: newUser.id,
@@ -445,7 +390,7 @@ app.post('/import-excel', upload.single('file'), async (req, res) => {
         jml_saudara_angkat: row['Jumlah Saudara Angkat'],
         kelengkapan_ortu: row['Kelengkapan Ortu'],
         bahasa_sehari_hari: row['Bahasa Sehari-hari'],
-      });
+      })
 
       await Models.perkembangan.create({
         user_id: newUser.id,
@@ -456,10 +401,14 @@ app.post('/import-excel', upload.single('file'), async (req, res) => {
         meninggalkan_sekolah_ini_alasan: row['Meninggalkan Sekolah Ini Alasan'],
         akhir_pendidikan_tamat_belajar_lulus_tahun:
           row['Akhir Pendidikan Tamat Belajar Lulus Tahun'],
-        akhir_pendidikan_no_tanggal_ijazah:
-          row['Akhir Pendidikan No/Tanggal Ijazah'],
-        akhir_pendidikan_no_tanggal_skhun:
-          row['Akhir Pendidikan No/Tanggal SKHUN'],
+        akhir_pendidikan_tanggal_ijazah:
+          row['Akhir Pendidikan Tanggal Ijazah'],
+        akhir_pendidikan_no_ijazah:
+          row['Akhir Pendidikan No Ijazah'],
+        akhir_pendidikan_tanggal_skhun:
+          row['Akhir Pendidikan Tanggal SKHUN'],
+        akhir_pendidikan_no_skhun:
+          row['Akhir Pendidikan No SKHUN'],
       })
 
       await Models.ayah_kandung.create({
@@ -528,12 +477,13 @@ app.post('/import-excel', upload.single('file'), async (req, res) => {
         sebelumnya_tanggal_skhun: row['Sebelumnya Tanggal SKHUN'],
         sebelumnya_no_skhun: row['Sebelumnya No SKHUN'],
         sebelumnya_lama_belajar: row['Sebelumnya Lama Belajar'],
+        pindahan_dari_sekolah: row['Pindahan Dari Sekolah'],
+        pindahan_alasan: row['Pindahan Alasan'],
         diterima_di_kelas: row['Diterima di Kelas'],
         diterima_di_bidang_keahlian: row['Diterima di Bidang Keahlian'],
         diterima_di_program_keahlian: row['Diterima di Program Keahlian'],
         diterima_di_paket_keahlian: row['Diterima di Paket Keahlian'],
         diterima_tanggal: row['Diterima Tanggal'],
-        user_id: newUser.id,
       })
 
       await Models.tempat_tinggal.create({
@@ -552,145 +502,19 @@ app.post('/import-excel', upload.single('file'), async (req, res) => {
       // Setelah menyimpan data siswa, simpan data ke model sia
       await Models.sia.create({
         user_id: newUser.id,
-        sakit: row['Sakit'] || 0,
-        izin: row['Izin'] || 0,
-        alpha: row['Tanpa Keterangan'] || 0,
-        semester: row['Semester'] || 1,
+        sakit: row['Sakit'] || 0, // Ambil data sakit dari Excel, default 0 jika tidak ada
+        izin: row['Izin'] || 0, // Ambil data izin dari Excel, default 0 jika tidak ada
+        alpha: row['Tanpa Keterangan'] || 0, // Ambil data alpha dari Excel, default 0 jika tidak ada
+        semester: row['Semester'] || 1, // Ambil semester dari Excel, default 1 jika tidak ada
       });
     }
 
-    res.status(201).json({ message: 'Excel data imported successfully' });
+    res.status(201).json({ message: 'Excel data imported successfully' })
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error(error)
+    res.status(500).json({ message: 'Internal server error' })
   }
-});
-
-app.post('/import-raport', upload.single('file'), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ message: 'No file uploaded' });
-    }
-
-    const { semester } = req.query; 
-    if (!semester) {
-      return res.status(400).json({ message: 'Semester is required' });
-    }
-
-    const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
-    const sheetName = workbook.SheetNames[0]; 
-    const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
-
-    const subjectNames = data[0]; 
-    const labels = data[1]; 
-    const rows = data.slice(2); 
-
-    const mapelColumns = [];
-    for (let i = 0; i < subjectNames.length; i++) {
-      if (labels[i] === 'Nilai R') { 
-        mapelColumns.push({
-          mapelName: subjectNames[i],
-          nilaiIndex: i,
-          keteranganIndex: i + 1,
-        });
-      }
-    }
-
-    console.log('Mapel found in Excel:', mapelColumns.map(col => col.mapelName));
-
-    for (const row of rows) {
-      const nisn = row[2]; 
-      console.log('Processing NISN:', nisn); 
-
-      if (!nisn) {
-        console.log('Skipping row with undefined NISN:', row);
-        continue;
-      }
-
-      const user = await Models.user.findOne({ where: { nisn } });
-
-      if (!user) {
-        console.log(`Skipping NISN not found in database: ${nisn}`);
-        continue;
-      }
-
-      for (const mapelColumn of mapelColumns) {
-        const mapel = await Models.mapel.findOne({ where: { nama: mapelColumn.mapelName } });
-
-        if (!mapel) {
-          console.log(`Skipping mapel not found: ${mapelColumn.mapelName}`);
-          continue;
-        }
-
-        const existingNilai = await Models.nilai.findOne({
-          where: {
-            mapel_id: mapel.id,
-            user_id: user.id,
-            semester: parseInt(semester, 10),
-          },
-        });
-
-        if (existingNilai) {
-          console.log(`Skipping existing nilai_merdeka for mapel: ${mapelColumn.mapelName}, user_id: ${user.id}, semester: ${semester}`);
-          continue;
-        }
-
-        const nilaiMerdeka = {
-          r: row[mapelColumn.nilaiIndex],
-          keterangan: row[mapelColumn.keteranganIndex],
-          mapel_id: mapel.id,
-          semester: parseInt(semester, 10), 
-          user_id: user.id,
-        };
-
-        try {
-          console.log('Upserting nilai_merdeka:', nilaiMerdeka);
-          await Models.nilai.upsert(nilaiMerdeka);
-        } catch (err) {
-          console.error('Error upserting nilai_merdeka:', err);
-        }
-      }
-
-      const parseInteger = (value) => {
-        const parsed = parseInt(value, 10);
-        return isNaN(parsed) ? 0 : parsed;
-      };
-
-      const existingSia = await Models.sia.findOne({
-        where: {
-          user_id: user.id,
-          semester: parseInt(semester, 10),
-        },
-      });
-
-      if (existingSia) {
-        console.log(`Skipping existing SIA data for user_id: ${user.id}, semester: ${semester}`);
-        continue;
-      }
-
-      const siaData = {
-        user_id: user.id,
-        sakit: parseInteger(row[row.length - 3]),
-        izin: parseInteger(row[row.length - 2]),
-        alpha: parseInteger(row[row.length - 1]),
-        semester: parseInt(semester, 10), 
-      };
-
-      try {
-        const [siaRecord, created] = await Models.sia.upsert(siaData);
-        console.log(`SIA record ${created ? 'created' : 'updated'} for user_id: ${user.id}, semester: ${semester}`);
-        console.log('Upserting SIA data :', siaData)
-      } catch (err) {
-        console.error('Error upserting SIA data:', err);
-      }
-    }
-
-    res.status(201).json({ message: 'Raport data imported successfully' });
-  } catch (error) {
-    console.error('Error during import:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
+})
 
 app.listen(8080, async () => {
   console.log('App listen on port 8080')

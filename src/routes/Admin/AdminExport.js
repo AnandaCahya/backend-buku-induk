@@ -47,72 +47,42 @@ router.get('/export-excel', async (req, res) => {
       {
         model: Models.data_diri,
         as: 'data_diri',
-        where: {
-          status_perubahan: 'approved',
-        },
       },
       {
         model: Models.perkembangan,
         as: 'perkembangan',
-        where: {
-          status_perubahan: 'approved',
-        },
       },
       {
         model: Models.ayah_kandung,
         as: 'ayah_kandung',
-        where: {
-          status_perubahan: 'approved',
-        },
       },
       {
         model: Models.ibu_kandung,
         as: 'ibu_kandung',
-        where: {
-          status_perubahan: 'approved',
-        },
       },
       {
         model: Models.kesehatan,
         as: 'kesehatan',
-        where: {
-          status_perubahan: 'approved',
-        },
       },
       {
         model: Models.pendidikan,
         as: 'pendidikan',
-        where: {
-          status_perubahan: 'approved',
-        },
       },
       {
         model: Models.setelah_pendidikan,
         as: 'setelah_pendidikan',
-        where: {
-          status_perubahan: 'approved',
-        },
       },
       {
         model: Models.tempat_tinggal,
         as: 'tempat_tinggal',
-        where: {
-          status_perubahan: 'approved',
-        },
       },
       {
         model: Models.wali,
         as: 'wali',
-        where: {
-          status_perubahan: 'approved',
-        },
       },
       {
         model: Models.hobi_siswa,
         as: 'hobi_siswa',
-        where: {
-          status_perubahan: 'approved',
-        },
       },
     ],
   })
@@ -148,8 +118,10 @@ router.get('/export-excel', async (req, res) => {
     'Meninggalkan Sekolah Ini Tanggal',
     'Meninggalkan Sekolah Ini Alasan',
     'Akhir Pendidikan Tamat Belajar Lulus Tahun',
-    'Akhir Pendidikan No/Tanggal Ijazah',
-    'Akhir Pendidikan No/Tanggal SKHUN',
+    'Akhir Pendidikan Tanggal Ijazah',
+    'Akhir Pendidikan No Ijazah',
+    'Akhir Pendidikan Tanggal SKHUN',
+    'Akhir Pendidikan No SKHUN',
     'Nama Ayah',
     'Tempat Lahir Ayah',
     'Tanggal Lahir Ayah',
@@ -236,8 +208,10 @@ router.get('/export-excel', async (req, res) => {
       item.perkembangan?.meninggalkan_sekolah_ini_tanggal,
       item.perkembangan?.meninggalkan_sekolah_ini_alasan,
       item.perkembangan?.akhir_pendidikan_tamat_belajar_lulus_tahun,
-      item.perkembangan?.akhir_pendidikan_no_tanggal_ijazah,
-      item.perkembangan?.akhir_pendidikan_no_tanggal_skhun,
+      item.perkembangan?.akhir_pendidikan_tanggal_ijazah,
+      item.perkembangan?.akhir_pendidikan_no_ijazah,
+      item.perkembangan?.akhir_pendidikan_tanggal_skhun,
+      item.perkembangan?.akhir_pendidikan_no_skhun,
       item.ayah_kandung.nama,
       item.ayah_kandung.tempat_lahir,
       item.ayah_kandung.tanggal_lahir,
@@ -436,7 +410,6 @@ router.get('/export-raport-pdf/:id', async (req, res) => {
     const pdf = await page.pdf({
       format: 'A3',
       landscape: true,
-      margin: { top: '10px', right: '10px', bottom: '10px', left: '10px' }
     });
 
     await browser.close();
@@ -486,9 +459,6 @@ router.get('/export-raport-excel', async (req, res) => {
         {
           model: Models.data_diri,
           as: 'data_diri',
-          where: {
-            status_perubahan: 'approved',
-          },
         },
       ],
     });
