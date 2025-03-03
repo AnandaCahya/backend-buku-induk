@@ -14,7 +14,7 @@ const { Models } = require('../../models')
 const router = Router()
 
 /**
- * POST data-diri
+ * POST /siswa/data-diri
  * @summary Menambahkan data diri siswa beserta informasi terkait lainnya
  * @tags siswa
  * @param {object} request.body.request.required - Data yang akan ditambahkan
@@ -72,7 +72,8 @@ router.post('/data-diri', async (req, res) => {
         siswa,
       } = req.body
   
-      
+      const caridulu = await Models.user.findOne({ where: {nisn: siswa.nisn}})
+      if(caridulu) return res.status(400).json({message: "NISN sudah digunakan"}) 
       const user = await Models.user.create(siswa)
   
       
@@ -102,13 +103,8 @@ router.post('/data-diri', async (req, res) => {
         data: req.body,
       })
     } catch (error) {
-      if (error instanceof Sequelize.UniqueConstraintError) {
-        res.status(400).json({ message: 'NISN sudah terpakai' })
-      } else {
-        
         console.log(error)
         res.status(500).json({ message: 'Internal server error' })
-      }
       await Models.user.destroy({
         where: {
           nisn: req.body.siswa.nisn,

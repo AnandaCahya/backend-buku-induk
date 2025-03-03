@@ -72,6 +72,161 @@
                 <th rowspan="2" class="index">No</th>
                 <th rowspan="2" class="mata-pelajaran">Mata Pelajaran</th>
                 <% 
+                    const tahunPelajaran = `${element.angkatan.tahun}/${parseInt(element.angkatan.tahun) + 1}`;
+                %>
+                <th colspan="2" class="tahun-pelajaran">Tahun Pelajaran <%= tahunPelajaran %></th>
+            </tr>
+            <tr>
+                <th class="nilai">Nilai R</th>
+                <th class="keterangan">Keterangan</th>
+            </tr>
+            <% 
+                const kelompokUmum = ['Pendidikan Agama dan Budi Pekerti', 'Pendidikan Pancasila', 'Bahasa Indonesia', 'Pendidikan Jasmani, Olahraga, dan Kesehatan', 'Sejarah', 'Seni Budaya', 'Bahasa Jawa'];
+                const kelompokKejuruan = ['Matematika', 'Bahasa Inggris', 'Informatika', 'Projek IPAS', 'Dasar Program Keahlian', 'Mata Pelajaran Konsentrasi Keahlian', 'Projek Kreatif dan Kewirausahaan', 'Mata Pelajaran Pilihan'];
+
+                const mapelPerSemester = {
+                    1: {
+                        'Kelompok Mata Pelajaran Umum': kelompokUmum,
+                        'Kelompok Mata Pelajaran Kejuruan': ['Matematika', 'Bahasa Inggris', 'Informatika', 'Projek IPAS', 'Dasar Program Keahlian']
+                    },
+                    2: {
+                        'Kelompok Mata Pelajaran Umum': kelompokUmum,
+                        'Kelompok Mata Pelajaran Kejuruan': ['Matematika', 'Bahasa Inggris', 'Informatika', 'Projek IPAS', 'Dasar Program Keahlian']
+                    },
+                    3: {
+                        'Kelompok Mata Pelajaran Umum': kelompokUmum.filter(mapel => !['Seni Budaya', 'Informatika', 'Projek IPAS', 'Dasar Program Keahlian'].includes(mapel)),
+                        'Kelompok Mata Pelajaran Kejuruan': ['Matematika', 'Bahasa Inggris', 'Mata Pelajaran Konsentrasi Keahlian', 'Projek Kreatif dan Kewirausahaan', 'Mata Pelajaran Pilihan']
+                    },
+                    4: {
+                        'Kelompok Mata Pelajaran Umum': kelompokUmum.filter(mapel => !['Seni Budaya', 'Informatika', 'Projek IPAS', 'Dasar Program Keahlian'].includes(mapel)),
+                        'Kelompok Mata Pelajaran Kejuruan': ['Matematika', 'Bahasa Inggris', 'Mata Pelajaran Konsentrasi Keahlian', 'Projek Kreatif dan Kewirausahaan', 'Mata Pelajaran Pilihan']
+                    },
+                    5: {
+                        'Kelompok Mata Pelajaran Umum': kelompokUmum.filter(mapel => !['Pendidikan Jasmani, Olahraga, dan Kesehatan', 'Seni Budaya', 'Informatika', 'Projek IPAS', 'Dasar Program Keahlian'].includes(mapel)),
+                        'Kelompok Mata Pelajaran Kejuruan': ['Matematika', 'Bahasa Inggris', 'Mata Pelajaran Konsentrasi Keahlian', 'Projek Kreatif dan Kewirausahaan', 'Mata Pelajaran Pilihan']
+                    },
+                    6: {
+                        'Kelompok Mata Pelajaran Umum': kelompokUmum.filter(mapel => !['Pendidikan Jasmani, Olahraga, dan Kesehatan', 'Seni Budaya', 'Informatika', 'Projek IPAS', 'Dasar Program Keahlian'].includes(mapel)),
+                        'Kelompok Mata Pelajaran Kejuruan': ['Matematika', 'Bahasa Inggris', 'Mata Pelajaran Konsentrasi Keahlian', 'Projek Kreatif dan Kewirausahaan', 'Mata Pelajaran Pilihan']
+                    }
+                };
+
+                const currentMapel = mapelPerSemester[semester] || {};
+            %>
+
+            <% Object.keys(currentMapel).forEach(function(category) { %>
+                <tr>
+                    <th colspan="4" class="jenis-mapel"><%= category %></th>
+                </tr>
+                <% currentMapel[category].forEach(function(mapel, index) { %>
+                    <tr>
+                        <td class="index"><%= index + 1 %>.</td>
+                        <td class="mata-pelajaran"><%= mapel %></td>
+                        <% const semesterKey = `Semester ${semester}`; %>
+                        <% const nilaiData = nilaiPerSemester[semesterKey] && nilaiPerSemester[semesterKey].find(n => n.mapel.nama === mapel); %>
+                        <td class="nilai"><%= nilaiData ? nilaiData.dataValues.r : '' %></td>
+                        <td class="keterangan"><%= nilaiData ? nilaiData.dataValues.keterangan : '' %></td>
+                    </tr>
+                <% }); %>
+            <% }); %>
+
+            <tr>
+                <th colspan="4" style="text-align: start;">Ketidakhadiran</th>
+            </tr>
+            <tr>
+                <td class="index-ketidakhadiran">1.</td>
+                <td>Sakit</td>
+                <td class="keterangan" colspan="2"><%= sia.find(s => s.semester === parseInt(semester, 10))?.sakit || 0 %> Hari</td>
+            </tr>
+            <tr>
+                <td class="index-ketidakhadiran">2.</td>
+                <td>Ijin</td>
+                <td class="keterangan" colspan="2"><%= sia.find(s => s.semester === parseInt(semester, 10))?.izin || 0 %> Hari</td>
+            </tr>
+            <tr>
+                <td class="index-ketidakhadiran">3.</td>
+                <td>Tanpa Keterangan</td>
+                <td class="keterangan" colspan="2"><%= sia.find(s => s.semester === parseInt(semester, 10))?.alpha || 0 %> Hari</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Raport</title>
+    <style>
+        * {
+            font-size: 22px;
+        }
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
+        table, td, th {
+            border: 1px solid black;
+            border-collapse: collapse;
+            table-layout: fixed;
+            width: 100%;
+        }
+        .index {
+            width: 5%;
+            text-align: center;
+        }
+        .index-ketidakhadiran {
+            text-align: center;
+        }
+        .mata-pelajaran {
+            width: 55%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .tahun-pelajaran {
+            width: 40%;
+        }
+        .jenis-mapel {
+            text-align: left;
+        }
+        .nilai {
+            font-size: 20px;
+            width: 30%;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .keterangan {
+            font-size: 20px;
+            width: 70%;
+            text-align: center;
+            word-wrap: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        tr {
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <table>
+            <colgroup>
+                <col style="width: 5%;"> <!-- Index -->
+                <col style="width: 55%;"> <!-- Mata Pelajaran -->
+                <col style="width: 10%;"> <!-- Nilai R -->
+                <col style="width: 30%;"> <!-- Keterangan -->
+            </colgroup>            
+            <tr>
+                <th rowspan="2" class="index">No</th>
+                <th rowspan="2" class="mata-pelajaran">Mata Pelajaran</th>
+                <% 
                     const startYear = parseInt(element.angkatan.tahun);
                     const semesterYear = Math.floor((semester - 1) / 2);
                     const tahunPelajaran = `${startYear + semesterYear}/${startYear + semesterYear + 1}`;

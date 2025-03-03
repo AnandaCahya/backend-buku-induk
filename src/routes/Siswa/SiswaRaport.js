@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/image-raport/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { semester = 1 } = req.query; // Default to semester 1 if not provided
+    const { semester = 1 } = req.query;
 
     const url = `http://localhost:8080/view-image-raport/${id}?semester=${semester}`;
     const browser = await puppeteer.launch({
