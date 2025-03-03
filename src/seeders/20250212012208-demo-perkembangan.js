@@ -24,6 +24,28 @@ module.exports = {
         akhir_pendidikan_no_skhun: 'SKHUN-2025/001',
         user_id: 1,
       },
+      {
+        menerima_bea_siswa_tahun_kelas_dari: null,
+        meninggalkan_sekolah_ini_tanggal: null,
+        meninggalkan_sekolah_ini_alasan: null,
+        akhir_pendidikan_tamat_belajar_lulus_tahun: null,
+        akhir_pendidikan_tanggal_ijazah: null,
+        akhir_pendidikan_no_ijazah: null,
+        akhir_pendidikan_tanggal_skhun: null,
+        akhir_pendidikan_no_skhun: null,
+        user_id: 2,
+      },
+      {
+        menerima_bea_siswa_tahun_kelas_dari: null,
+        meninggalkan_sekolah_ini_tanggal: null,
+        meninggalkan_sekolah_ini_alasan: null,
+        akhir_pendidikan_tamat_belajar_lulus_tahun: null,
+        akhir_pendidikan_tanggal_ijazah: null,
+        akhir_pendidikan_no_ijazah: null,
+        akhir_pendidikan_tanggal_skhun: null,
+        akhir_pendidikan_no_skhun: null,
+        user_id: 3,
+      },
     ])
   },
 
