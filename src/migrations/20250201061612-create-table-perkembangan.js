@@ -32,11 +32,19 @@ module.exports = {
         type: Sequelize.STRING(255),
         allowNull: true,
       },
-      akhir_pendidikan_no_tanggal_ijazah: {
+      akhir_pendidikan_tanggal_ijazah: {
+        type: Sequelize.DATEONLY,
+        allowNull: true,
+      },
+      akhir_pendidikan_no_ijazah: {
         type: Sequelize.STRING(255),
         allowNull: true,
       },
-      akhir_pendidikan_no_tanggal_skhun: {
+      akhir_pendidikan_tanggal_skhun: {
+        type: Sequelize.DATEONLY,
+        allowNull: true,
+      },
+      akhir_pendidikan_no_skhun: {
         type: Sequelize.STRING(255),
         allowNull: true,
       },
