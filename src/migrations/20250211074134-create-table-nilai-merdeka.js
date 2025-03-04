@@ -32,13 +32,9 @@ module.exports = {
           key: 'id',
         },
       },
-      tahun_pelajaran_id: {
+      semester: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: {
-          model: 'tahun_pelajaran',
-          key: 'id',
-        },
       },
       user_id: {
         type: Sequelize.INTEGER,

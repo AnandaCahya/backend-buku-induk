@@ -24,10 +24,10 @@ module.exports = {
       { nama: 'Bahasa Inggris' },
       { nama: 'Informatika' },
       { nama: 'Projek IPAS' },
-      { nama: 'DPK' },
-      { nama: 'MPKK' },
-      { nama: 'PKDK' },
-      { nama: 'MPP' },
+      { nama: 'Dasar Program Keahlian' },
+      { nama: 'Mata Pelajaran Konsentrasi Keahlian' },
+      { nama: 'Projek Kreatif dan Kewirausahaan' },
+      { nama: 'Mata Pelajaran Pilihan' },
     ])
   },
 
