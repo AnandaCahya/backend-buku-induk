@@ -526,20 +526,40 @@ router.get('/export-raport-excel', async (req, res) => {
       },
     });
 
-    const allMapel = [...new Set(nilaiData.map(n => n.mapel.nama))];
+    // Filter mata pelajaran berdasarkan semester
+    const allMapel = await Models.mapel.findAll({
+      attributes: ['nama'],
+    });
+
+    let filteredMapel;
+    if (semester === '1' || semester === '2') {
+      filteredMapel = allMapel.filter(mapel => 
+        !['Mata Pelajaran Konsentrasi Keahlian', 'Projek Kreatif dan Kewirausahaan', 'Mata Pelajaran Pilihan'].includes(mapel.nama)
+      );
+    } else if (semester === '3' || semester === '4') {
+      filteredMapel = allMapel.filter(mapel => 
+        !['Seni Budaya', 'Informatika', 'Projek IPAS', 'Dasar Program Keahlian'].includes(mapel.nama)
+      );
+    } else if (semester === '5' || semester === '6') {
+      filteredMapel = allMapel.filter(mapel => 
+        !['Pendidikan Jasmani, Olahraga, dan Kesehatan', 'Seni Budaya', 'Informatika', 'Projek IPAS', 'Dasar Program Keahlian'].includes(mapel.nama)
+      );
+    } else {
+      return res.status(400).json({ error: 'Semester tidak valid' });
+    }
 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Data Raport');
 
     let headerRow1 = ['No', 'Nama Siswa', 'NISN'];
-    allMapel.forEach(mapel => {
-      headerRow1.push(mapel, ''); 
+    filteredMapel.forEach(mapel => {
+      headerRow1.push(mapel.nama, ''); 
     });
     headerRow1.push('Ketidakhadiran', '', ''); 
     worksheet.addRow(headerRow1);
 
     let headerRow2 = ['', '', ''];
-    allMapel.forEach(() => {
+    filteredMapel.forEach(() => {
       headerRow2.push('Nilai R', 'Keterangan');
     });
     headerRow2.push('Sakit', 'Izin', 'Tanpa Keterangan'); 
@@ -550,7 +570,7 @@ router.get('/export-raport-excel', async (req, res) => {
     worksheet.mergeCells('C1:C2'); 
 
     let colIndex = 4; 
-    allMapel.forEach(() => {
+    filteredMapel.forEach(() => {
       worksheet.mergeCells(1, colIndex, 1, colIndex + 1);
       colIndex += 2;
     });
@@ -565,8 +585,8 @@ router.get('/export-raport-excel', async (req, res) => {
         user.nisn,
       ];
 
-      allMapel.forEach(mapel => {
-        const nilai = nilaiData.find(n => n.user_id === user.id && n.mapel.nama === mapel);
+      filteredMapel.forEach(mapel => {
+        const nilai = nilaiData.find(n => n.user_id === user.id && n.mapel.nama === mapel.nama);
         row.push(nilai ? nilai.r : '-', nilai ? nilai.keterangan : '-');
       });
 
