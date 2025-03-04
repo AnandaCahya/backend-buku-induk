@@ -424,6 +424,44 @@ router.get('/export-raport-pdf/:id', async (req, res) => {
 });
 
 /**
+ * GET /admin/export-halaman-belakang-bulk
+ * @summary Mengekspor halaman belakang untuk banyak siswa berdasarkan angkatan dan jurusan
+ * @tags admin
+ * @param {string} angkatanId.query - Tahun angkatan untuk filter data siswa
+ * @param {string} jurusanId.query - Nama jurusan untuk filter data siswa
+ * @return {file} 200 - Berhasil mengekspor halaman belakang ke file PDF - application/pdf
+ * @return {object} 500 - Terjadi kesalahan saat ekspor PDF - application/json
+ * @example response - 500 - Terjadi kesalahan saat ekspor PDF
+ * {
+ *   "error": "Terjadi kesalahan saat ekspor PDF"
+ * }
+ */
+router.get('/export-raport-pdf', async (req, res) => {
+  try {
+    const { angkatanId, jurusanId } = req.query;
+    const browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+    const page = await browser.newPage();
+    const url = `http://localhost:8080/view-raport?angkatanId=${angkatanId}&jurusanId=${jurusanId}`;
+    await page.goto(url, { waitUntil: 'networkidle0' });
+    const pdf = await page.pdf({
+      format: 'A3',
+      landscape: true,
+    });
+
+    await browser.close();
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=halaman-belakang-bulk.pdf');
+    res.send(pdf);
+  } catch (err) {
+    console.error('Terjadi kesalahan:', err);
+    res.status(500).send('Terjadi kesalahan saat ekspor PDF');
+  }
+});
+
+/**
  * GET /admin/export-raport-excel
  * @summary Mengekspor semua data raport berdasarkan angkatan, jurusan, dan semester
  * @tags admin
@@ -624,5 +662,8 @@ router.get('/export-raport-template', async (req, res) => {
     res.status(500).send('Terjadi kesalahan saat mengunduh template Excel');
   }
 });
+
+
+
 
 module.exports = router
