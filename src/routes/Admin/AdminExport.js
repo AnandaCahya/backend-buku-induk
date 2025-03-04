@@ -549,6 +549,80 @@ router.get('/export-raport-excel', async (req, res) => {
   }
 });
 
+/**
+ * GET /admin/export-raport-template
+ * @summary Mengunduh template Excel untuk raport berdasarkan semester
+ * @tags admin
+ * @param {string} semester.query - Semester untuk menentukan mata pelajaran yang disertakan
+ * @return {file} 200 - Berhasil mengunduh template Excel - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+ * @return {object} 500 - Terjadi kesalahan saat mengunduh template Excel - application/json
+ * @example response - 500 - Terjadi kesalahan saat mengunduh template Excel
+ * {
+ *   "error": "Terjadi kesalahan saat mengunduh template Excel"
+ * }
+ */
+router.get('/export-raport-template', async (req, res) => {
+  try {
+    const { semester } = req.query;
+    const allMapel = await Models.mapel.findAll({
+      attributes: ['nama'],
+    });
 
+    let filteredMapel;
+    if (semester === '1' || semester === '2') {
+      filteredMapel = allMapel.filter(mapel => 
+        !['Mata Pelajaran Konsentrasi Keahlian', 'Projek Kreatif dan Kewirausahaan', 'Mata Pelajaran Pilihan'].includes(mapel.nama)
+      );
+    } else if (semester === '3' || semester === '4') {
+      filteredMapel = allMapel.filter(mapel => 
+        !['Seni Budaya', 'Informatika', 'Projek IPAS', 'Dasar Program Keahlian'].includes(mapel.nama)
+      );
+    } else if (semester === '5' || semester === '6') {
+      filteredMapel = allMapel.filter(mapel => 
+        !['Pendidikan Jasmani, Olahraga, dan Kesehatan', 'Seni Budaya', 'Informatika', 'Projek IPAS', 'Dasar Program Keahlian'].includes(mapel.nama)
+      );
+    } else {
+      return res.status(400).json({ error: 'Semester tidak valid' });
+    }
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Template Raport');
+
+    let headerRow1 = ['No', 'Nama Siswa', 'NISN'];
+    filteredMapel.forEach(mapel => {
+      headerRow1.push(mapel.nama, '');
+    });
+    headerRow1.push('Ketidakhadiran', '', '');
+    worksheet.addRow(headerRow1);
+
+    let headerRow2 = ['', '', ''];
+    filteredMapel.forEach(() => {
+      headerRow2.push('Nilai R', 'Keterangan');
+    });
+    headerRow2.push('Sakit', 'Izin', 'Tanpa Keterangan');
+    worksheet.addRow(headerRow2);
+
+    worksheet.mergeCells('A1:A2');
+    worksheet.mergeCells('B1:B2');
+    worksheet.mergeCells('C1:C2');
+
+    let colIndex = 4;
+    filteredMapel.forEach(() => {
+      worksheet.mergeCells(1, colIndex, 1, colIndex + 1);
+      colIndex += 2;
+    });
+
+    worksheet.mergeCells(1, colIndex, 1, colIndex + 2);
+
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename=raport-template.xlsx');
+
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (err) {
+    console.error('Terjadi kesalahan:', err);
+    res.status(500).send('Terjadi kesalahan saat mengunduh template Excel');
+  }
+});
 
 module.exports = router
