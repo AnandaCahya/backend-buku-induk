@@ -20,11 +20,19 @@ module.exports = {
         type: Sequelize.STRING(255),
         allowNull: false,
       },
-      sebelumnya_tanggal_dan_ijazah: {
+      sebelumnya_tanggal_ijazah: {
+        type: Sequelize.DATEONLY,
+        allowNull: false,
+      },
+      sebelumnya_no_ijazah: {
         type: Sequelize.STRING(255),
         allowNull: false,
       },
-      sebelumnya_tanggal_skhun_dan_: {
+      sebelumnya_tanggal_skhun: {
+        type: Sequelize.DATEONLY,
+        allowNull: false,
+      },
+      sebelumnya_no_skhun: {
         type: Sequelize.STRING(255),
         allowNull: false,
       },

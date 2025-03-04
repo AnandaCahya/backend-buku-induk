@@ -347,45 +347,348 @@ router.post('/data-diri/pending/:id', async (req, res) => {
   ];
 
   try {
-    await Promise.all(models.map(async (model) => {
-      let [pendingData] = await Promise.all([
-        Models[model].findOne({
-          where: {
-            user_id: user_id,
-            status_perubahan: "pending"
-          }
-        })
-      ]);
+    //1. Cek data yang berubah
+    let caripending_datadiri = await Models.data_diri.findOne({
+      where: {
+        user_id: user_id,
+        status_perubahan: "pending"
+      }
+    })
+    let caripending_ayahkandung = await Models.ayah_kandung.findOne({
+      where: {
+        user_id: user_id,
+        status_perubahan: "pending"
+      }
+    })
+    let caripending_ibukandung = await Models.ibu_kandung.findOne({
+      where: {
+        user_id: user_id,
+        status_perubahan: "pending"
+      }
+    })
+    let caripending_hobisiswa = await Models.hobi_siswa.findOne({
+      where: {
+        user_id: user_id,
+        status_perubahan: "pending"
+      }
+    })
+    let caripending_kesehatan = await Models.kesehatan.findOne({
+      where: {
+        user_id: user_id,
+        status_perubahan: "pending"
+      }
+    })
+    let caripending_pendidikan = await Models.pendidikan.findOne({
+      where: {
+        user_id: user_id,
+        status_perubahan: "pending"
+      }
+    })
+    let caripending_perkembangan = await Models.perkembangan.findOne({
+      where: {
+        user_id: user_id,
+        status_perubahan: "pending"
+      }
+    })
+    let caripending_setelahpendidikan = await Models.setelah_pendidikan.findOne({
+      where: {
+        user_id: user_id,
+        status_perubahan: "pending"
+      }
+    })
+    let caripending_tempattinggal = await Models.tempat_tinggal.findOne({
+      where: {
+        user_id: user_id,
+        status_perubahan: "pending"
+      }
+    })
+    let caripending_wali = await Models.wali.findOne({
+      where: {
+        user_id: user_id,
+        status_perubahan: "pending"
+      }
+    })
 
-      if (!pendingData?.dataValues) return;
-      pendingData = pendingData.dataValues;
-
-      await Promise.all(Object.keys(pendingData).map((k) => {
-        if (pendingData[k] == null) delete pendingData[k];
-        delete pendingData["id"];
-        delete pendingData["status_perubahan"];
-      }));
-      console.log(`Updating model: ${model}, Data:`, pendingData);
-
-      const updateResult = await Models[model].update(pendingData, {
+    //2. Cek dulu sikambing ini. Kalau ada lansgung update
+    if (caripending_datadiri) {
+      await Object.keys(caripending_datadiri).forEach(async (k) => {
+        if (caripending_datadiri[k] == null) await delete caripending_datadiri[k];
+        if (typeof caripending_datadiri[k] === "string" && caripending_datadiri[k] === "") caripending_datadiri[k] = null
+        await delete caripending_datadiri["id"];
+        await delete caripending_datadiri["status_perubahan"];
+      })
+      console.log(`Updating model: data_diri:`, caripending_datadiri);
+      const updateResult = await Models.data_diri.update(caripending_datadiri, {
         where: {
           user_id: user_id,
           status_perubahan: "approved"
         }
       });
 
-      console.log(`Update result for ${model}:`, updateResult);
-    }));
+      console.log(`Update result for data_diri:`, updateResult);
+    }
 
-    await Promise.all(models.map(async model => {
-      await Models[model].destroy({
+    if (caripending_ayahkandung) {
+      await Object.keys(caripending_ayahkandung).forEach(async (k) => {
+        if (caripending_ayahkandung[k] == null) await delete caripending_ayahkandung[k];
+        if (typeof caripending_ayahkandung[k] === "string" && caripending_ayahkandung[k] === "") caripending_ayahkandung[k] = null;
+        await delete caripending_ayahkandung["id"];
+        await delete caripending_ayahkandung["status_perubahan"];
+      });
+      console.log(`Updating model: ayah_kandung:`, caripending_ayahkandung);
+      const updateResult = await Models.ayah_kandung.update(caripending_ayahkandung, {
+        where: {
+          user_id: user_id,
+          status_perubahan: "approved"
+        }
+      });
+
+      console.log(`Update result for ayah_kandung:`, updateResult);
+    }
+
+    if (caripending_ibukandung) {
+      await Object.keys(caripending_ibukandung).forEach(async (k) => {
+        if (caripending_ibukandung[k] == null) await delete caripending_ibukandung[k];
+        if (typeof caripending_ibukandung[k] === "string" && caripending_ibukandung[k] === "") caripending_ibukandung[k] = null;
+        await delete caripending_ibukandung["id"];
+        await delete caripending_ibukandung["status_perubahan"];
+      });
+      console.log(`Updating model: ibu_kandung:`, caripending_ibukandung);
+      const updateResult = await Models.ibu_kandung.update(caripending_ibukandung, {
+        where: {
+          user_id: user_id,
+          status_perubahan: "approved"
+        }
+      });
+
+      console.log(`Update result for ibu_kandung:`, updateResult);
+    }
+
+    if (caripending_hobisiswa) {
+      await Object.keys(caripending_hobisiswa).forEach(async (k) => {
+        if (caripending_hobisiswa[k] == null) await delete caripending_hobisiswa[k];
+        if (typeof caripending_hobisiswa[k] === "string" && caripending_hobisiswa[k] === "") caripending_hobisiswa[k] = null;
+        await delete caripending_hobisiswa["id"];
+        await delete caripending_hobisiswa["status_perubahan"];
+      });
+      console.log(`Updating model: hobi_siswa:`, caripending_hobisiswa);
+      const updateResult = await Models.hobi_siswa.update(caripending_hobisiswa, {
+        where: {
+          user_id: user_id,
+          status_perubahan: "approved"
+        }
+      });
+
+      console.log(`Update result for hobi_siswa:`, updateResult);
+    }
+
+    if (caripending_kesehatan) {
+      await Object.keys(caripending_kesehatan).forEach(async (k) => {
+        if (caripending_kesehatan[k] == null) await delete caripending_kesehatan[k];
+        if (typeof caripending_kesehatan[k] === "string" && caripending_kesehatan[k] === "") caripending_kesehatan[k] = null;
+        await delete caripending_kesehatan["id"];
+        await delete caripending_kesehatan["status_perubahan"];
+      });
+      console.log(`Updating model: kesehatan:`, caripending_kesehatan);
+      const updateResult = await Models.kesehatan.update(caripending_kesehatan, {
+        where: {
+          user_id: user_id,
+          status_perubahan: "approved"
+        }
+      });
+
+      console.log(`Update result for kesehatan:`, updateResult);
+    }
+
+    if (caripending_pendidikan) {
+      await Object.keys(caripending_pendidikan).forEach(async (k) => {
+        if (caripending_pendidikan[k] == null) await delete caripending_pendidikan[k];
+        if (typeof caripending_pendidikan[k] === "string" && caripending_pendidikan[k] === "") caripending_pendidikan[k] = null;
+        await delete caripending_pendidikan["id"];
+        await delete caripending_pendidikan["status_perubahan"];
+      });
+      console.log(`Updating model: pendidikan:`, caripending_pendidikan);
+      const updateResult = await Models.pendidikan.update(caripending_pendidikan, {
+        where: {
+          user_id: user_id,
+          status_perubahan: "approved"
+        }
+      });
+
+      console.log(`Update result for pendidikan:`, updateResult);
+    }
+
+    if (caripending_perkembangan) {
+      await Object.keys(caripending_perkembangan).forEach(async (k) => {
+        if (caripending_perkembangan[k] == null) await delete caripending_perkembangan[k];
+        if (typeof caripending_perkembangan[k] === "string" && caripending_perkembangan[k] === "") caripending_perkembangan[k] = null;
+        await delete caripending_perkembangan["id"];
+        await delete caripending_perkembangan["status_perubahan"];
+      });
+      console.log(`Updating model: perkembangan:`, caripending_perkembangan);
+      const updateResult = await Models.perkembangan.update(caripending_perkembangan, {
+        where: {
+          user_id: user_id,
+          status_perubahan: "approved"
+        }
+      });
+
+      console.log(`Update result for perkembangan:`, updateResult);
+    }
+
+    if (caripending_setelahpendidikan) {
+      await Object.keys(caripending_setelahpendidikan).forEach(async (k) => {
+        if (caripending_setelahpendidikan[k] == null) await delete caripending_setelahpendidikan[k];
+        if (typeof caripending_setelahpendidikan[k] === "string" && caripending_setelahpendidikan[k] === "") caripending_setelahpendidikan[k] = null;
+        await delete caripending_setelahpendidikan["id"];
+        await delete caripending_setelahpendidikan["status_perubahan"];
+      });
+      console.log(`Updating model: setelah_pendidikan:`, caripending_setelahpendidikan);
+      const updateResult = await Models.setelah_pendidikan.update(caripending_setelahpendidikan, {
+        where: {
+          user_id: user_id,
+          status_perubahan: "approved"
+        }
+      });
+
+      console.log(`Update result for setelah_pendidikan:`, updateResult);
+    }
+
+    if (caripending_tempattinggal) {
+      await Object.keys(caripending_tempattinggal).forEach(async (k) => {
+        if (caripending_tempattinggal[k] == null) await delete caripending_tempattinggal[k];
+        if (typeof caripending_tempattinggal[k] === "string" && caripending_tempattinggal[k] === "") caripending_tempattinggal[k] = null;
+        await delete caripending_tempattinggal["id"];
+        await delete caripending_tempattinggal["status_perubahan"];
+      });
+      console.log(`Updating model: tempat_tinggal:`, caripending_tempattinggal);
+      const updateResult = await Models.tempat_tinggal.update(caripending_tempattinggal, {
+        where: {
+          user_id: user_id,
+          status_perubahan: "approved"
+        }
+      });
+
+      console.log(`Update result for tempat_tinggal:`, updateResult);
+    }
+
+    if (caripending_wali) {
+      await Object.keys(caripending_wali).forEach(async (k) => {
+        if (caripending_wali[k] == null) await delete caripending_wali[k];
+        if (typeof caripending_wali[k] === "string" && caripending_wali[k] === "") caripending_wali[k] = null;
+        await delete caripending_wali["id"];
+        await delete caripending_wali["status_perubahan"];
+      });
+      console.log(`Updating model: wali:`, caripending_wali);
+      const updateResult = await Models.wali.update(caripending_wali, {
+        where: {
+          user_id: user_id,
+          status_perubahan: "approved"
+        }
+      });
+
+      console.log(`Update result for wali:`, updateResult);
+    }
+
+    //3. Last chance buat di cek lagi kalau masih ada data pending. Terus hapus data pending saja
+    if (caripending_datadiri) {
+      await Models.data_diri.destroy({
         where: {
           user_id: user_id,
           status_perubahan: "pending"
         }
       });
-      console.log(`Deleted pending data ${model}`)
-    }));
+      console.log(`Deleted pending data data_diri`)
+    }
+    if (caripending_ayahkandung) {
+      await Models.ayah_kandung.destroy({
+        where: {
+          user_id: user_id,
+          status_perubahan: "pending"
+        }
+      });
+      console.log(`Deleted pending data ayah_kandung`);
+    }
+    
+    if (caripending_ibukandung) {
+      await Models.ibu_kandung.destroy({
+        where: {
+          user_id: user_id,
+          status_perubahan: "pending"
+        }
+      });
+      console.log(`Deleted pending data ibu_kandung`);
+    }
+    
+    if (caripending_hobisiswa) {
+      await Models.hobi_siswa.destroy({
+        where: {
+          user_id: user_id,
+          status_perubahan: "pending"
+        }
+      });
+      console.log(`Deleted pending data hobi_siswa`);
+    }
+    
+    if (caripending_kesehatan) {
+      await Models.kesehatan.destroy({
+        where: {
+          user_id: user_id,
+          status_perubahan: "pending"
+        }
+      });
+      console.log(`Deleted pending data kesehatan`);
+    }
+    
+    if (caripending_pendidikan) {
+      await Models.pendidikan.destroy({
+        where: {
+          user_id: user_id,
+          status_perubahan: "pending"
+        }
+      });
+      console.log(`Deleted pending data pendidikan`);
+    }
+    
+    if (caripending_perkembangan) {
+      await Models.perkembangan.destroy({
+        where: {
+          user_id: user_id,
+          status_perubahan: "pending"
+        }
+      });
+      console.log(`Deleted pending data perkembangan`);
+    }
+    
+    if (caripending_setelahpendidikan) {
+      await Models.setelah_pendidikan.destroy({
+        where: {
+          user_id: user_id,
+          status_perubahan: "pending"
+        }
+      });
+      console.log(`Deleted pending data setelah_pendidikan`);
+    }
+    
+    if (caripending_tempattinggal) {
+      await Models.tempat_tinggal.destroy({
+        where: {
+          user_id: user_id,
+          status_perubahan: "pending"
+        }
+      });
+      console.log(`Deleted pending data tempat_tinggal`);
+    }
+    
+    if (caripending_wali) {
+      await Models.wali.destroy({
+        where: {
+          user_id: user_id,
+          status_perubahan: "pending"
+        }
+      });
+      console.log(`Deleted pending data wali`);
+    }    
 
     return res.json({ message: 'Data successfully approved' });
   } catch (error) {
