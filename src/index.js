@@ -598,6 +598,223 @@ app.post('/import-excel', upload.single('file'), async (req, res) => {
   }
 })
 
+
+app.post('/import-raport', upload.single('file'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    const { semester } = req.query; 
+    if (!semester) {
+      return res.status(400).json({ message: 'Semester is required' });
+    }
+
+    const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
+    const sheetName = workbook.SheetNames[0]; 
+    const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
+
+    const subjectNames = data[0]; 
+    const labels = data[1]; 
+    const rows = data.slice(2); 
+
+    const mapelColumns = [];
+    for (let i = 0; i < subjectNames.length; i++) {
+      if (labels[i] === 'Nilai R') { 
+        mapelColumns.push({
+          mapelName: subjectNames[i],
+          nilaiIndex: i,
+          keteranganIndex: i + 1,
+        });
+      }
+    }
+
+    console.log('Mapel found in Excel:', mapelColumns.map(col => col.mapelName));
+
+    for (const row of rows) {
+      const nisn = row[2]; 
+      console.log('Processing NISN:', nisn); 
+
+      if (!nisn) {
+        console.log('Skipping row with undefined NISN:', row);
+        continue;
+      }
+
+      const user = await Models.user.findOne({ where: { nisn } });
+
+      if (!user) {
+        console.log(`Skipping NISN not found in database: ${nisn}`);
+        continue;
+      }
+
+      for (const mapelColumn of mapelColumns) {
+        const mapel = await Models.mapel.findOne({ where: { nama: mapelColumn.mapelName } });
+
+        if (!mapel) {
+          console.log(`Skipping mapel not found: ${mapelColumn.mapelName}`);
+          continue;
+        }
+
+        const existingNilai = await Models.nilai.findOne({
+          where: {
+            mapel_id: mapel.id,
+            user_id: user.id,
+            semester: parseInt(semester, 10),
+          },
+        });
+
+        if (existingNilai) {
+          console.log(`Skipping existing nilai_merdeka for mapel: ${mapelColumn.mapelName}, user_id: ${user.id}, semester: ${semester}`);
+          continue;
+        }
+
+        const nilaiMerdeka = {
+          r: row[mapelColumn.nilaiIndex],
+          keterangan: row[mapelColumn.keteranganIndex],
+          mapel_id: mapel.id,
+          semester: parseInt(semester, 10), 
+          user_id: user.id,
+        };
+
+        try {
+          console.log('Upserting nilai_merdeka:', nilaiMerdeka);
+          await Models.nilai.upsert(nilaiMerdeka);
+        } catch (err) {
+          console.error('Error upserting nilai_merdeka:', err);
+        }
+      }
+
+      const parseInteger = (value) => {
+        const parsed = parseInt(value, 10);
+        return isNaN(parsed) ? 0 : parsed;
+      };
+
+      const existingSia = await Models.sia.findOne({
+        where: {
+          user_id: user.id,
+          semester: parseInt(semester, 10),
+        },
+      });
+
+      if (existingSia) {
+        console.log(`Skipping existing SIA data for user_id: ${user.id}, semester: ${semester}`);
+        continue;
+      }
+
+      const siaData = {
+        user_id: user.id,
+        sakit: parseInteger(row[row.length - 3]),
+        izin: parseInteger(row[row.length - 2]),
+        alpha: parseInteger(row[row.length - 1]),
+        semester: parseInt(semester, 10), 
+      };
+
+      try {
+        await Models.sia.upsert(siaData);
+      } catch (err) {
+        console.error('Error upserting SIA data:', err);
+      }
+    }
+
+    res.status(201).json({ message: 'Raport data imported successfully' });
+  } catch (error) {
+    console.error('Error during import:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+// Configure multer for file upload
+// const upload = multer({ dest: 'uploads/' });
+
+app.post('/admin/import-individual-raport', upload.single('file'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    const { userId } = req.body;
+    if (!userId) {
+      return res.status(400).json({ error: 'User ID is required' });
+    }
+
+    // Delete all existing nilai and sia data for the user before importing fresh data
+    await Models.nilai.destroy({ where: { user_id: userId } });
+    await Models.sia.destroy({ where: { user_id: userId } });
+
+    const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
+    const sheetName = workbook.SheetNames[0]; 
+    const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
+
+    const headers = data[0]; 
+    const labels = data[1]; 
+    const rows = data.slice(2); 
+
+    const semesters = [1, 2, 3, 4, 5, 6];
+
+    const mapelColumns = [];
+    for (let i = 1; i < headers.length; i++) { // Start from index 1 (skip first column)
+      if (labels[i] === 'Nilai R') { 
+        mapelColumns.push({
+          mapelName: headers[i],
+          nilaiIndex: i,
+          keteranganIndex: i + 1,
+        });
+      }
+    }
+
+    console.log('Mapel found in Excel:', mapelColumns.map(col => col.mapelName));
+
+    const allMapel = await Models.mapel.findAll({ attributes: ['id', 'nama'] });
+
+    let importedData = [];
+
+    for (const row of rows) {
+      const mapelName = row[0]; // Mata Pelajaran
+      const mapel = allMapel.find(m => m.nama === mapelName);
+
+      if (!mapel) {
+        console.log(`Skipping unknown mapel: ${mapelName}`);
+        continue;
+      }
+
+      let colIndex = 1; // Start from the second column
+      for (let semester of semesters) {
+        const nilaiR = row[colIndex] || null;
+        const keterangan = row[colIndex + 1] || null;
+
+        if (nilaiR !== null || keterangan !== null) {
+          importedData.push({
+            user_id: userId,
+            mapel_id: mapel.id,
+            semester: semester,
+            r: nilaiR,
+            keterangan: keterangan,
+          });
+        }
+        colIndex += 2;
+      }
+    }
+
+    // Insert or update records in the database
+    for (let data of importedData) {
+      await Models.nilai.upsert({
+        user_id: data.user_id,
+        mapel_id: data.mapel_id,
+        semester: data.semester,
+        r: data.r,
+        keterangan: data.keterangan,
+      });
+    }
+
+    res.json({ message: 'Import successful', data: importedData });
+  } catch (err) {
+    console.error('Error importing Excel:', err);
+    res.status(500).json({ error: 'Error processing Excel file' });
+  }
+});
+
+
 app.listen(8080, async () => {
   console.log('App listen on port 8080')
 })

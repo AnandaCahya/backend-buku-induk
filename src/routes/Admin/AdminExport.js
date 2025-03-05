@@ -189,21 +189,21 @@ router.get('/export-excel', async (req, res) => {
     const row = [
       item.id,
       item.nisn,
-      item.angkatan.tahun,
-      item.jurusan.nama,
-      item.data_diri.nama_lengkap,
-      item.data_diri.nama_panggilan,
-      item.data_diri.jenis_kelamin,
-      item.data_diri.tempat_lahir,
-      item.data_diri.tanggal_lahir,
-      item.data_diri.agama,
-      item.data_diri.kewarganegaraan,
-      item.data_diri.anak_ke,
-      item.data_diri.jml_saudara_kandung,
-      item.data_diri.jml_saudara_tiri,
-      item.data_diri.jml_saudara_angkat,
-      item.data_diri.kelengkapan_ortu,
-      item.data_diri.bahasa_sehari_hari,
+      item.angkatan?.tahun,
+      item.jurusan?.nama,
+      item.data_diri?.nama_lengkap,
+      item.data_diri?.nama_panggilan,
+      item.data_diri?.jenis_kelamin,
+      item.data_diri?.tempat_lahir,
+      item.data_diri?.tanggal_lahir,
+      item.data_diri?.agama,
+      item.data_diri?.kewarganegaraan,
+      item.data_diri?.anak_ke,
+      item.data_diri?.jml_saudara_kandung,
+      item.data_diri?.jml_saudara_tiri,
+      item.data_diri?.jml_saudara_angkat,
+      item.data_diri?.kelengkapan_ortu,
+      item.data_diri?.bahasa_sehari_hari,
       item.perkembangan?.menerima_bea_siswa_tahun_kelas_dari,
       item.perkembangan?.meninggalkan_sekolah_ini_tanggal,
       item.perkembangan?.meninggalkan_sekolah_ini_alasan,
@@ -212,65 +212,65 @@ router.get('/export-excel', async (req, res) => {
       item.perkembangan?.akhir_pendidikan_no_ijazah,
       item.perkembangan?.akhir_pendidikan_tanggal_skhun,
       item.perkembangan?.akhir_pendidikan_no_skhun,
-      item.ayah_kandung.nama,
-      item.ayah_kandung.tempat_lahir,
-      item.ayah_kandung.tanggal_lahir,
-      item.ayah_kandung.agama,
-      item.ayah_kandung.kewarganegaraan,
-      item.ayah_kandung.pendidikan,
-      item.ayah_kandung.pekerjaan,
-      item.ayah_kandung.pengeluaran_per_bulan,
-      item.ayah_kandung.alamat_dan_no_telepon,
-      item.ayah_kandung.status,
-      item.ibu_kandung.nama,
-      item.ibu_kandung.tempat_lahir,
-      item.ibu_kandung.tanggal_lahir,
-      item.ibu_kandung.agama,
-      item.ibu_kandung.kewarganegaraan,
-      item.ibu_kandung.pendidikan,
-      item.ibu_kandung.pekerjaan,
-      item.ibu_kandung.pengeluaran_per_bulan,
-      item.ibu_kandung.alamat_dan_no_telepon,
-      item.ibu_kandung.status,
-      item.kesehatan.gol_darah,
-      item.kesehatan.penyakit_pernah_diderita,
-      item.kesehatan.kelainan_jasmani,
-      item.kesehatan.tinggi,
-      item.kesehatan.berat_badan,
-      item.pendidikan.sebelumnya_tamatan_dari,
-      item.pendidikan.sebelumnya_tanggal_ijazah,
-      item.pendidikan.sebelumnya_no_ijazah,
-      item.pendidikan.sebelumnya_tanggal_skhun,
-      item.pendidikan.sebelumnya_no_skhun,
-      item.pendidikan.sebelumnya_lama_belajar,
-      item.pendidikan.pindahan_dari_sekolah,
-      item.pendidikan.pindahan_alasan,
-      item.pendidikan.diterima_di_kelas,
-      item.pendidikan.diterima_di_bidang_keahlian,
-      item.pendidikan.diterima_di_program_keahlian,
-      item.pendidikan.diterima_di_paket_keahlian,
-      item.pendidikan.diterima_tanggal,
-      item.setelah_pendidikan.melanjutkan_ke,
-      item.setelah_pendidikan.bekerja_nama_perusahaan,
-      item.setelah_pendidikan.bekerja_tanggal_mulai,
-      item.setelah_pendidikan.bekerja_penghasilan,
-      item.tempat_tinggal.alamat,
-      item.tempat_tinggal.no_telepon,
-      item.tempat_tinggal.tinggal_dengan,
-      item.tempat_tinggal.jarak_ke_sekolah,
-      item.wali.nama,
-      item.wali.tempat_lahir,
-      item.wali.tanggal_lahir,
-      item.wali.agama,
-      item.wali.kewarganegaraan,
-      item.wali.pendidikan,
-      item.wali.pekerjaan,
-      item.wali.pengeluaran_per_bulan,
-      item.wali.alamat_dan_no_telepon,
-      item.hobi_siswa.kesenian,
-      item.hobi_siswa.olahraga,
-      item.hobi_siswa.organisasi,
-      item.hobi_siswa.lain_lain,
+      item.ayah_kandung?.nama,
+      item.ayah_kandung?.tempat_lahir,
+      item.ayah_kandung?.tanggal_lahir,
+      item.ayah_kandung?.agama,
+      item.ayah_kandung?.kewarganegaraan,
+      item.ayah_kandung?.pendidikan,
+      item.ayah_kandung?.pekerjaan,
+      item.ayah_kandung?.pengeluaran_per_bulan,
+      item.ayah_kandung?.alamat_dan_no_telepon,
+      item.ayah_kandung?.status,
+      item.ibu_kandung?.nama,
+      item.ibu_kandung?.tempat_lahir,
+      item.ibu_kandung?.tanggal_lahir,
+      item.ibu_kandung?.agama,
+      item.ibu_kandung?.kewarganegaraan,
+      item.ibu_kandung?.pendidikan,
+      item.ibu_kandung?.pekerjaan,
+      item.ibu_kandung?.pengeluaran_per_bulan,
+      item.ibu_kandung?.alamat_dan_no_telepon,
+      item.ibu_kandung?.status,
+      item.kesehatan?.gol_darah,
+      item.kesehatan?.penyakit_pernah_diderita,
+      item.kesehatan?.kelainan_jasmani,
+      item.kesehatan?.tinggi,
+      item.kesehatan?.berat_badan,
+      item.pendidikan?.sebelumnya_tamatan_dari,
+      item.pendidikan?.sebelumnya_tanggal_ijazah,
+      item.pendidikan?.sebelumnya_no_ijazah,
+      item.pendidikan?.sebelumnya_tanggal_skhun,
+      item.pendidikan?.sebelumnya_no_skhun,
+      item.pendidikan?.sebelumnya_lama_belajar,
+      item.pendidikan?.pindahan_dari_sekolah,
+      item.pendidikan?.pindahan_alasan,
+      item.pendidikan?.diterima_di_kelas,
+      item.pendidikan?.diterima_di_bidang_keahlian,
+      item.pendidikan?.diterima_di_program_keahlian,
+      item.pendidikan?.diterima_di_paket_keahlian,
+      item.pendidikan?.diterima_tanggal,
+      item.setelah_pendidikan?.melanjutkan_ke,
+      item.setelah_pendidikan?.bekerja_nama_perusahaan,
+      item.setelah_pendidikan?.bekerja_tanggal_mulai,
+      item.setelah_pendidikan?.bekerja_penghasilan,
+      item.tempat_tinggal?.alamat,
+      item.tempat_tinggal?.no_telepon,
+      item.tempat_tinggal?.tinggal_dengan,
+      item.tempat_tinggal?.jarak_ke_sekolah,
+      item.wali?.nama,
+      item.wali?.tempat_lahir,
+      item.wali?.tanggal_lahir,
+      item.wali?.agama,
+      item.wali?.kewarganegaraan,
+      item.wali?.pendidikan,
+      item.wali?.pekerjaan,
+      item.wali?.pengeluaran_per_bulan,
+      item.wali?.alamat_dan_no_telepon,
+      item.hobi_siswa?.kesenian,
+      item.hobi_siswa?.olahraga,
+      item.hobi_siswa?.organisasi,
+      item.hobi_siswa?.lain_lain,
     ]
     worksheet.addRow(row)
   })
@@ -587,6 +587,7 @@ router.get('/export-raport-excel', async (req, res) => {
 
       filteredMapel.forEach(mapel => {
         const nilai = nilaiData.find(n => n.user_id === user.id && n.mapel.nama === mapel.nama);
+        
         row.push(nilai ? nilai.r : '-', nilai ? nilai.keterangan : '-');
       });
 
@@ -598,6 +599,76 @@ router.get('/export-raport-excel', async (req, res) => {
 
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Disposition', 'attachment; filename=raport.xlsx');
+
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (err) {
+    console.error('Terjadi kesalahan:', err);
+    res.status(500).send('Terjadi kesalahan saat ekspor Excel');
+  }
+});
+
+router.get('/export-raport-excel/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const user = await Models.user.findByPk(userId, {
+      include: [
+        { model: Models.data_diri, as: 'data_diri', attributes: ['nama_lengkap'] },
+      ],
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const nilaiData = await Models.nilai.findAll({
+      where: { user_id: userId },
+      include: [
+        {
+          model: Models.mapel,
+          as: 'mapel',
+          attributes: ['nama'],
+        },
+      ],
+    });
+
+    const allMapel = await Models.mapel.findAll({ attributes: ['nama'] });
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet(`Raport ${user.data_diri.nama_lengkap}`);
+
+    // Header row
+    let headerRow = ['Mata Pelajaran', 'Semester 1', '', 'Semester 2', '', 'Semester 3', '', 'Semester 4', '', 'Semester 5', '', 'Semester 6', ''];
+    worksheet.addRow(headerRow);
+
+    let subHeaderRow = [''];
+    for (let i = 1; i <= 6; i++) {
+      subHeaderRow.push('Nilai R', 'Keterangan');
+    }
+    worksheet.addRow(subHeaderRow);
+
+    // Merge cells for semester headers
+    let colIndex = 2;
+    for (let i = 1; i <= 6; i++) {
+      worksheet.mergeCells(1, colIndex, 1, colIndex + 1);
+      colIndex += 2;
+    }
+
+    // Add mapel rows
+    allMapel.forEach(mapel => {
+      let row = [mapel.nama];
+
+      for (let i = 1; i <= 6; i++) {
+        const nilai = nilaiData.find(n => n.mapel.nama === mapel.nama && n.semester === i);
+        row.push(nilai ? nilai.r : '', nilai ? nilai.keterangan : '');
+      }
+
+      worksheet.addRow(row);
+    });
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename="raport_${user.data_diri.nama_lengkap}.xlsx"`);
+
 
     await workbook.xlsx.write(res);
     res.end();
@@ -683,6 +754,57 @@ router.get('/export-raport-template', async (req, res) => {
   }
 });
 
+router.get('/export-raport-excel-dummy', async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+
+    const nilaiData = []
+
+    const allMapel = await Models.mapel.findAll({ attributes: ['nama'] });
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet(`Raport Dummy`);
+
+    // Header row
+    let headerRow = ['Mata Pelajaran', 'Semester 1', '', 'Semester 2', '', 'Semester 3', '', 'Semester 4', '', 'Semester 5', '', 'Semester 6', ''];
+    worksheet.addRow(headerRow);
+
+    let subHeaderRow = [''];
+    for (let i = 1; i <= 6; i++) {
+      subHeaderRow.push('Nilai R', 'Keterangan');
+    }
+    worksheet.addRow(subHeaderRow);
+
+    // Merge cells for semester headers
+    let colIndex = 2;
+    for (let i = 1; i <= 6; i++) {
+      worksheet.mergeCells(1, colIndex, 1, colIndex + 1);
+      colIndex += 2;
+    }
+
+    // Add mapel rows
+    allMapel.forEach(mapel => {
+      let row = [mapel.nama];
+
+      for (let i = 1; i <= 6; i++) {
+        const nilai = nilaiData.find(n => n.mapel.nama === mapel.nama && n.semester === i);
+        row.push(nilai ? nilai.r : '', nilai ? nilai.keterangan : '');
+      }
+
+      worksheet.addRow(row);
+    });
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename="raport_dummy.xlsx"`);
+
+
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (err) {
+    console.error('Terjadi kesalahan:', err);
+    res.status(500).send('Terjadi kesalahan saat ekspor Excel');
+  }
+});
 
 
 
