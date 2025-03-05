@@ -424,6 +424,44 @@ router.get('/export-raport-pdf/:id', async (req, res) => {
 });
 
 /**
+ * GET /admin/export-halaman-belakang-bulk
+ * @summary Mengekspor halaman belakang untuk banyak siswa berdasarkan angkatan dan jurusan
+ * @tags admin
+ * @param {string} angkatanId.query - Tahun angkatan untuk filter data siswa
+ * @param {string} jurusanId.query - Nama jurusan untuk filter data siswa
+ * @return {file} 200 - Berhasil mengekspor halaman belakang ke file PDF - application/pdf
+ * @return {object} 500 - Terjadi kesalahan saat ekspor PDF - application/json
+ * @example response - 500 - Terjadi kesalahan saat ekspor PDF
+ * {
+ *   "error": "Terjadi kesalahan saat ekspor PDF"
+ * }
+ */
+router.get('/export-raport-pdf', async (req, res) => {
+  try {
+    const { angkatanId, jurusanId } = req.query;
+    const browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+    const page = await browser.newPage();
+    const url = `http://localhost:8080/view-raport?angkatanId=${angkatanId}&jurusanId=${jurusanId}`;
+    await page.goto(url, { waitUntil: 'networkidle0' });
+    const pdf = await page.pdf({
+      format: 'A3',
+      landscape: true,
+    });
+
+    await browser.close();
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=halaman-belakang-bulk.pdf');
+    res.send(pdf);
+  } catch (err) {
+    console.error('Terjadi kesalahan:', err);
+    res.status(500).send('Terjadi kesalahan saat ekspor PDF');
+  }
+});
+
+/**
  * GET /admin/export-raport-excel
  * @summary Mengekspor semua data raport berdasarkan angkatan, jurusan, dan semester
  * @tags admin
@@ -488,20 +526,40 @@ router.get('/export-raport-excel', async (req, res) => {
       },
     });
 
-    const allMapel = [...new Set(nilaiData.map(n => n.mapel.nama))];
+    // Filter mata pelajaran berdasarkan semester
+    const allMapel = await Models.mapel.findAll({
+      attributes: ['nama'],
+    });
+
+    let filteredMapel;
+    if (semester === '1' || semester === '2') {
+      filteredMapel = allMapel.filter(mapel => 
+        !['Mata Pelajaran Konsentrasi Keahlian', 'Projek Kreatif dan Kewirausahaan', 'Mata Pelajaran Pilihan'].includes(mapel.nama)
+      );
+    } else if (semester === '3' || semester === '4') {
+      filteredMapel = allMapel.filter(mapel => 
+        !['Seni Budaya', 'Informatika', 'Projek IPAS', 'Dasar Program Keahlian'].includes(mapel.nama)
+      );
+    } else if (semester === '5' || semester === '6') {
+      filteredMapel = allMapel.filter(mapel => 
+        !['Pendidikan Jasmani, Olahraga, dan Kesehatan', 'Seni Budaya', 'Informatika', 'Projek IPAS', 'Dasar Program Keahlian'].includes(mapel.nama)
+      );
+    } else {
+      return res.status(400).json({ error: 'Semester tidak valid' });
+    }
 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Data Raport');
 
     let headerRow1 = ['No', 'Nama Siswa', 'NISN'];
-    allMapel.forEach(mapel => {
-      headerRow1.push(mapel, ''); 
+    filteredMapel.forEach(mapel => {
+      headerRow1.push(mapel.nama, ''); 
     });
     headerRow1.push('Ketidakhadiran', '', ''); 
     worksheet.addRow(headerRow1);
 
     let headerRow2 = ['', '', ''];
-    allMapel.forEach(() => {
+    filteredMapel.forEach(() => {
       headerRow2.push('Nilai R', 'Keterangan');
     });
     headerRow2.push('Sakit', 'Izin', 'Tanpa Keterangan'); 
@@ -512,7 +570,7 @@ router.get('/export-raport-excel', async (req, res) => {
     worksheet.mergeCells('C1:C2'); 
 
     let colIndex = 4; 
-    allMapel.forEach(() => {
+    filteredMapel.forEach(() => {
       worksheet.mergeCells(1, colIndex, 1, colIndex + 1);
       colIndex += 2;
     });
@@ -527,8 +585,8 @@ router.get('/export-raport-excel', async (req, res) => {
         user.nisn,
       ];
 
-      allMapel.forEach(mapel => {
-        const nilai = nilaiData.find(n => n.user_id === user.id && n.mapel.nama === mapel);
+      filteredMapel.forEach(mapel => {
+        const nilai = nilaiData.find(n => n.user_id === user.id && n.mapel.nama === mapel.nama);
         row.push(nilai ? nilai.r : '-', nilai ? nilai.keterangan : '-');
       });
 
@@ -548,6 +606,83 @@ router.get('/export-raport-excel', async (req, res) => {
     res.status(500).send('Terjadi kesalahan saat ekspor Excel');
   }
 });
+
+/**
+ * GET /admin/export-raport-template
+ * @summary Mengunduh template Excel untuk raport berdasarkan semester
+ * @tags admin
+ * @param {string} semester.query - Semester untuk menentukan mata pelajaran yang disertakan
+ * @return {file} 200 - Berhasil mengunduh template Excel - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+ * @return {object} 500 - Terjadi kesalahan saat mengunduh template Excel - application/json
+ * @example response - 500 - Terjadi kesalahan saat mengunduh template Excel
+ * {
+ *   "error": "Terjadi kesalahan saat mengunduh template Excel"
+ * }
+ */
+router.get('/export-raport-template', async (req, res) => {
+  try {
+    const { semester } = req.query;
+    const allMapel = await Models.mapel.findAll({
+      attributes: ['nama'],
+    });
+
+    let filteredMapel;
+    if (semester === '1' || semester === '2') {
+      filteredMapel = allMapel.filter(mapel => 
+        !['Mata Pelajaran Konsentrasi Keahlian', 'Projek Kreatif dan Kewirausahaan', 'Mata Pelajaran Pilihan'].includes(mapel.nama)
+      );
+    } else if (semester === '3' || semester === '4') {
+      filteredMapel = allMapel.filter(mapel => 
+        !['Seni Budaya', 'Informatika', 'Projek IPAS', 'Dasar Program Keahlian'].includes(mapel.nama)
+      );
+    } else if (semester === '5' || semester === '6') {
+      filteredMapel = allMapel.filter(mapel => 
+        !['Pendidikan Jasmani, Olahraga, dan Kesehatan', 'Seni Budaya', 'Informatika', 'Projek IPAS', 'Dasar Program Keahlian'].includes(mapel.nama)
+      );
+    } else {
+      return res.status(400).json({ error: 'Semester tidak valid' });
+    }
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Template Raport');
+
+    let headerRow1 = ['No', 'Nama Siswa', 'NISN'];
+    filteredMapel.forEach(mapel => {
+      headerRow1.push(mapel.nama, '');
+    });
+    headerRow1.push('Ketidakhadiran', '', '');
+    worksheet.addRow(headerRow1);
+
+    let headerRow2 = ['', '', ''];
+    filteredMapel.forEach(() => {
+      headerRow2.push('Nilai R', 'Keterangan');
+    });
+    headerRow2.push('Sakit', 'Izin', 'Tanpa Keterangan');
+    worksheet.addRow(headerRow2);
+
+    worksheet.mergeCells('A1:A2');
+    worksheet.mergeCells('B1:B2');
+    worksheet.mergeCells('C1:C2');
+
+    let colIndex = 4;
+    filteredMapel.forEach(() => {
+      worksheet.mergeCells(1, colIndex, 1, colIndex + 1);
+      colIndex += 2;
+    });
+
+    worksheet.mergeCells(1, colIndex, 1, colIndex + 2);
+
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename=raport-template.xlsx');
+
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (err) {
+    console.error('Terjadi kesalahan:', err);
+    res.status(500).send('Terjadi kesalahan saat mengunduh template Excel');
+  }
+});
+
 
 
 

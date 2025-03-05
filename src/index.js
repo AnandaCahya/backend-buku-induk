@@ -217,6 +217,88 @@ app.get('/view-pdf', async (req, res) => {
   res.render('export-pdf-bulk', { elements: data })
 })
 
+app.get('/view-raport', async (req, res) => {
+  const { angkatanId, jurusanId } = req.query;
+
+  try {
+    const users = await Models.user.findAll({
+      where: {
+        angkatan_id: angkatanId,
+        jurusan_id: jurusanId,
+      },
+      include: [
+        {
+          model: Models.jurusan,
+          as: 'jurusan',
+          attributes: ['nama'],
+        },
+        {
+          model: Models.angkatan,
+          as: 'angkatan',
+          attributes: ['tahun'],
+        },
+        {
+          model: Models.data_diri,
+          as: 'data_diri',
+          attributes: ['nama_lengkap', 'nama_panggilan'],
+          where: { status_perubahan: 'approved' },
+        },
+        {
+          model: Models.pendidikan,
+          as: 'pendidikan',
+          attributes: ['diterima_di_program_keahlian', 'diterima_di_paket_keahlian'],
+          where: { status_perubahan: 'approved' },
+        },
+      ],
+    });
+
+    if (!users.length) {
+      return res.status(404).json({ error: 'No users found for the specified angkatan and jurusan' });
+    }
+
+    const nilaiData = await Models.nilai.findAll({
+      where: {
+        user_id: users.map(user => user.id),
+      },
+      include: [
+        {
+          model: Models.mapel,
+          as: 'mapel',
+          attributes: ['nama'],
+        },
+      ],
+    });
+
+    const siaData = await Models.sia.findAll({
+      where: {
+        user_id: users.map(user => user.id),
+      },
+    });
+
+    const nilaiPerUser = users.map(user => {
+      const nilaiPerSemester = nilaiData.reduce((acc, curr) => {
+        if (curr.user_id === user.id) {
+          const semesterKey = `Semester ${curr.semester}`;
+          if (!acc[semesterKey]) {
+            acc[semesterKey] = [];
+          }
+          acc[semesterKey].push(curr);
+        }
+        return acc;
+      }, {});
+
+      const siaPerUser = siaData.filter(s => s.user_id === user.id);
+
+      return { user, nilaiPerSemester, sia: siaPerUser };
+    });
+
+    res.render('export-halaman-belakang-bulk', { elements: nilaiPerUser });
+  } catch (err) {
+    console.error('Terjadi kesalahan:', err);
+    res.status(500).send('Terjadi kesalahan saat menampilkan halaman belakang');
+  }
+});
+
 app.get('/view-raport/:id', async (req, res) => {
   const { id } = req.params;
   try {
