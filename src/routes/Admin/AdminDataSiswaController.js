@@ -108,6 +108,12 @@ router.get('/data-diri/pending', async (req, res) => {
           required: false, // Mengizinkan user tanpa data 'pending' di sini
         },
         {
+          model: Models.data_diri,
+          as: 'data_diri_approved',
+          where: { status_perubahan: 'approved' },
+          required: false,
+        },
+        {
           model: Models.perkembangan,
           as: 'perkembangan',
           where: {

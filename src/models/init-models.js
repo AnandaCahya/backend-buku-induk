@@ -48,6 +48,8 @@ function initModels(sequelize) {
 
   data_diri.belongsTo(user, { as: 'user', foreignKey: 'user_id' })
   user.hasOne(data_diri, { as: 'data_diri', foreignKey: 'user_id' })
+  user.hasOne(data_diri, { as: 'data_diri_approved', foreignKey: 'user_id' })
+
 
   hobi_siswa.belongsTo(user, { as: 'user', foreignKey: 'user_id' })
   user.hasOne(hobi_siswa, { as: 'hobi_siswa', foreignKey: 'user_id' })
