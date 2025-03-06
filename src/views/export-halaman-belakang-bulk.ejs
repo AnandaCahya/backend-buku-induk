@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export Halaman Belakang Bulk</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            font-size: 12px;
+            font-family: "Roboto", sans-serif;
+        }
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
+        .main table, .main td, .main tr, .main th {
+            border: 1px solid black;
+            border-collapse: collapse;
+            table-layout: auto;
+        }
+        .jenis-mapel {
+            text-align: start;
+        }
+        .nilai {
+            text-align: center;
+        }
+        .keterangan {
+            vertical-align: center;
+            text-align: justify;
+            font-size: 10px;
+            padding: 5px;
+            width: 140px;
+            min-width: 140px;
+            max-width: 140px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .mata-pelajaran {
+            width: 250px;
+            font-size: 15px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .no {
+            width: 20px;
+            text-align: center;
+        }
+        .nilai {
+            width: 90px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .mata-pelajaran-jasmani {
+            font-size: 12px;
+        }
+        tr {
+            height: 30px;
+        }
+        @media print {
+            @page {
+                size: A3 landscape;
+                margin: 20mm;
+            }
+            body {
+                margin: 0;
+                padding: 0;
+            }
+        }
+        .large-text {
+            font-size: 16px;
+        }
+        .indent {
+            padding-left: 150px;
+        }
+    </style>
+</head>
+<body style="margin: 20px;">
+    <% elements.forEach(function(elementData) { %>
+    <div style="page-break-before: always;">
+        <div style="width: 100%; display: flex;">
+            <table style="width: 50%;">
+                <tr>
+                    <td class="large-text">Nama</td>
+                    <td>:</td>
+                    <td><b class="large-text"><%= elementData.user.data_diri.nama_lengkap %></b></td>
+                </tr>
+                <tr>
+                    <td class="large-text">Nomor Induk</td>
+                    <td>:</td>
+                    <td class="large-text"><%= elementData.user.nisn %></td>
+                </tr>
+                <tr>
+                    <td class="large-text">Nama Sekolah</td>
+                    <td>:</td>
+                    <td class="large-text"><b>SMKN 2 SINGOSARI</b></td>
+                </tr>
+            </table>
+            <table style="width: 50%;">
+                <tr>
+                    <td class="large-text indent">Bidang Keahlian</td>
+                    <td>:</td>
+                    <td class="large-text"><%= elementData.user.jurusan.nama %></td>
+                </tr>
+                <tr>
+                    <td class="large-text indent">Program Keahlian</td>
+                    <td>:</td>
+                    <td class="large-text"><%= elementData.user.pendidikan.diterima_di_program_keahlian %></td>
+                </tr>
+                <tr>
+                    <td class="large-text indent">Kompetensi Keahlian</td>
+                    <td>:</td>
+                    <td class="large-text"><%= elementData.user.pendidikan.diterima_di_paket_keahlian %></td>
+                </tr>
+            </table>
+        </div>
+        <div class="main">
+            <table style="border: 1px solid black; width: 100%;">
+                <tr>
+                    <th rowspan="3" colspan="2" class="mata-pelajaran">Mata Pelajaran</th>
+                    <% 
+                        const tahunPelajaran = [];
+                        for (let i = 1; i <= 3; i++) {
+                            const startYear = parseInt(elementData.user.angkatan.tahun) + i - 1;
+                            const endYear = startYear + 1;
+                            tahunPelajaran.push(`${startYear}/${endYear}`);
+                        }
+                    %>
+                    <th colspan="4">Tahun Pelajaran <%= tahunPelajaran[0] %></th>
+                    <th colspan="4">Tahun Pelajaran <%= tahunPelajaran[1] %></th>
+                    <th colspan="4">Tahun Pelajaran <%= tahunPelajaran[2] %></th>
+                </tr>
+                <tr>
+                    <th colspan="2">Semester 1</th>
+                    <th colspan="2">Semester 2</th>
+                    <th colspan="2">Semester 3</th>
+                    <th colspan="2">Semester 4</th>
+                    <th colspan="2">Semester 5</th>
+                    <th colspan="2">Semester 6</th>
+                </tr>
+                <tr>
+                    <th>Nilai</th>
+                    <th>Keterangan</th>
+                    <th>Nilai</th>
+                    <th>Keterangan</th>
+                    <th>Nilai</th>
+                    <th>Keterangan</th>
+                    <th>Nilai</th>
+                    <th>Keterangan</th>
+                    <th>Nilai</th>
+                    <th>Keterangan</th>
+                    <th>Nilai</th>
+                    <th>Keterangan</th>
+                </tr>
+
+                <% 
+                    const kelompokUmum = ['Pendidikan Agama dan Budi Pekerti', 'Pendidikan Pancasila', 'Bahasa Indonesia', 'Pendidikan Jasmani, Olahraga, dan Kesehatan', 'Sejarah', 'Seni Budaya', 'Bahasa Jawa'];
+                    const kelompokKejuruan = ['Matematika', 'Bahasa Inggris', 'Informatika', 'Projek IPAS', 'Dasar Program Keahlian', 'Mata Pelajaran Konsentrasi Keahlian', 'Projek Kreatif dan Kewirausahaan', 'Mata Pelajaran Pilihan'];
+                    const groupedByMapel = {
+                        'Kelompok Mata Pelajaran Umum': kelompokUmum,
+                        'Kelompok Mata Pelajaran Kejuruan': kelompokKejuruan
+                    };
+                %>
+
+                <% Object.keys(groupedByMapel).forEach(function(category) { %>
+                    <tr>
+                        <th colspan="14" class="jenis-mapel"><%= category %></th>
+                    </tr>
+                    <% let index = 1; %>
+                    <% groupedByMapel[category].forEach(function(mapel) { %>
+                        <tr>
+                            <td class="no"><%= index++ %>.</td>
+                            <td class="mata-pelajaran <%= mapel === 'Pendidikan Jasmani, Olahraga, dan Kesehatan' ? 'mata-pelajaran-jasmani' : '' %>"><%= mapel %></td>
+                            <% for (let i = 1; i <= 6; i++) { %>
+                                <% const semesterKey = `Semester ${i}`; %>
+                                <% const nilaiData = elementData.nilaiPerSemester[semesterKey] && elementData.nilaiPerSemester[semesterKey].find(n => n.mapel.nama === mapel); %>
+                                <td class="nilai"><%= nilaiData ? nilaiData.dataValues.r : '' %></td>
+                                <td class="keterangan"><%= nilaiData ? nilaiData.dataValues.keterangan : '' %></td>
+                            <% } %>
+                        </tr>
+                    <% }); %>
+                <% }); %>
+
+                <tr>
+                    <th colspan="13" style="text-align: start;">Ketidakhadiran</th>
+                </tr>
+
+                <tr>
+                    <td>1.</td>
+                    <td>Sakit</td>
+                    <% for (let i = 1; i <= 6; i++) { %>
+                        <td colspan="2">
+                            <% const siaData = elementData.sia.find(s => s.semester === i); %>
+                            <%= siaData ? siaData.sakit : 0 %> Hari
+                        </td>
+                    <% } %>
+                </tr>
+                <tr>
+                    <td>2.</td>
+                    <td>Ijin</td>
+                    <% for (let i = 1; i <= 6; i++) { %>
+                        <td colspan="2">
+                            <% const siaData = elementData.sia.find(s => s.semester === i); %>
+                            <%= siaData ? siaData.izin : 0 %> Hari
+                        </td>
+                    <% } %>
+                </tr>
+                <tr>
+                    <td>3.</td>
+                    <td>Tanpa Keterangan</td>
+                    <% for (let i = 1; i <= 6; i++) { %>
+                        <td colspan="2">
+                            <% const siaData = elementData.sia.find(s => s.semester === i); %>
+                            <%= siaData ? siaData.alpha : 0 %> Hari
+                        </td>
+                    <% } %>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <% }); %>
+</body>
+</html>

@@ -45,11 +45,11 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: true,
       },
       tinggi: {
-        type: DataTypes.STRING(255),
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       berat_badan: {
-        type: DataTypes.STRING(255),
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       user_id: {

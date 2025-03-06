@@ -42,11 +42,19 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.STRING(255),
         allowNull: false,
       },
-      sebelumnya_tanggal_dan_ijazah: {
+      sebelumnya_tanggal_ijazah: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+      },
+      sebelumnya_no_ijazah: {
         type: DataTypes.STRING(255),
         allowNull: false,
       },
-      sebelumnya_tanggal_skhun_dan_: {
+      sebelumnya_tanggal_skhun: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+      },
+      sebelumnya_no_skhun: {
         type: DataTypes.STRING(255),
         allowNull: false,
       },

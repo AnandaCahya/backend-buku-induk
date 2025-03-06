@@ -29,11 +29,11 @@ module.exports = {
         allowNull: true,
       },
       tinggi: {
-        type: Sequelize.STRING(255),
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       berat_badan: {
-        type: Sequelize.STRING(255),
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       user_id: {
