@@ -403,10 +403,14 @@ app.post('/import-excel', upload.single('file'), async (req, res) => {
         meninggalkan_sekolah_ini_alasan: row['Meninggalkan Sekolah Ini Alasan'],
         akhir_pendidikan_tamat_belajar_lulus_tahun:
           row['Akhir Pendidikan Tamat Belajar Lulus Tahun'],
-        akhir_pendidikan_no_tanggal_ijazah:
-          row['Akhir Pendidikan No/Tanggal Ijazah'],
-        akhir_pendidikan_no_tanggal_skhun:
-          row['Akhir Pendidikan No/Tanggal SKHUN'],
+        akhir_pendidikan_tanggal_ijazah:
+          row['Akhir Pendidikan Tanggal Ijazah'],
+        akhir_pendidikan_no_ijazah:
+          row['Akhir Pendidikan No Ijazah'],
+        akhir_pendidikan_tanggal_skhun:
+          row['Akhir Pendidikan Tanggal SKHUN'],
+        akhir_pendidikan_no_skhun:
+          row['Akhir Pendidikan No SKHUN'],
       })
 
       await Models.ayah_kandung.create({
@@ -470,15 +474,18 @@ app.post('/import-excel', upload.single('file'), async (req, res) => {
       await Models.pendidikan.create({
         user_id: newUser.id,
         sebelumnya_tamatan_dari: row['Sebelumnya Tamatan Dari'],
-        sebelumnya_tanggal_dan_ijazah: row['Sebelumnya Tanggal dan Ijazah'],
-        sebelumnya_tanggal_skhun_dan_: row['Sebelumnya Tanggal SKHUN'],
+        sebelumnya_tanggal_ijazah: row['Sebelumnya Tanggal Ijazah'],
+        sebelumnya_no_ijazah: row['Sebelumnya No Ijazah'],
+        sebelumnya_tanggal_skhun: row['Sebelumnya Tanggal SKHUN'],
+        sebelumnya_no_skhun: row['Sebelumnya No SKHUN'],
         sebelumnya_lama_belajar: row['Sebelumnya Lama Belajar'],
+        pindahan_dari_sekolah: row['Pindahan Dari Sekolah'],
+        pindahan_alasan: row['Pindahan Alasan'],
         diterima_di_kelas: row['Diterima di Kelas'],
         diterima_di_bidang_keahlian: row['Diterima di Bidang Keahlian'],
         diterima_di_program_keahlian: row['Diterima di Program Keahlian'],
         diterima_di_paket_keahlian: row['Diterima di Paket Keahlian'],
         diterima_tanggal: row['Diterima Tanggal'],
-        user_id: newUser.id,
       })
 
       await Models.tempat_tinggal.create({

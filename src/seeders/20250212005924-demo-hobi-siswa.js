@@ -20,6 +20,20 @@ module.exports = {
         lain_lain: null,
         user_id: 1,
       },
+      {
+        kesenian: 'Bermain Gitar',
+        olahraga: 'Sepak Bola',
+        organisasi: 'Pecinta Alam',
+        lain_lain: null,
+        user_id: 2,
+      },
+      {
+        kesenian: 'Bermain Gitar',
+        olahraga: 'Sepak Bola',
+        organisasi: 'Pecinta Alam',
+        lain_lain: null,
+        user_id: 3,
+      },
     ])
   },
 
