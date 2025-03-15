@@ -3,15 +3,6 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-     */
     return queryInterface.bulkInsert('ayah_kandung', [
       {
         nama: 'Aster',
@@ -27,7 +18,7 @@ module.exports = {
         user_id: 1,
       },
       {
-        nama: 'Aster',
+        nama: 'Aster', // Sama dengan user_id 1
         tempat_lahir: 'Malang',
         tanggal_lahir: '1978-04-17',
         agama: 'Islam',
@@ -40,27 +31,87 @@ module.exports = {
         user_id: 2,
       },
       {
-        nama: 'Aster',
-        tempat_lahir: 'Malang',
-        tanggal_lahir: '1978-04-17',
-        agama: 'Islam',
+        nama: 'Budi Santoso',
+        tempat_lahir: 'Jakarta',
+        tanggal_lahir: '1980-05-22',
+        agama: 'Kristen',
         kewarganegaraan: 'Indonesia',
-        pendidikan: 'S1',
-        pekerjaan: 'Guru',
-        pengeluaran_per_bulan: '1200000',
-        alamat_dan_no_telepon: 'Jl. Raya Tunjungtirto, 08123456789',
+        pendidikan: 'SMA',
+        pekerjaan: 'Wiraswasta',
+        pengeluaran_per_bulan: '3000000',
+        alamat_dan_no_telepon: 'Jl. Merdeka No. 10, 081298765432',
         status: 'masih hidup',
         user_id: 3,
       },
-    ])
+      {
+        nama: 'Surya Wijaya',
+        tempat_lahir: 'Surabaya',
+        tanggal_lahir: '1975-08-30',
+        agama: 'Hindu',
+        kewarganegaraan: 'Indonesia',
+        pendidikan: 'D3',
+        pekerjaan: 'Pegawai Negeri',
+        pengeluaran_per_bulan: '5000000',
+        alamat_dan_no_telepon: 'Jl. Pahlawan, 081312345678',
+        status: 'masih hidup',
+        user_id: 4,
+      },
+      {
+        nama: 'Budi Santoso', // Sama dengan user_id 3
+        tempat_lahir: 'Jakarta',
+        tanggal_lahir: '1980-05-22',
+        agama: 'Kristen',
+        kewarganegaraan: 'Indonesia',
+        pendidikan: 'SMA',
+        pekerjaan: 'Wiraswasta',
+        pengeluaran_per_bulan: '3000000',
+        alamat_dan_no_telepon: 'Jl. Merdeka No. 10, 081298765432',
+        status: 'masih hidup',
+        user_id: 5,
+      },
+      {
+        nama: 'Darmawan',
+        tempat_lahir: 'Bandung',
+        tanggal_lahir: '1972-06-12',
+        agama: 'Buddha',
+        kewarganegaraan: 'Indonesia',
+        pendidikan: 'S2',
+        pekerjaan: 'Dosen',
+        pengeluaran_per_bulan: '7000000',
+        alamat_dan_no_telepon: 'Jl. Asia Afrika, 081356789012',
+        status: 'masih hidup',
+        user_id: 6,
+      },
+      {
+        nama: 'Joko Saputra',
+        tempat_lahir: 'Semarang',
+        tanggal_lahir: '1983-09-28',
+        agama: 'Katolik',
+        kewarganegaraan: 'Indonesia',
+        pendidikan: 'SMA',
+        pekerjaan: 'Petani',
+        pengeluaran_per_bulan: '2500000',
+        alamat_dan_no_telepon: 'Jl. Diponegoro, 081378945612',
+        status: 'meninggal',
+        user_id: 7,
+      },
+      {
+        nama: 'Hendra Wijaya',
+        tempat_lahir: 'Yogyakarta',
+        tanggal_lahir: '1979-11-05',
+        agama: 'Islam',
+        kewarganegaraan: 'Indonesia',
+        pendidikan: 'S1',
+        pekerjaan: 'Karyawan Swasta',
+        pengeluaran_per_bulan: '4500000',
+        alamat_dan_no_telepon: 'Jl. Malioboro, 081345678923',
+        status: 'meninggal',
+        user_id: 8,
+      },
+    ], {});
   },
 
   async down(queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
+    return queryInterface.bulkDelete('ayah_kandung', null, {});
   },
 }

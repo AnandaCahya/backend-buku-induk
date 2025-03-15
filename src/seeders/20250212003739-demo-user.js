@@ -3,15 +3,6 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-     */
     return queryInterface.bulkInsert('user', [
       {
         nisn: '0097932112',
@@ -28,15 +19,35 @@ module.exports = {
         angkatan_id: 2,
         jurusan_id: 5,
       },
-    ])
+      {
+        nisn: '00979356789',
+        angkatan_id: 2,
+        jurusan_id: 3,
+      },
+      {
+        nisn: '00979367890',
+        angkatan_id: 3,
+        jurusan_id: 1,
+      },
+      {
+        nisn: '00979378901',
+        angkatan_id: 3,
+        jurusan_id: 8,
+      },
+      {
+        nisn: '00979389012',
+        angkatan_id: 2,
+        jurusan_id: 5, 
+      },
+      {
+        nisn: '00979390123',
+        angkatan_id: 3,
+        jurusan_id: 1, 
+      },
+    ], {});
   },
 
   async down(queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
+    return queryInterface.bulkDelete('user', null, {});
   },
 }
