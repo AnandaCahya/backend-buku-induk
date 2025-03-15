@@ -53,6 +53,11 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.STRING(5),
         allowNull: true,
       },
+      role: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+        defaultValue: 'admin',
+      },
     },
     {
       sequelize,
