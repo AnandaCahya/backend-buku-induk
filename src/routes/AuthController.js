@@ -228,6 +228,7 @@ router.post('/code-admin', codeAdminRequest, async (req, res) => {
       id: data.id,
       username: data.username,
       email: data.email,
+      role: data.role,
       token: data.token,
     })
   } catch (ex) {

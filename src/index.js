@@ -13,6 +13,7 @@ const app = express()
 const authControllers = require('./routes/AuthController')
 const userControllers = require('./routes/Siswa/SiswaSpesificData')
 const akunControllers = require('./routes/Admin/AdminAccountController')
+const adminPetugasController = require('./routes/Admin/AdminPetugasController')
 const dataSiswaController = require('./routes/Admin/AdminDataSiswaController')
 const jurusanController = require('./routes/Admin/AdminJurusan')
 const angkatanController = require('./routes/Admin/AdminAngkatan')
@@ -89,6 +90,7 @@ app.use('/admin', AuthMiddlewareAdmin, tahunpelajaranController)
 app.use('/admin', AuthMiddlewareAdmin, nilaiController)
 app.use('/admin', AuthMiddlewareAdmin, mapelController)
 app.use('/admin', AuthMiddlewareAdmin, AdminRaportController)
+app.use('/admin', AuthMiddlewareAdmin, adminPetugasController)
 
 
 // ------ Siswa
