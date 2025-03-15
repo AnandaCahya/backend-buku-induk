@@ -35,7 +35,7 @@ module.exports = {
         email: 'drscity20@gmail.comm',
         password: 'pass',
         username: 'DarisNur',
-        role: 'petugas',
+        role: 'admin',
       },
       {
         email: 'ardiandwic37@gmail.comm',
