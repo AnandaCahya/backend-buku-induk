@@ -347,7 +347,8 @@ router.get('/export-pdf/:id', async (req, res) => {
  */
 router.get('/export-pdf', async (req, res) => {
   try {
-    const url = 'http://localhost:8080/view-pdf'
+    const { angkatanId, jurusanId } = req.query;
+    const url = `http://localhost:8080/view-pdf?angkatanId=${angkatanId}&jurusanId=${jurusanId}`;
     const outputPath = './output/example.pdf'
 
     const browser = await puppeteer.launch({
@@ -804,6 +805,109 @@ router.get('/export-raport-excel-dummy', async (req, res) => {
     console.error('Terjadi kesalahan:', err);
     res.status(500).send('Terjadi kesalahan saat ekspor Excel');
   }
+});
+
+router.get('/export-excel-template', async (req, res) => {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet('Template Data Siswa');
+
+  const headers = [
+    'ID',
+    'NISN',
+    'Angkatan Tahun',
+    'Jurusan',
+    'Nama Lengkap',
+    'Nama Panggilan',
+    'Jenis Kelamin',
+    'Tempat Lahir',
+    'Tanggal Lahir',
+    'Agama',
+    'Kewarganegaraan',
+    'Anak Ke',
+    'Jumlah Saudara Kandung',
+    'Jumlah Saudara Tiri',
+    'Jumlah Saudara Angkat',
+    'Kelengkapan Ortu',
+    'Bahasa Sehari-hari',
+    'Menerima Bea Siswa Tahun Kelas Dari',
+    'Meninggalkan Sekolah Ini Tanggal',
+    'Meninggalkan Sekolah Ini Alasan',
+    'Akhir Pendidikan Tamat Belajar Lulus Tahun',
+    'Akhir Pendidikan Tanggal Ijazah',
+    'Akhir Pendidikan No Ijazah',
+    'Akhir Pendidikan Tanggal SKHUN',
+    'Akhir Pendidikan No SKHUN',
+    'Nama Ayah',
+    'Tempat Lahir Ayah',
+    'Tanggal Lahir Ayah',
+    'Agama Ayah',
+    'Kewarganegaraan Ayah',
+    'Pendidikan Ayah',
+    'Pekerjaan Ayah',
+    'Pengeluaran per Bulan Ayah',
+    'Alamat dan No. Telepon Ayah',
+    'Status Ayah',
+    'Nama Ibu',
+    'Tempat Lahir Ibu',
+    'Tanggal Lahir Ibu',
+    'Agama Ibu',
+    'Kewarganegaraan Ibu',
+    'Pendidikan Ibu',
+    'Pekerjaan Ibu',
+    'Pengeluaran per Bulan Ibu',
+    'Alamat dan No. Telepon Ibu',
+    'Status Ibu',
+    'Golongan Darah',
+    'Penyakit Pernah Diderita',
+    'Kelainan Jasmani',
+    'Tinggi',
+    'Berat Badan',
+    'Sebelumnya Tamatan Dari',
+    'Sebelumnya Tanggal Ijazah',
+    'Sebelumnya No Ijazah',
+    'Sebelumnya Tanggal SKHUN',
+    'Sebelumnya No SKHUN',
+    'Sebelumnya Lama Belajar',
+    'Pindahan Dari Sekolah',
+    'Pindahan Alasan',
+    'Diterima di Kelas',
+    'Diterima di Bidang Keahlian',
+    'Diterima di Program Keahlian',
+    'Diterima di Paket Keahlian',
+    'Diterima Tanggal',
+    'Melanjutkan Ke',
+    'Bekerja Nama Perusahaan',
+    'Bekerja Tanggal Mulai',
+    'Bekerja Penghasilan',
+    'Alamat Tempat Tinggal',
+    'No. Telepon Tempat Tinggal',
+    'Tinggal Dengan',
+    'Jarak ke Sekolah',
+    'Nama Wali',
+    'Tempat Lahir Wali',
+    'Tanggal Lahir Wali',
+    'Agama Wali',
+    'Kewarganegaraan Wali',
+    'Pendidikan Wali',
+    'Pekerjaan Wali',
+    'Pengeluaran per Bulan Wali',
+    'Alamat dan No. Telepon Wali',
+    'Kesenian',
+    'Olahraga',
+    'Organisasi',
+    'Lain-lain',
+  ];
+
+  worksheet.addRow(headers);
+
+  res.setHeader(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  );
+  res.setHeader('Content-Disposition', 'attachment; filename=template-data-siswa.xlsx');
+
+  await workbook.xlsx.write(res);
+  res.end();
 });
 
 

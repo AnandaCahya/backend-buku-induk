@@ -101,7 +101,6 @@ app.use('/siswa', AuthMiddlewareSiswa, siswaRaportController)
 
 
 app.get('/view-pdf/:id', async (req, res) => {
-  const { jurusan, angkatan, search } = req.query
   const { id } = req.params
   let data = await Models.user.findOne({
     where: { id: id },
@@ -163,9 +162,13 @@ app.get('/view-pdf/:id', async (req, res) => {
 })
 
 app.get('/view-pdf', async (req, res) => {
-  const { jurusan, angkatan, search } = req.query
-  const { id } = req.params
+  const { angkatanId, jurusanId } = req.query;
+  
   let data = await Models.user.findAll({
+    where: {
+      ...(angkatanId && { angkatan_id: angkatanId }),
+      ...(jurusanId && { jurusan_id: jurusanId }),
+    },
     include: [
       {
         model: Models.jurusan,
