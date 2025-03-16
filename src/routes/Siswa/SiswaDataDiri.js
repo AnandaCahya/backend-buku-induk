@@ -14,7 +14,7 @@ const { Op } = require('sequelize');
 
 const router = Router()
 
-/**
+/** 
  * GET /siswa/data-diri
  * @summary Mengambil data diri siswa beserta informasi terkait lainnya dan status perubahan "pending" jika ada
  * @tags siswa
