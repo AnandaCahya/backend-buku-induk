@@ -7,240 +7,356 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet" />
+    <style>
+      * {
+        font-size: 14px;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Roboto", sans-serif;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      .row {
+        display: flex;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      .right-side{
+        margin-left: 10px;
+      }
+
+      .image-side{
+        margin-left: 10px;
+      }
+
+      .image-border {
+        /* display: flex; */
+        text-align: center;
+        align-items: center;
+      }
+      
+      .label {
+        width: 50%;
+        text-align: left;
+        padding-right: 10px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .label::after {
+        padding-left: 5px;
+      }
+
+      .value {
+        flex-grow: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        border-bottom: 1px dotted black;
+      }
+
+      .center-value{
+        padding-left: 20px;
+      }
+      .value-sub {
+        flex-grow: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        padding-left: 5px;
+        border-bottom: 1px dotted black;
+      }
+
+      .center-value2{
+        padding-left: 10px;
+      }
+
+      
+      .value-sub2 {
+        flex-grow: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        padding-left: 5px;
+        border-bottom: 1px dotted black;
+      }
+
+      .center-value-title{
+        padding-left: 30px;
+      }
+
+      .value-title{
+        border-bottom: 1px dotted black;
+        padding-left: 5px;
+        width: 100px;
+      }
+
+      .value-2line {
+        flex-grow: 1;
+        overflow: hidden;
+        white-space: normal;
+        word-wrap: break-word;
+        word-break: break-word;
+        text-overflow: ellipsis;
+        padding-left: 5px;
+        font-size: 13px;
+        border-bottom: 1px dotted black;
+      }
+
+
+      .ol-cont {
+        margin-left: 20px;
+        list-style: upper-alpha;
+        font-weight: bold;
+      }
+
+      .ol-cont ol {
+        list-style: decimal;
+        font-weight: normal;
+      }
+
+
+      .title {
+        font-size: 20px;
+      }
+
+      @page {
+        size: A3 landscape;
+        margin: 20mm;
+      }
+    </style>
   </head>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: "Roboto", sans-serif;
-    }
-
-    .row {
-      display: flex;
-      width: 100%;
-    }
-
-    .label {
-      width: 45%; /* Adjust as needed */
-    }
-
-    .value {
-      flex-grow: 1;
-    }
-
-    .ol-cont {
-      margin-left: 20px;
-      list-style: upper-alpha;
-      font-weight: bold;
-    }
-
-    .ol-cont ol {
-      list-style: upper-alpha;
-      font-weight: normal;
-      list-style: decimal;
-    }
-  </style>
   <body style="margin: 0px 30px">
-    <% elements.forEach(function(element) { %>
+    <% elements.forEach(element => { %>
     <div style="page-break-before: always; position: relative;">
-      <h4 style="text-align: center; width: 100%">LEMBAR BUKU INDUK SISWA</h4>
-      <div style="width: 50%">
+      <h4 style="text-align: center; width: 100% " class="title">LEMBAR BUKU INDUK SISWA</h4>
+      <div style="width: 45%" name="Bagian kiri">
         <div class="row">
           <div class="label">NISN</div>
-          <div class="value">: <%= element?.nisn %></div>
+          <div class="center-value-title">:</div>
+          <div class="value-title"><%= element.nisn %></div>
         </div>
         <div class="row" style="margin-bottom: 20px">
           <div class="label">Nomer Induk</div>
-          <div class="value">: <%= element?.id %></div>
+          <div class="center-value-title">:</div>
+          <div class="value-title"><%= element.id %></div>
         </div>
       </div>
   
       <div style="width: 100%; display: flex">
-        <div style="width: 50%">
+        <div style="width:45%">
           <ol class="ol-cont">
             <li>
-              <h4>Keterangan Tentang Diri Siswa</h4>
+              <h4>KETERANGAN TENTANG DIRI SISWA</h4>
               <ol style="list-style: 1">
                 <li>
                   <div class="row">
                     <div class="label">Nama Lengkap</div>
-                    <div class="value">: <%= element?.data_diri?.nama_lengkap %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.data_diri.nama_lengkap %></div>
                   </div>
                 </li>
                 <li>
                   <div class="row">
                     <div class="label">Nama Panggilan</div>
-                    <div class="value">: <%= element?.data_diri?.nama_panggilan %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.data_diri.nama_panggilan %></div>
                   </div>
                 </li>
                 <li>
                   <div class="row">
                     <div class="label">Jenis Kelamin</div>
-                    <div class="value">: <%= element?.data_diri?.jenis_kelamin %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.data_diri.jenis_kelamin %></div>
                   </div>
                 </li>
                 <li>
                   <div class="row">
                     <div class="label">Tempat Lahir</div>
-                    <div class="value">: <%= element?.data_diri?.tempat_lahir %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.data_diri.tempat_lahir %></div>
                   </div>
                 </li>
                 <li>
                   <div class="row">
                     <div class="label">Agama</div>
-                    <div class="value">: <%= element?.data_diri?.agama %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.data_diri.agama %></div>
                   </div>
                 </li>
                 <li>
                   <div class="row">
                     <div class="label">Kewarganegaraan</div>
-                    <div class="value">: <%= element?.data_diri?.kewarganegaraan %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.data_diri.kewarganegaraan %></div>
                   </div>
                 </li>
                 <li>
                   <div class="row">
                     <div class="label">Anak Ke</div>
-                    <div class="value">: <%= element?.data_diri?.anak_ke %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.data_diri.anak_ke %></div>
                   </div>
                 </li>
                 <li>
                   <div class="row">
                     <div class="label">Jumlah Saudara Kandung</div>
-                    <div class="value">: <%= element?.data_diri?.jml_saudara_kandung %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.data_diri.jml_saudara_kandung %></div>
                   </div>
                 </li>
                 <li>
                   <div class="row">
                     <div class="label">Jumlah Saudara Tiri</div>
-                    <div class="value">: <%= element?.data_diri?.jml_saudara_tiri %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.data_diri.jml_saudara_tiri %></div>
                   </div>
                 </li>
                 <li>
                   <div class="row">
                     <div class="label">Jumlah Saudara Angkat</div>
-                    <div class="value">: <%= element?.data_diri?.jml_saudara_angkat %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.data_diri.jml_saudara_angkat %></div>
                   </div>
                 </li>
                 <li>
                   <div class="row">
                     <div class="label">Kelengkapan Ortu</div>
-                    <div class="value">: <%= element?.data_diri?.kelengkapan_ortu %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.data_diri.kelengkapan_ortu %></div>
                   </div>
                 </li>
                 <li>
                   <div class="row">
                     <div class="label">Bahasa Sehari Hari</div>
-                    <div class="value">: <%= element?.data_diri?.bahasa_sehari_hari %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.data_diri.bahasa_sehari_hari %></div>
                   </div>
                 </li>
                 <li>
                   <div class="row">
                     <div class="label">Tanggal Lahir</div>
-                    <div class="value">: <%= element?.data_diri?.tanggal_lahir %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.data_diri.tanggal_lahir %></div>
                   </div>
                 </li>
               </ol>
             </li>
   
             <li>
-              <h4>Keterangan Tempat Tinggal</h4>
+              <h4>KETERANGAN TEMPAT TINGAL</h4>
               <ol style="list-style: 1">
                 <li>
                   <div class="row">
                     <div class="label">Alamat Tempat Tinggal</div>
-                    <div class="value">: <%= element?.tempat_tinggal?.alamat %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.tempat_tinggal.alamat %></div>
                   </div>
                 </li>
                 <li>
                   <div class="row">
                     <div class="label">No Telepon Tempat Tinggal</div>
-                    <div class="value">: <%= element?.tempat_tinggal?.no_telepon %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.tempat_tinggal.no_telepon %></div>
                   </div>
                 </li>
                 <li>
                   <div class="row">
                     <div class="label">Tinggal Dengan</div>
-                    <div class="value">: <%= element?.tempat_tinggal?.tinggal_dengan %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.tempat_tinggal.tinggal_dengan %></div>
                   </div>
                 </li>
                 <li>
                   <div class="row">
                     <div class="label">Jarak Ke Sekolah</div>
-                    <div class="value">: <%= element?.tempat_tinggal?.jarak_ke_sekolah %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.tempat_tinggal.jarak_ke_sekolah %></div>
                   </div>
                 </li>
               </ol>
             </li>
   
             <li>
-              <h4>Keterangan Kesehatan</h4>
+              <h4>KETERANGAN KESEHATAN</h4>
               <ol style="list-style: 1">
                 <li>
                   <div class="row">
                     <div class="label">Gol Darah</div>
-                    <div class="value">: <%= element?.kesehatan?.gol_darah %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.kesehatan.gol_darah %></div>
                   </div>
                 </li>
                 <li>
                   <div class="row">
                     <div class="label">Penyakit Pernah Diderita</div>
-                    <div class="value">: <%= element?.kesehatan?.penyakit_pernah_diderita %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.kesehatan.penyakit_pernah_diderita %></div>
                   </div>
                 </li>
                 <li>
                   <div class="row">
                     <div class="label">Kelainan Jasmani</div>
-                    <div class="value">: <%= element?.kesehatan?.kelainan_jasmani %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.kesehatan.kelainan_jasmani %></div>
                   </div>
                 </li>
                 <li>
                   <div class="row">
                     <div class="label">Tinggi</div>
-                    <div class="value">: <%= element?.kesehatan?.tinggi %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.kesehatan.tinggi %> cm</div>
                   </div>
                 </li>
                 <li>
                   <div class="row">
                     <div class="label">Berat Badan</div>
-                    <div class="value">: <%= element?.kesehatan?.berat_badan %></div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.kesehatan.berat_badan %> kg</div>
                   </div>
                 </li>
               </ol>
             </li>
   
             <li>
-              <h4>Keterangan Pendidikan</h4>
-              <ol>
-                <li>
-                  <div>Pendidikan Sebelumnya</div>
-  
-                  <ol style="list-style: lower-alpha; margin-left: 20px">
+              <h4>KETERANGAN PENDIDIKAN</h4>  
+                  <ol>
                     <li>
                       <div>Pendidikan Sebelumnya</div>
                       <ol style="list-style: lower-alpha; margin-left: 20px">
                         <li>
                           <div class="row">
                             <div class="label">Tamatan Dari</div>
-                            <div class="value">: <%= element?.pendidikan?.sebelumnya_tamatan_dari %></div>
+                            <div class="center-value2">:</div>
+                            <div class="value-sub"><%= element.pendidikan.sebelumnya_tamatan_dari %></div>
                           </div>
                         </li>
                         <li>
                           <div class="row">
                             <div class="label">Tanggal Dan Ijazah</div>
-                            <div class="value">: <%= element?.pendidikan?.sebelumnya_tanggal_dan_ijazah %></div>
+                            <div class="center-value2">:</div>
+                            <div class="value-sub"><%= element.pendidikan.sebelumnya_tanggal_ijazah %> & <%= element.pendidikan.sebelumnya_no_ijazah %></div>
                           </div>
                         </li>
                         <li>
                           <div class="row">
                             <div class="label">Tanggal Dan Skhun</div>
-                            <div class="value">: <%= element?.pendidikan?.sebelumnya_tanggal_skhun_dan_ %></div>
+                            <div class="center-value2">:</div>
+                            <div class="value-sub"><%= element.pendidikan.sebelumnya_tanggal_skhun %> & <%= element.pendidikan.sebelumnya_no_skhun %></div>
                           </div>
                         </li>
                         <li>
                           <div class="row">
                             <div class="label">Lama Belajar</div>
-                            <div class="value">: <%= element?.pendidikan?.sebelumnya_lama_belajar %></div>
+                            <div class="center-value2">:</div>
+                            <div class="value-sub"><%= element.pendidikan.sebelumnya_lama_belajar %></div>
                           </div>
                         </li>
                   </ol>
@@ -253,13 +369,15 @@
                     <li>
                       <div class="row">
                         <div class="label">Dari Sekolah</div>
-                        <div class="value">: <%= element?.pendidikan?.pindahan_dari_sekolah %></div>
+                        <div class="center-value2">:</div>
+                        <div class="value-sub"><%= element.pendidikan.pindahan_dari_sekolah %></div>
                       </div>
                     </li>
                     <li>
                       <div class="row">
                         <div class="label">Alasan</div>
-                        <div class="value">: <%= element?.pendidikan?.pindahan_alasan %></div>
+                        <div class="center-value2">:</div>
+                        <div class="value-sub"><%= element.pendidikan.pindahan_alasan %></div>
                       </div>
                     </li>
                   </ol>
@@ -272,25 +390,320 @@
                     <li>
                       <div class="row">
                         <div class="label">Di kelas</div>
-                        <div class="value">: <%= element?.pendidikan?.diterima_di_kelas %></div>
+                        <div class="center-value2">:</div>
+                        <div class="value-sub"><%= element.pendidikan.diterima_di_kelas %></div>
                       </div>
                     </li>
                     <li>
                       <div class="row">
                         <div class="label">Bidang Keahlian</div>
-                        <div class="value">: <%= element?.pendidikan?.diterima_di_bidang_keahlian %></div>
+                        <div class="center-value2">:</div>
+                        <div class="value-sub"><%= element.pendidikan.diterima_di_bidang_keahlian %></div>
                       </div>
                     </li>
                     <li>
                       <div class="row">
                         <div class="label">Program Keahlian</div>
-                        <div class="value">: <%= element?.pendidikan?.diterima_di_program_keahlian %></div>
+                        <div class="center-value2">:</div>
+                        <div class="value-sub"><%= element.pendidikan.diterima_di_program_keahlian %></div>
                       </div>
                     </li>
                     <li>
                       <div class="row">
                         <div class="label">Tanggal</div>
-                        <div class="value">: <%= element?.pendidikan?.diterima_tanggal %></div>
+                        <div class="center-value2">:</div>
+                        <div class="value-sub"><%= element.pendidikan.diterima_tanggal %></div>
+                      </div>
+                    </li>
+                  </ol>
+                </li>
+              </ol>
+            </li>
+            
+            <li>
+              <h4>KETERANGAN TENTANG AYAH KANDUNG</h4>
+              <ol >
+                <li>
+                  <div class="row">
+                    <div class="label">Nama</div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.ayah_kandung.nama %></div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="label">Tempat Dan Tanggal Lahir</div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.ayah_kandung.tempat_lahir %> <%= element.ayah_kandung.tanggal_lahir %></div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="label">Agama</div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.ayah_kandung.agama %></div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="label">Kewarganegaraan</div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.ayah_kandung.kewarganegaraan %></div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="label">Pendidikan</div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.ayah_kandung.pendidikan %></div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="label">Pekerjaan</div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.ayah_kandung.pekerjaan %></div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="label">Pengeluaran per Bulan</div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.ayah_kandung.pengeluaran_per_bulan %></div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="label">Alamat & No Telp Rumah/HP</div>
+                    <div class="center-value">:</div>
+                    <div class="value-2line"><%= element.ayah_kandung.alamat_dan_no_telepon %></div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="label">Masih Hidup/Meninggal Dunia</div>
+                    <div class="center-value">:</div>
+                    <div class="value-sub"><%= element.ayah_kandung.status %></div>
+                  </div>
+                </li>
+              </ol>
+            </li>
+          </ol>
+        </div>
+        <div style="width: 40% " class="right-side">
+          <ol class="ol-cont" start="6">
+            <li>
+              <h4>KETERANGAN TENTANG IBU KANDUNG</h4>
+              <ol>
+                <li>
+                  <div class="row">
+                    <div class="label">Nama</div>
+                    <div class="center-value2">:</div>
+                    <div class="value-sub2"><%= element.ibu_kandung.nama %></div>
+                  </div>
+                </li>
+            </li>
+            <li>
+              <div class="row">
+                <div class="label">Tempat Dan Tanggal Lahir</div>
+                <div class="center-value2">:</div>
+                <div class="value-sub2"><%= element.ibu_kandung.tempat_lahir %> <%= element.ibu_kandung.tanggal_lahir %></div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="label">Agama</div>
+                <div class="center-value2">:</div>
+                <div class="value-sub2"><%= element.ibu_kandung.agama %></div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="label">Kewarganegaraan</div>
+                <div class="center-value2">:</div>
+                <div class="value-sub2"><%= element.ibu_kandung.kewarganegaraan %></div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="label">Pendidikan</div>
+                <div class="center-value2">:</div>
+                <div class="value-sub2"><%= element.ibu_kandung.pendidikan %></div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="label">Pekerjaan</div>
+                <div class="center-value2">:</div>
+                <div class="value-sub2"><%= element.ibu_kandung.pekerjaan %></div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="label">Pengeluaran per Bulan</div>
+                <div class="center-value2">:</div>
+                <div class="value-sub2"><%= element.ibu_kandung.penghasilan %></div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="label">Alamat & No Telp Rumah/HP</div>
+                <div class="center-value2">:</div>
+                <div class="value-2line"><%= element.ibu_kandung.alamat_dan_no_telepon %></div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="label">Masih Hidup/Meninggal Dunia</div>
+                <div class="center-value2">:</div>
+                <div class="value-sub2"><%= element.ibu_kandung.status %></div>
+              </div>
+            </li>
+            </ol>
+             
+            <li>
+              <h4>KETERANGAN TENTANG WALI</h4>
+              <ol style="list-style: 1">
+                <li>
+                  <div class="row">
+                    <div class="label">Nama</div>
+                    <div class="center-value2">:</div>
+                    <div class="value-sub2"><%= element.wali.nama %></div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="label">Tempat Dan Tanggal Lahir</div>
+                    <div class="center-value2">:</div>
+                    <div class="value-sub2"><%= element.wali.tempat_lahir %> <%= element.wali.tanggal_lahir %></div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="label">Agama</div>
+                    <div class="center-value2">:</div>
+                    <div class="value-sub2"><%= element.wali.agama %></div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="label">Kewarganegaraan</div>
+                    <div class="center-value2">:</div>
+                    <div class="value-sub2"><%= element.wali.kewarganegaraan %></div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="label">Pendidikan</div>
+                    <div class="center-value2">:</div>
+                    <div class="value-sub2"><%= element.wali.pendidikan %></div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="label">Pekerjaan</div>
+                    <div class="center-value2">:</div>
+                    <div class="value-sub2"><%= element.wali.pekerjaan %></div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="label">Pengeluaran per Bulan</div>
+                    <div class="center-value2">:</div>
+                    <div class="value-sub2"><%= element.wali.penghasilan %></div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="label">Alamat & No Telp Rumah/HP</div>
+                    <div class="center-value2">:</div>
+                    <div class="value-2line"><%= element.wali.alamat_dan_no_telepon %></div>
+              </ol>
+            </li>
+  
+            <li>
+              <h4>HOBI SISWA</h4>
+              <ol style="list-style: 1">
+                <li>
+                  <div class="row">
+                    <div class="label">Kesenian</div>
+                    <div class="center-value2">:</div>
+                    <div class="value-sub2"><%= element.hobi_siswa.kesenian %></div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="label">Olahraga</div>
+                    <div class="center-value2">:</div>
+                    <div class="value-sub2"><%= element.hobi_siswa.olahraga %></div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="label">Organisasi</div>
+                    <div class="center-value2">:</div>
+                    <div class="value-sub2"><%= element.hobi_siswa.organisasi %></div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="label">Lain Lain</div>
+                    <div class="center-value2">:</div>
+                    <div class="value-sub2"><%= element.hobi_siswa.lain_lain %></div>
+                  </div>
+                </li>
+              </ol>
+            </li>
+  
+            <li>
+              <h4>KETERANGAN PERKEMBANGAN SISWA</h4>
+              <ol>
+                <li>
+                  <div class="row">
+                    <div class="label">Menerima Beasiswa</div>
+                    <div class="center-value2">:</div>
+                    <div class="value-sub2"><%= element.perkembangan?.menerima_bea_siswa_tahun_kelas_dari %></div>
+                  </div>
+                </li>
+
+                <li>
+                  <div>Meninggalkan Sekolah Ini</div>
+  
+                  <ol style="list-style: lower-alpha; margin-left: 20px">
+                    <li>
+                      <div class="row">
+                        <div class="label">Tanggal</div>
+                        <div class="value">: <%= element.perkembangan?.meninggalkan_sekolah_ini_tanggal %></div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="row">
+                        <div class="label">Alasan</div>
+                        <div class="value">: <%= element.perkembangan?.meninggalkan_sekolah_ini_alasan %></div>
+                      </div>
+                    </li>
+                  </ol>
+                </li>
+                <li>
+                  <div>Akhir Pendidikan</div>
+  
+                  <ol style="list-style: lower-alpha; margin-left: 20px">
+                    <li>
+                      <div class="row">
+                        <div class="label">Tamat Belajar/Lulus</div>
+                        <div class="value">: <%= element.perkembangan?.akhir_pendidikan_tamat_belajar_lulus_tahun %></div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="row">
+                        <div class="label">Nomor/Tanggal Ijazah</div>
+                        <div class="value">: <%= element.perkembangan?.akhir_pendidikan_no_ijazah %>, <%= element.perkembangan?.akhir_pendidikan_tanggal_ijazah %></div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="row">
+                        <div class="label">Nomor/Tanggal SKHUN</div>
+                        <div class="value">:<%= element.perkembangan?.akhir_pendidikan_no_skhun %>, <%= element.perkembangan?.akhir_pendidikan_tanggal_skhun %></div>
                       </div>
                     </li>
                   </ol>
@@ -299,242 +712,15 @@
             </li>
   
             <li>
-              <h4>Keterangan Tentang Ayah Kandung</h4>
-              <ol style="list-style: 1">
-                <li>
-                  <div class="row">
-                    <div class="label">Nama</div>
-                    <div class="value">: <%= element?.ayah_kandung?.nama %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Tempat Dan Tanggal Lahir</div>
-                    <div class="value">: <%= element?.ayah_kandung?.tempat_lahir %>, <%= element?.ayah_kandung?.tanggal_lahir %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Agama</div>
-                    <div class="value">: <%= element?.ayah_kandung?.agama %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Kewarganegaraan</div>
-                    <div class="value">: <%= element?.ayah_kandung?.kewarganegaraan %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Pendidikan</div>
-                    <div class="value">: <%= element?.ayah_kandung?.pendidikan %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Pekerjaan</div>
-                    <div class="value">: <%= element?.ayah_kandung?.pekerjaan %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Penghasilan /bulan/tahun</div>
-                    <div class="value">: <%= element?.ayah_kandung?.pengeluaran_per_bulan %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Alamat & No Telp Rumah/HP</div>
-                    <div class="value">: <%= element?.ayah_kandung?.alamat_dan_no_telepon %></div>
-                  </div>
-                </li>
-              </ol>
-            </li>
-          </ol>
-        </div>
-        <div style="width: 50%">
-          <h4>Keterangan Ibu Kandung</h4>
-          <ol class="ol-cont" start="6">
-            <li>
-              <div class="row">
-                <div class="label">Nama</div>
-                <div class="value">: <%= element?.ibu_kandung?.nama %></div>
-              </div>
-            </li>
-            <li>
-              <div class="row">
-                <div class="label">Tempat Dan Tanggal Lahir</div>
-                <div class="value">: <%= element?.ibu_kandung?.tempat_lahir %>, <%= element?.ibu_kandung?.tanggal_lahir %><</div>
-              </div>
-            </li>
-            <li>
-              <div class="row">
-                <div class="label">Agama</div>
-                <div class="value">: <%= element?.ibu_kandung?.agama %></div>
-              </div>
-            </li>
-            <li>
-              <div class="row">
-                <div class="label">Kewarganegaraan</div>
-                <div class="value">: <%= element?.ibu_kandung?.kewarganegaraan %></div>
-              </div>
-            </li>
-            <li>
-              <div class="row">
-                <div class="label">Pendidikan</div>
-                <div class="value">: <%= element?.ibu_kandung?.pendidikan %></div>
-              </div>
-            </li>
-            <li>
-              <div class="row">
-                <div class="label">Pekerjaan</div>
-                <div class="value">: <%= element?.ibu_kandung?.pekerjaan %></div>
-              </div>
-            </li>
-            <li>
-              <div class="row">
-                <div class="label">Penghasilan /bulan/tahun</div>
-                <div class="value">: <%= element?.ibu_kandung?.penghasilan %></div>
-              </div>
-            </li>
-            <li>
-              <div class="row">
-                <div class="label">Alamat & No Telp Rumah/HP</div>
-                <div class="value">: <%= element?.ibu_kandung?.alamat_dan_no_telepon %></div>
-              </div>
-            </li>
-            
-              </ol>
-            </li>
-  
-            <li>
-              <h4>Keterangan Tetang Wali</h4>
-              <ol style="list-style: 1">
-                <li>
-                  <div class="row">
-                    <div class="label">Nama</div>
-                    <div class="value">: <%= element?.wali?.nama %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Tempat Dan Tanggal Lahir</div>
-                    <div class="value">: <%= element?.wali?.tempat_lahir %>, <%= element?.wali?.tanggal_lahir %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Agama</div>
-                    <div class="value">: <%= element?.wali?.agama %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Kewarganegaraan</div>
-                    <div class="value">: <%= element?.wali?.kewarganegaraan %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Pendidikan</div>
-                    <div class="value">: <%= element?.wali?.pendidikan %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Pekerjaan</div>
-                    <div class="value">: <%= element?.wali?.pekerjaan %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Penghasilan /bulan/tahun</div>
-                    <div class="value">: <%= element?.wali?.penghasilan %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Alamat & No Telp Rumah/HP</div>
-                    <div class="value">: <%= element?.wali?.alamat_dan_no_telepon %></div>
-              </ol>
-            </li>
-  
-            <li>
-              <h4>Keterangan Hobi</h4>
-              <ol style="list-style: 1">
-                <li>
-                  <div class="row">
-                    <div class="label">Kesenian</div>
-                    <div class="value">: <%= element?.hobi_siswa?.kesenian %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Olahraga</div>
-                    <div class="value">: <%= element?.hobi_siswa?.olahraga %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Organisasi</div>
-                    <div class="value">: <%= element?.hobi_siswa?.organisasi %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Lain Lain</div>
-                    <div class="value">: <%= element?.hobi_siswa?.lain_lain %></div>
-                  </div>
-                </li>
-              </ol>
-            </li>
-  
-            <li>
-              <h4>Perkembangan Siswa</h4>
-              <ol style="list-style: 1">
-                <li>
-                  <div class="row">
-                    <div class="label">Menerima Beasiswa Tahun Kelas Dari</div>
-                    <div class="value">: <%= element?.perkembangan?.menerima_bea_siswa_tahun_kelas_dari %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Meninggalkan Sekolah Ini Tanggal</div>
-                    <div class="value">: <%= element?.perkembangan?.meninggalkan_sekolah_ini_tanggal %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Meninggalkan Sekolah Ini Alasan</div>
-                    <div class="value">: <%= element?.perkembangan?.meninggalkan_sekolah_ini_alasan %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Akhir Pendidikan Tamat Belajar Lulus Tahun</div>
-                    <div class="value">: <%= element?.perkembangan?.akhir_pendidikan_tamat_belajar_lulus_tahun %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Nomor/Tanggal Ijazah</div>
-                    <div class="value">: <%= element?.perkembangan?.akhir_pendidikan_no_ijazah %>, <%= element?.perkembangan?.akhir_pendidikan_tanggal_ijazah %></div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="label">Nomor/Tanggal SKHUN</div>
-                    <div class="value">:<%= element?.perkembangan?.akhir_pendidikan_no_skhun %>, <%= element?.perkembangan?.akhir_pendidikan_tanggal_skhun %></div>
-                  </div>
-                </li>
-              </ol>
-            </li>
-  
-            <li>
-              <h4>Keterangan Pendidikan</h4>
+              <h4>KETERANGAN SETELAH SELESAI PENDIDIKAN</h4>
               <ol>
+                <li>
+                  <div class="row">
+                    <div class="label">Melanjutkan Ke</div>
+                    <div class="center-value2">:</div>
+                    <div class="value-sub2"><%= element.setelah_pendidikan.melanjutkan_ke %></div>
+                  </div>
+                </li>
                 <li>
                   <div>Bekerja</div>
   
@@ -542,19 +728,19 @@
                     <li>
                       <div class="row">
                         <div class="label">Nama Perusahaan</div>
-                        <div class="value">: <%= element?.setelah_pendidikan?.bekerja_nama_perusahaan %></div>
+                        <div class="value">: <%= element.setelah_pendidikan.bekerja_nama_perusahaan %></div>
                       </div>
                     </li>
                     <li>
                       <div class="row">
                         <div class="label">Mulai Tanggal</div>
-                        <div class="value">: <%= element?.setelah_pendidikan?.bekerja_tanggal_mulai %></div>
+                        <div class="value">: <%= element.setelah_pendidikan.bekerja_tanggal_mulai %></div>
                       </div>
                     </li>
                     <li>
                       <div class="row">
                         <div class="label">Penghasilan</div>
-                        <div class="value">: <%= element?.setelah_pendidikan?.bekerja_penghasilan %></div>
+                        <div class="value">: <%= element.setelah_pendidikan.bekerja_penghasilan %></div>
                       </div>
                     </li>
                   </ol>
@@ -564,11 +750,20 @@
           </ol>
         </div>
       </div>
-  
-      <div style="width: 2.79cm; height: 3.81cm; position: absolute; border: solid black 1px; top: 80px; right: 40px"></div>
-      <div style="width: 2.79cm; height: 3.81cm; position: absolute; border: solid black 1px; bottom: 240px; right: 40px"></div>
+          </ol>
+      </li>
+ 
+      <div style="width: 10%;" class="image-side">
+        
+        <div style="width: 3cm; height: 4cm; position: absolute; border: solid black 1px; top: 80px; right: 40px" class="image-border">3x4</div>
+        <div style="position: absolute; top: 235px; right: 50px">Waktu diterima</div>
+        <div style="position: absolute; top: 255px; right: 56px">di sekolah ini</div>
+        <div style="width: 3cm; height: 4cm; position: absolute; border: solid black 1px; bottom: 240px; right: 40px" class="image-border">3x4</div>
+        <div style="position: absolute; top: 715px; right: 32px">Waktu meninggalkan</div>
+        <div style="position: absolute; top: 735px; right: 68px">sekolah ini</div>
       </div>
+        
+    </div>
     <% }); %>
   </body>
 </html>
-
