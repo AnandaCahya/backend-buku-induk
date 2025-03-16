@@ -3,15 +3,6 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-     */
     return queryInterface.bulkInsert('wali', [
       {
         nama: null,
@@ -49,15 +40,70 @@ module.exports = {
         alamat_dan_no_telepon: null,
         user_id: 3,
       },
+      {
+        nama: null,
+        tempat_lahir: null,
+        tanggal_lahir: null,
+        agama: null,
+        kewarganegaraan: null,
+        pendidikan: null,
+        pekerjaan: null,
+        pengeluaran_per_bulan: null,
+        alamat_dan_no_telepon: null,
+        user_id: 4,
+      },
+      {
+        nama: null,
+        tempat_lahir: null,
+        tanggal_lahir: null,
+        agama: null,
+        kewarganegaraan: null,
+        pendidikan: null,
+        pekerjaan: null,
+        pengeluaran_per_bulan: null,
+        alamat_dan_no_telepon: null,
+        user_id: 5,
+      },
+      {
+        nama: null,
+        tempat_lahir: null,
+        tanggal_lahir: null,
+        agama: null,
+        kewarganegaraan: null,
+        pendidikan: null,
+        pekerjaan: null,
+        pengeluaran_per_bulan: null,
+        alamat_dan_no_telepon: null,
+        user_id: 6,
+      },
+      {
+        nama: null,
+        tempat_lahir: null,
+        tanggal_lahir: null,
+        agama: null,
+        kewarganegaraan: null,
+        pendidikan: null,
+        pekerjaan: null,
+        pengeluaran_per_bulan: null,
+        alamat_dan_no_telepon: null,
+        user_id: 7,
+      },
+      {
+        nama: 'Budi Santoso',
+        tempat_lahir: 'Surabaya',
+        tanggal_lahir: '1970-05-10',
+        agama: 'Islam',
+        kewarganegaraan: 'Indonesia',
+        pendidikan: 'SMA',
+        pekerjaan: 'Wiraswasta',
+        pengeluaran_per_bulan: '5.000.000',
+        alamat_dan_no_telepon: 'JL Raya Tunjungtirto No. 45, 088901234567',
+        user_id: 8,
+      },
     ])
   },
 
   async down(queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
+    await queryInterface.bulkDelete('wali', null, {})
   },
 }

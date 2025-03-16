@@ -17,26 +17,31 @@ module.exports = {
         email: 'triogamerz46@gmail.com',
         password: 'sendaljepit',
         username: 'AnandaEka',
+        role: 'admin',
       },
       {
         email: 'aden286chara@gmail.com',
         password: 'aden',
         username: 'Aden',
+        role: 'petugas',
       },
       {
         email: 'jokoaiko8b@gmail.com',
         password: 'aiko',
         username: 'JokoAiko',
+        role: 'admin',
       },
       {
         email: 'drscity20@gmail.comm',
         password: 'pass',
         username: 'DarisNur',
+        role: 'admin',
       },
       {
         email: 'ardiandwic37@gmail.comm',
         password: 'ardian',
         username: 'ardiandw',
+        role: 'admin',
       },
     ])
   },
@@ -48,5 +53,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
+    return queryInterface.bulkDelete('admin', null, {})
   },
 }

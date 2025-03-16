@@ -34,6 +34,41 @@ module.exports = {
         bekerja_penghasilan: null,
         user_id: 3,
       },
+      {
+        melanjutkan_ke: null,
+        bekerja_nama_perusahaan: null,
+        bekerja_tanggal_mulai: null,
+        bekerja_penghasilan: null,
+        user_id: 4,
+      },
+      {
+        melanjutkan_ke: null,
+        bekerja_nama_perusahaan: null,
+        bekerja_tanggal_mulai: null,
+        bekerja_penghasilan: null,
+        user_id: 5,
+      },
+      {
+        melanjutkan_ke: null,
+        bekerja_nama_perusahaan: null,
+        bekerja_tanggal_mulai: null,
+        bekerja_penghasilan: null,
+        user_id: 6,
+      },
+      {
+        melanjutkan_ke: null,
+        bekerja_nama_perusahaan: null,
+        bekerja_tanggal_mulai: null,
+        bekerja_penghasilan: null,
+        user_id: 7,
+      },
+      {
+        melanjutkan_ke: null,
+        bekerja_nama_perusahaan: null,
+        bekerja_tanggal_mulai: null,
+        bekerja_penghasilan: null,
+        user_id: 8,
+      },
     ])
   },
 

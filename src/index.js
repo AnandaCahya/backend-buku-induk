@@ -13,6 +13,7 @@ const app = express()
 const authControllers = require('./routes/AuthController')
 const userControllers = require('./routes/Siswa/SiswaSpesificData')
 const akunControllers = require('./routes/Admin/AdminAccountController')
+const adminPetugasController = require('./routes/Admin/AdminPetugasController')
 const dataSiswaController = require('./routes/Admin/AdminDataSiswaController')
 const jurusanController = require('./routes/Admin/AdminJurusan')
 const angkatanController = require('./routes/Admin/AdminAngkatan')
@@ -89,6 +90,7 @@ app.use('/admin', AuthMiddlewareAdmin, tahunpelajaranController)
 app.use('/admin', AuthMiddlewareAdmin, nilaiController)
 app.use('/admin', AuthMiddlewareAdmin, mapelController)
 app.use('/admin', AuthMiddlewareAdmin, AdminRaportController)
+app.use('/admin', AuthMiddlewareAdmin, adminPetugasController)
 
 
 // ------ Siswa
@@ -633,6 +635,10 @@ app.post('/import-raport', upload.single('file'), async (req, res) => {
       }
     }
 
+    const sakitIndex = labels.indexOf('Sakit');
+    const izinIndex = labels.indexOf('Izin');
+    const alphaIndex = labels.indexOf('Alpha');
+
     console.log('Mapel found in Excel:', mapelColumns.map(col => col.mapelName));
 
     for (const row of rows) {
@@ -659,18 +665,13 @@ app.post('/import-raport', upload.single('file'), async (req, res) => {
           continue;
         }
 
-        const existingNilai = await Models.nilai.findOne({
+        await Models.nilai.destroy({
           where: {
-            mapel_id: mapel.id,
             user_id: user.id,
+            mapel_id: mapel.id,
             semester: parseInt(semester, 10),
           },
         });
-
-        if (existingNilai) {
-          console.log(`Skipping existing nilai_merdeka for mapel: ${mapelColumn.mapelName}, user_id: ${user.id}, semester: ${semester}`);
-          continue;
-        }
 
         const nilaiMerdeka = {
           r: row[mapelColumn.nilaiIndex],
@@ -681,10 +682,10 @@ app.post('/import-raport', upload.single('file'), async (req, res) => {
         };
 
         try {
-          console.log('Upserting nilai_merdeka:', nilaiMerdeka);
-          await Models.nilai.upsert(nilaiMerdeka);
+          console.log('Inserting nilai_merdeka:', nilaiMerdeka);
+          await Models.nilai.create(nilaiMerdeka);
         } catch (err) {
-          console.error('Error upserting nilai_merdeka:', err);
+          console.error('Error inserting nilai_merdeka:', err);
         }
       }
 
@@ -693,30 +694,27 @@ app.post('/import-raport', upload.single('file'), async (req, res) => {
         return isNaN(parsed) ? 0 : parsed;
       };
 
-      const existingSia = await Models.sia.findOne({
+      console.log(`Sakit: ${row[sakitIndex]}, Izin: ${row[izinIndex]}, Alpha: ${row[alphaIndex]}`);
+
+      await Models.sia.destroy({
         where: {
           user_id: user.id,
           semester: parseInt(semester, 10),
         },
       });
 
-      if (existingSia) {
-        console.log(`Skipping existing SIA data for user_id: ${user.id}, semester: ${semester}`);
-        continue;
-      }
-
       const siaData = {
         user_id: user.id,
-        sakit: parseInteger(row[row.length - 3]),
-        izin: parseInteger(row[row.length - 2]),
-        alpha: parseInteger(row[row.length - 1]),
+        sakit: parseInteger(row[sakitIndex]),
+        izin: parseInteger(row[izinIndex]),
+        alpha: parseInteger(row[alphaIndex]),
         semester: parseInt(semester, 10), 
       };
 
       try {
-        await Models.sia.upsert(siaData);
+        await Models.sia.create(siaData);
       } catch (err) {
-        console.error('Error upserting SIA data:', err);
+        console.error('Error inserting SIA data:', err);
       }
     }
 
