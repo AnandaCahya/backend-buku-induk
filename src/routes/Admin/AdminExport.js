@@ -19,8 +19,8 @@ const router = Router()
  * GET /admin/export-excel
  * @summary Mengubah data diri siswa berdasarkan ID siswa
  * @tags admin
- * @param {string} jurusan.query - Nama jurusan untuk filter data siswa
- * @param {string} angkatan.query - Tahun angkatan untuk filter data siswa
+ * @param {string} jurusanId.query - ID jurusan untuk filter data siswa
+ * @param {string} angkatanId.query - ID angkatan untuk filter data siswa
  * @param {string} search.query - Pencarian nama siswa
  * @return {object} 200 - Data berhasil dibuat - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
  * @return {object} 500 - Terjadi kesalahan saat memperbarui data - application/json
@@ -30,9 +30,13 @@ const router = Router()
  * }
  */
 router.get('/export-excel', async (req, res) => {
-  const { jurusan, angkatan, search } = req.query
+  const { jurusanId, angkatanId, search } = req.query
 
   let data = await Models.user.findAll({
+    where: {
+      ...(jurusanId && { jurusan_id: jurusanId }),
+      ...(angkatanId && { angkatan_id: angkatanId }),
+    },
     include: [
       {
         model: Models.jurusan,
@@ -87,8 +91,6 @@ router.get('/export-excel', async (req, res) => {
     ],
   })
 
-  if (jurusan) data = data.filter((e) => e.jurusan == jurusan)
-  if (angkatan) data = data.filter((e) => e.angkatan == angkatan)
   if (search)
     data = data.filter((e) =>
       e.data_diri.nama_lengkap.toLowerCase().includes(search.toLowerCase())
