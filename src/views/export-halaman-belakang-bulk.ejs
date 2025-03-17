@@ -160,31 +160,52 @@
 
                 <% 
                     const kelompokUmum = ['Pendidikan Agama dan Budi Pekerti', 'Pendidikan Pancasila', 'Bahasa Indonesia', 'Pendidikan Jasmani, Olahraga, dan Kesehatan', 'Sejarah', 'Seni Budaya', 'Bahasa Jawa'];
-                    const kelompokKejuruan = ['Matematika', 'Bahasa Inggris', 'Informatika', 'Projek IPAS', 'Dasar Program Keahlian', 'Mata Pelajaran Konsentrasi Keahlian', 'Projek Kreatif dan Kewirausahaan', 'Mata Pelajaran Pilihan'];
+                    const kelompokKejuruan = ['Matematika', 'Bahasa Inggris', 'Informatika', 'Projek IPAS', 'Dasar Program Keahlian', 'Mata Pelajaran Konsentrasi Keahlian', 'Projek Kreatif dan Kewirausahaan'];
+                    
+                    const optionalSubjects = Object.keys(elementData.nilaiPerSemester)
+                        .flatMap(semester => elementData.nilaiPerSemester[semester])
+                        .filter(nilai => nilai.mapel.nama.startsWith('@'))
+                        .map(nilai => nilai.mapel.nama.substring(1))
+                        .filter((value, index, self) => self.indexOf(value) === index); 
+
                     const groupedByMapel = {
                         'Kelompok Mata Pelajaran Umum': kelompokUmum,
-                        'Kelompok Mata Pelajaran Kejuruan': kelompokKejuruan
+                        'Kelompok Mata Pelajaran Kejuruan': kelompokKejuruan,
+                        'Optional': optionalSubjects
                     };
                 %>
 
-                <% Object.keys(groupedByMapel).forEach(function(category) { %>
-                    <tr>
-                        <th colspan="14" class="jenis-mapel"><%= category %></th>
-                    </tr>
-                    <% let index = 1; %>
-                    <% groupedByMapel[category].forEach(function(mapel) { %>
-                        <tr>
-                            <td class="no"><%= index++ %>.</td>
-                            <td class="mata-pelajaran <%= mapel === 'Pendidikan Jasmani, Olahraga, dan Kesehatan' ? 'mata-pelajaran-jasmani' : '' %>"><%= mapel %></td>
-                            <% for (let i = 1; i <= 6; i++) { %>
-                                <% const semesterKey = `Semester ${i}`; %>
-                                <% const nilaiData = elementData.nilaiPerSemester[semesterKey] && elementData.nilaiPerSemester[semesterKey].find(n => n.mapel.nama === mapel); %>
-                                <td class="nilai"><%= nilaiData ? nilaiData.dataValues.r : '' %></td>
-                                <td class="keterangan"><%= nilaiData ? nilaiData.dataValues.keterangan : '' %></td>
+                <% 
+                    let globalIndex = 1; 
+                    Object.keys(groupedByMapel).forEach(function(category) { %>
+                        <% if (groupedByMapel[category].length > 0) { %>
+                            <% if (category !== 'Optional') { %>
+                                <tr>
+                                    <th colspan="14" class="jenis-mapel"><%= category %></th>
+                                </tr>
+                                <% if (category === 'Kelompok Mata Pelajaran Kejuruan') { %>
+                                    <% globalIndex = 1; %>
+                                <% } %>
                             <% } %>
-                        </tr>
+                            <% groupedByMapel[category].forEach(function(mapel) { %>
+                                <tr>
+                                    <td class="no"><%= globalIndex++ %>.</td>
+                                    <td class="mata-pelajaran <%= mapel === 'Pendidikan Jasmani, Olahraga, dan Kesehatan' ? 'mata-pelajaran-jasmani' : '' %>">
+                                        <%= mapel %>
+                                    </td>
+                                    <% for (let i = 1; i <= 6; i++) { %>
+                                        <% const semesterKey = `Semester ${i}`; %>
+                                        <% const nilaiData = elementData.nilaiPerSemester[semesterKey] && 
+                                            elementData.nilaiPerSemester[semesterKey].find(n => 
+                                                n.mapel.nama === (category === 'Optional' ? '@' + mapel : mapel)
+                                            ); %>
+                                        <td class="nilai"><%= nilaiData ? nilaiData.dataValues.r : '' %></td>
+                                        <td class="keterangan"><%= nilaiData ? nilaiData.dataValues.keterangan : '' %></td>
+                                    <% } %>
+                                </tr>
+                            <% }); %>
+                        <% } %>
                     <% }); %>
-                <% }); %>
 
                 <tr>
                     <th colspan="13" style="text-align: start;">Ketidakhadiran</th>
