@@ -732,28 +732,84 @@ router.delete('/data-diri/pending/:id', async (req, res) => {
  *   "error": "Internal server error"
  * }
  */
+
 router.get('/dashboard', async (req, res) => {
-  const count_siswa = await Models.user.count()
-  const count_laki = await Models.data_diri.count({
-    where: {
-      jenis_kelamin: 'laki-laki',
-    },
-  })
+  try {
+    const [count_siswa, count_laki, count_perempuan, count_datainputed] = await Promise.all([
+      Models.user.count(),
+      Models.data_diri.count({ where: { jenis_kelamin: 'laki-laki' } }),
+      Models.data_diri.count({ where: { jenis_kelamin: 'perempuan' } }),
+      Models.data_diri.count()
+    ]);
 
-  const count_perempuan = await Models.data_diri.count({
-    where: {
-      jenis_kelamin: 'perempuan',
-    },
-  })
+    const entryYears = await Models.user.findAll({
+      attributes: [
+        [Sequelize.fn('DISTINCT', Sequelize.col('angkatan.tahun')), 'entry_year']
+      ],
+      include: [{
+        model: Models.angkatan,
+        as: 'angkatan',
+        attributes: [],
+        required: true
+      }],
+      raw: true,
+      order: [[Sequelize.col('angkatan.tahun'), 'DESC']]
+    });
 
-  const count_datainputed = await Models.data_diri.count()
+    // distribusi kelas
+    const tahunAjaran = [];
+    
+    for (const { entry_year } of entryYears) {
+      const [kelas10, kelas11, kelas12] = await Promise.all([
+        Models.user.count({
+          include: [{
+            model: Models.angkatan,
+            as: 'angkatan', 
+            where: { tahun: entry_year },
+            attributes: []
+          }]
+        }),
+        Models.user.count({
+          include: [{
+            model: Models.angkatan,
+            as: 'angkatan', 
+            where: { tahun: entry_year - 1 },
+            attributes: []
+          }]
+        }),
+        Models.user.count({
+          include: [{
+            model: Models.angkatan,
+            as: 'angkatan', 
+            where: { tahun: entry_year - 2 },
+            attributes: []
+          }]
+        })
+      ]);
 
-  res.status(200).json({
-    count_datainputed,
-    count_laki,
-    count_perempuan,
-    count_siswa,
-  })
-})
+      tahunAjaran.push({
+        tahun: `${entry_year}/${entry_year + 1}`,
+        kelas_10: kelas10,
+        kelas_11: kelas11,
+        kelas_12: kelas12
+      });
+    }
+
+    res.status(200).json({
+      count_datainputed,
+      count_laki,
+      count_perempuan,
+      count_siswa,
+      tahun_ajaran: tahunAjaran
+    });
+
+  } catch (error) {
+    console.error('Error dashboard:', error);
+    res.status(500).json({ 
+      error: 'Internal server error',
+      details: error.message 
+    });
+  }
+});
 
 module.exports = router

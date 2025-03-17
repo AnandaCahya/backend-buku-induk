@@ -527,4 +527,151 @@ router.put('/data-diri', async (req, res) => {
   }
 })
 
+/**
+ * GET /siswa/data-diri/approved
+ * @summary Mengambil data siswa yang status perubahannya "approved"
+ * @tags siswa
+ * @param {string} user_id.query.required - ID pengguna yang data dirinya ingin diperiksa
+ * @return {object} 200 - Data siswa yang status perubahan-nya "approved" - application/json
+ * @return {object} 500 - Terjadi kesalahan pada server - application/json
+ * @example response - 200 - Data siswa dengan status perubahan yang sudah approved
+ * {
+ *   "id": 1,
+ *   "nama": "John Doe",
+ *   "jurusan": {
+ *     "nama": "Teknik Informatika"
+ *   },
+ *   "angkatan": {
+ *     "tahun": "2024"
+ *   },
+ *   "data_diri": { ... },
+ *   "perkembangan": { ... },
+ *   "ayah_kandung": { ... },
+ *   "ibu_kandung": { ... },
+ *   "kesehatan": { ... },
+ *   "pendidikan": { ... },
+ *   "setelah_pendidikan": { ... },
+ *   "tempat_tinggal": { ... },
+ *   "wali": { ... },
+ *   "hobi_siswa": { ... }
+ * }
+ * @example response - 500 - Kesalahan pada server
+ * {
+ *   "error": "Internal server error"
+ * }
+ */
+router.get('/data-diri/approved', async (req, res) => {
+  try {
+    const userId = req.user_id;
+
+    const approvedData = await Models.user.findOne({
+      where: {
+        id: userId,
+        [Op.or]: [
+          { '$data_diri.status_perubahan$': 'approved' },
+          { '$perkembangan.status_perubahan$': 'approved' },
+          { '$ayah_kandung.status_perubahan$': 'approved' },
+          { '$ibu_kandung.status_perubahan$': 'approved' },
+          { '$kesehatan.status_perubahan$': 'approved' },
+          { '$pendidikan.status_perubahan$': 'approved' },
+          { '$setelah_pendidikan.status_perubahan$': 'approved' },
+          { '$tempat_tinggal.status_perubahan$': 'approved' },
+          { '$wali.status_perubahan$': 'approved' },
+          { '$hobi_siswa.status_perubahan$': 'approved' },
+        ]
+      },
+      include: [
+        {
+          model: Models.jurusan,
+          as: 'jurusan',
+          attributes: ['nama'],
+        },
+        {
+          model: Models.angkatan,
+          as: 'angkatan',
+          attributes: ['tahun'],
+        },
+        {
+          model: Models.data_diri,
+          as: 'data_diri',
+          where: { status_perubahan: 'approved' },
+          required: false,
+        },
+        {
+          model: Models.perkembangan,
+          as: 'perkembangan',
+          where: { status_perubahan: 'approved' },
+          required: false,
+        },
+        {
+          model: Models.ayah_kandung,
+          as: 'ayah_kandung',
+          where: { status_perubahan: 'approved' },
+          required: false,
+        },
+        {
+          model: Models.ibu_kandung,
+          as: 'ibu_kandung',
+          where: { status_perubahan: 'approved' },
+          required: false,
+        },
+        {
+          model: Models.kesehatan,
+          as: 'kesehatan',
+          where: { status_perubahan: 'approved' },
+          required: false,
+        },
+        {
+          model: Models.pendidikan,
+          as: 'pendidikan',
+          where: { status_perubahan: 'approved' },
+          required: false,
+        },
+        {
+          model: Models.setelah_pendidikan,
+          as: 'setelah_pendidikan',
+          where: { status_perubahan: 'approved' },
+          required: false,
+        },
+        {
+          model: Models.tempat_tinggal,
+          as: 'tempat_tinggal',
+          where: { status_perubahan: 'approved' },
+          required: false,
+        },
+        {
+          model: Models.wali,
+          as: 'wali',
+          where: { status_perubahan: 'approved' },
+          required: false,
+        },
+        {
+          model: Models.hobi_siswa,
+          as: 'hobi_siswa',
+          where: { status_perubahan: 'approved' },
+          required: false,
+        },
+      ],
+    });
+
+    if (!approvedData) {
+      return res.status(404).json({ 
+        error: 'Tidak ada data perubahan yang telah disetujui' 
+      });
+    }
+
+    return res.status(200).json({
+      message: 'Data perubahan yang telah disetujui',
+      data: approvedData
+    });
+    
+  } catch (error) {
+    console.error('Error fetching approved data:', error);
+    return res.status(500).json({ 
+      error: 'Terjadi kesalahan server saat mengambil data yang telah disetujui',
+      details: error.message
+    });
+  }
+});
+
 module.exports = router
