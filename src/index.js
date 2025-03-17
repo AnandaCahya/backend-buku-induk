@@ -24,6 +24,7 @@ const nilaiController = require('./routes/Admin/AdminNilaiSiswa')
 const mapelController = require('./routes/Admin/AdminMapel')
 const AdminRaportController = require('./routes/Admin/AdminRaport')
 
+const adminDataSekolahController = require("./routes/Admin/AdminDataSekolah")
 
 //* Route siswa
 const dashboardController = require('./routes/Siswa/SiswaDashboard')
@@ -93,6 +94,7 @@ app.use('/admin', AuthMiddlewareAdmin, mapelController)
 app.use('/admin', AuthMiddlewareAdmin, AdminRaportController)
 app.use('/admin', AuthMiddlewareAdmin, adminPetugasController)
 
+app.use('/admin', AuthMiddlewareAdmin, adminDataSekolahController)
 
 // ------ Siswa
 app.use('/siswa', daftarDataController)

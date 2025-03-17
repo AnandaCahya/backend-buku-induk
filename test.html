@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Sekolah</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .school-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .logo-container {
+            margin: 20px 0;
+        }
+
+        .logo-container img {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+
+        .no-logo {
+            font-size: 18px;
+            color: #777;
+        }
+
+        .form-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .form-box {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .form-box input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .form-box input[type="file"] {
+            margin: 10px 0;
+        }
+
+        .form-box button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+
+        .form-box button:hover {
+            background-color: #45a049;
+        }
+
+        .form-box button.delete {
+            background-color: red;
+        }
+
+        .close-form {
+            color: white;
+            background-color: black;
+            padding: 5px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Data Sekolah</h1>
+        <div id="school-info">
+            <!-- Data sekolah akan muncul di sini -->
+            <p class="school-name" id="school-name">Memuat...</p>
+            <div class="logo-container" id="school-logo">
+                <!-- Logo sekolah akan muncul di sini -->
+            </div>
+            <div class="error-message" id="error-message" style="display: none;">
+                Terjadi kesalahan saat mengambil data sekolah. Coba lagi nanti.
+            </div>
+        </div>
+        <button onclick="openForm()">Ubah Data Sekolah</button>
+    </div>
+
+    <!-- Form Pop-up untuk Mengubah Nama dan Logo -->
+    <div id="form-container" class="form-container" style="display: none;">
+        <div class="form-box">
+            <button class="close-form" onclick="closeForm()">X</button>
+            <h2>Ubah Data Sekolah</h2>
+            <input type="text" id="new-school-name" placeholder="Nama Sekolah Baru" />
+            <input type="file" id="new-logo" />
+            <button onclick="updateSchoolName()">Perbarui Nama Sekolah</button>
+            <button onclick="updateSchoolLogo()">Perbarui Logo</button>
+            <button class="delete" onclick="deleteLogo()">Hapus Logo</button>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk memuat data sekolah dari API
+        async function fetchSchoolData() {
+            try {
+                const response = await fetch('http://localhost:8080/admin/data-sekolah', {
+                    headers: {
+                        "Authorization": "Bearer d9c25644-129b-491d-8d8e-d5606ecda0f5"
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Gagal memuat data sekolah');
+                }
+
+                const data = await response.json();
+                const schoolName = data.nama;
+                const schoolLogo = data.logo;
+
+                // Menampilkan nama sekolah
+                document.getElementById('school-name').textContent = schoolName;
+
+                // Menampilkan logo sekolah (jika ada)
+                const logoContainer = document.getElementById('school-logo');
+                if (schoolLogo) {
+                    logoContainer.innerHTML = `<img src="data:image/png;base64,${schoolLogo}" alt="Logo Sekolah">`;
+                } else {
+                    logoContainer.innerHTML = '<p class="no-logo">Logo tidak tersedia</p>';
+                }
+
+                // Menyembunyikan pesan kesalahan
+                document.getElementById('error-message').style.display = 'none';
+            } catch (error) {
+                console.error('Error fetching school data:', error);
+                // Menampilkan pesan kesalahan jika gagal
+                document.getElementById('error-message').style.display = 'block';
+            }
+        }
+
+        // Fungsi untuk membuka form modal
+        function openForm() {
+            document.getElementById('form-container').style.display = 'flex';
+        }
+
+        // Fungsi untuk menutup form modal
+        function closeForm() {
+            document.getElementById('form-container').style.display = 'none';
+        }
+
+        // Fungsi untuk memperbarui nama sekolah
+        async function updateSchoolName() {
+            const newName = document.getElementById('new-school-name').value;
+
+            if (!newName) {
+                alert("Nama sekolah tidak boleh kosong");
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:8080/admin/data-sekolah/nama', {
+                    method: 'POST',
+                    headers: {
+                        "Authorization": "Bearer d9c25644-129b-491d-8d8e-d5606ecda0f5",
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ nama: newName }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Gagal memperbarui nama sekolah');
+                }
+
+                // Memuat ulang data setelah berhasil update
+                fetchSchoolData();
+
+                // Menutup form setelah berhasil
+                closeForm();
+            } catch (error) {
+                console.error('Error updating school name:', error);
+            }
+        }
+
+        // Fungsi untuk memperbarui logo sekolah
+        async function updateSchoolLogo() {
+            const newLogo = document.getElementById('new-logo').files[0];
+
+            if (!newLogo) {
+                alert("File logo tidak boleh kosong");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("logo", newLogo);
+
+            try {
+                const response = await fetch('http://localhost:8080/admin/data-sekolah/logo', {
+                    method: 'POST',
+                    headers: {
+                        "Authorization": "Bearer d9c25644-129b-491d-8d8e-d5606ecda0f5" // Jangan set Content-Type di sini
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`Gagal memperbarui logo sekolah: ${errorData.message}`);
+                }
+
+                // Memuat ulang data setelah berhasil update
+                fetchSchoolData();
+            } catch (error) {
+                console.error('Error updating school logo:', error);
+            }
+        }
+
+        // Fungsi untuk menghapus logo sekolah
+        async function deleteLogo() {
+            try {
+                const response = await fetch('http://localhost:8080/admin/data-sekolah/logo', {
+                    headers: {
+                        "Authorization": "Bearer d9c25644-129b-491d-8d8e-d5606ecda0f5"
+                    },
+                    method: 'DELETE',
+                });
+
+                if (!response.ok) {
+                    throw new Error('Gagal menghapus logo');
+                }
+
+                // Memuat ulang data setelah berhasil menghapus logo
+                fetchSchoolData();
+            } catch (error) {
+                console.error('Error deleting logo:', error);
+            }
+        }
+
+        // Memuat data sekolah saat halaman pertama kali dibuka
+        window.onload = fetchSchoolData;
+    </script>
+</body>
+
+</html>
