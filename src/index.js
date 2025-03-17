@@ -26,6 +26,7 @@ const AdminRaportController = require('./routes/Admin/AdminRaport')
 
 
 //* Route siswa
+const dashboardController = require('./routes/Siswa/SiswaDashboard')
 const daftarDataController = require('./routes/Siswa/SiswaDaftar')
 const ubahDataController = require('./routes/Siswa/SiswaDataDiri')
 const siswaRaportController = require('./routes/Siswa/SiswaRaport')
@@ -95,6 +96,7 @@ app.use('/admin', AuthMiddlewareAdmin, adminPetugasController)
 
 // ------ Siswa
 app.use('/siswa', daftarDataController)
+app.use('/siswa', AuthMiddlewareSiswa, dashboardController)
 app.use('/siswa', AuthMiddlewareSiswa, ubahDataController)
 app.use('/siswa', AuthMiddlewareSiswa, siswaRaportController)
 

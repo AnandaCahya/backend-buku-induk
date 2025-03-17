@@ -1,8 +1,22 @@
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                        D A S H B O A R D
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+? Bagian ini isinya api untuk data dashboard
+! Dimohon memberikan note atau komentar pada bagian bagian route agar mempermudah development
+
+*/
+
+const { Router } = require('express')
+const { Models } = require('../../models');
+const { Op } = require('sequelize');
+
+const router = Router()
 
 router.get('/dashboard', async (req, res) => {
     try {  
-      const nilaiSiswa = await NilaiMerdeka.findAll({
+      const nilaiSiswa = await Models.nilai.findAll({
         where: {
           user_id: req.user_id,
         },
@@ -28,7 +42,6 @@ router.get('/dashboard', async (req, res) => {
       });
   
       res.json({
-        user_id: userId,
         rata_rata_per_semester: hasilRataRataPerSemester,
       });
     } catch (error) {
