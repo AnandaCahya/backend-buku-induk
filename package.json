@@ -33,7 +33,6 @@
     "mysql2": "^3.9.8",
     "nodemailer": "^6.9.13",
     "puppeteer": "^22.11.1",
-    "raw-body": "^3.0.0",
     "sequelize": "^6.37.3",
     "sequelize-auto": "^0.8.8",
     "uuid": "^9.0.1",
