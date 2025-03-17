@@ -2,21 +2,21 @@
   "development": {
     "username": "root",
     "password": "",
-    "database": "db_buku_induk_v4",
+    "database": "db_buku_induk_v100",
     "host": "localhost",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
     "password": "",
-    "database": "db_buku_induk_v4",
+    "database": "db_buku_induk_v100",
     "host": "localhost",
     "dialect": "mysql"
   },
   "production": {
     "username": "root",
     "password": "",
-    "database": "db_buku_induk_v4",
+    "database": "db_buku_induk_v100",
     "host": "localhost",
     "dialect": "mysql"
   }

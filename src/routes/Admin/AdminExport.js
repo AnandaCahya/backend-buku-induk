@@ -10,6 +10,7 @@
 
 const { Router } = require('express')
 const { Models } = require('../../models') 
+const { Op } = require('sequelize')
 const ExcelJS = require('exceljs')
 const puppeteer = require('puppeteer')
 
@@ -529,22 +530,30 @@ router.get('/export-raport-excel', async (req, res) => {
       },
     });
 
-    // Filter mata pelajaran berdasarkan semester
-    const allMapel = await Models.mapel.findAll({
+    const regularMapel = await Models.mapel.findAll({
+      where: {
+        nama: {
+          [Op.notLike]: '@%'
+        }
+      },
       attributes: ['nama'],
     });
 
+    const optionalMapel = [...new Set(nilaiData
+      .filter(nilai => nilai.mapel.nama.startsWith('@'))
+      .map(nilai => nilai.mapel.nama))];
+
     let filteredMapel;
     if (semester === '1' || semester === '2') {
-      filteredMapel = allMapel.filter(mapel => 
-        !['Mata Pelajaran Konsentrasi Keahlian', 'Projek Kreatif dan Kewirausahaan', 'Mata Pelajaran Pilihan'].includes(mapel.nama)
+      filteredMapel = regularMapel.filter(mapel => 
+        !['Mata Pelajaran Konsentrasi Keahlian', 'Projek Kreatif dan Kewirausahaan'].includes(mapel.nama)
       );
     } else if (semester === '3' || semester === '4') {
-      filteredMapel = allMapel.filter(mapel => 
+      filteredMapel = regularMapel.filter(mapel => 
         !['Seni Budaya', 'Informatika', 'Projek IPAS', 'Dasar Program Keahlian'].includes(mapel.nama)
       );
     } else if (semester === '5' || semester === '6') {
-      filteredMapel = allMapel.filter(mapel => 
+      filteredMapel = regularMapel.filter(mapel => 
         !['Pendidikan Jasmani, Olahraga, dan Kesehatan', 'Seni Budaya', 'Informatika', 'Projek IPAS', 'Dasar Program Keahlian'].includes(mapel.nama)
       );
     } else {
@@ -556,46 +565,53 @@ router.get('/export-raport-excel', async (req, res) => {
 
     let headerRow1 = ['No', 'Nama Siswa', 'NISN'];
     filteredMapel.forEach(mapel => {
-      headerRow1.push(mapel.nama, ''); 
+      headerRow1.push(mapel.nama, '');
     });
-    headerRow1.push('Ketidakhadiran', '', ''); 
+    optionalMapel.forEach(mapel => {
+      headerRow1.push(mapel.substring(1), '');
+    });
+    headerRow1.push('Ketidakhadiran', '', '');
     worksheet.addRow(headerRow1);
 
     let headerRow2 = ['', '', ''];
-    filteredMapel.forEach(() => {
+    const totalSubjects = filteredMapel.length + optionalMapel.length;
+    for (let i = 0; i < totalSubjects; i++) {
       headerRow2.push('Nilai R', 'Keterangan');
-    });
-    headerRow2.push('Sakit', 'Izin', 'Tanpa Keterangan'); 
+    }
+    headerRow2.push('Sakit', 'Izin', 'Tanpa Keterangan');
     worksheet.addRow(headerRow2);
 
-    worksheet.mergeCells('A1:A2'); 
-    worksheet.mergeCells('B1:B2'); 
-    worksheet.mergeCells('C1:C2'); 
+    worksheet.mergeCells('A1:A2');
+    worksheet.mergeCells('B1:B2');
+    worksheet.mergeCells('C1:C2');
 
-    let colIndex = 4; 
-    filteredMapel.forEach(() => {
+    let colIndex = 4;
+    for (let i = 0; i < totalSubjects; i++) {
       worksheet.mergeCells(1, colIndex, 1, colIndex + 1);
       colIndex += 2;
-    });
-
+    }
     worksheet.mergeCells(1, colIndex, 1, colIndex + 2);
 
     let index = 1;
     users.forEach(user => {
       const row = [
-        index++, 
-        user.data_diri.nama_lengkap, 
+        index++,
+        user.data_diri.nama_lengkap,
         user.nisn,
       ];
 
       filteredMapel.forEach(mapel => {
         const nilai = nilaiData.find(n => n.user_id === user.id && n.mapel.nama === mapel.nama);
-        
+        row.push(nilai ? nilai.r : '-', nilai ? nilai.keterangan : '-');
+      });
+
+      optionalMapel.forEach(mapel => {
+        const nilai = nilaiData.find(n => n.user_id === user.id && n.mapel.nama === mapel);
         row.push(nilai ? nilai.r : '-', nilai ? nilai.keterangan : '-');
       });
 
       const sia = siaData.find(s => s.user_id === user.id);
-      row.push(sia ? sia.sakit : '-', sia ? sia.izin : '-', sia ? sia.alpha : '-'); 
+      row.push(sia ? sia.sakit : '-', sia ? sia.izin : '-', sia ? sia.alpha : '-');
 
       worksheet.addRow(row);
     });
