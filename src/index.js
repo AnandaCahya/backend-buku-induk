@@ -31,6 +31,7 @@ const dashboardController = require('./routes/Siswa/SiswaDashboard')
 const daftarDataController = require('./routes/Siswa/SiswaDaftar')
 const ubahDataController = require('./routes/Siswa/SiswaDataDiri')
 const siswaRaportController = require('./routes/Siswa/SiswaRaport')
+const dataSekolahController = require("./routes/DataSekolah")
 
 //* DEV MODE
 
@@ -79,6 +80,8 @@ app.use(morgan('dev'))
 
 app.use('/auth', authControllers)
 
+app.use('/', dataSekolahController)
+
 app.use('/siswa', userControllers)
 
 // ----- Admin
@@ -101,7 +104,6 @@ app.use('/siswa', daftarDataController)
 app.use('/siswa', AuthMiddlewareSiswa, dashboardController)
 app.use('/siswa', AuthMiddlewareSiswa, ubahDataController)
 app.use('/siswa', AuthMiddlewareSiswa, siswaRaportController)
-
 
 
 app.get('/view-pdf/:id', async (req, res) => {
