@@ -332,7 +332,7 @@ router.get('/me', getMeRequest, async (req, res) => {
     where: {
       token,
     },
-    attributes: ['id', 'username', 'email', 'token'],
+    attributes: ['id', 'username', 'email', 'token', "role"],
   })
   if (admin != undefined) {
     res.json(admin)
