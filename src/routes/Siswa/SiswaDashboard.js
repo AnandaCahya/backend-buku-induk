@@ -18,7 +18,7 @@ router.get('/dashboard', async (req, res) => {
     try {  
       const nilaiSiswa = await Models.nilai.findAll({
         where: {
-          user_id: req.user_id,
+          user_id: req.user_id ?? req.query.user_id,
         },
       });
   
