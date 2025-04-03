@@ -66,12 +66,16 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
       },
       pengeluaran_per_bulan: {
-        type: DataTypes.STRING(255),
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
-      alamat_dan_no_telepon: {
+      alamat: {
         type: DataTypes.STRING(255),
-        allowNull: false,
+        allowNull: true,
+      },
+      no_telepon: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
       },
       status: {
         type: DataTypes.ENUM('masih hidup', 'meninggal'),

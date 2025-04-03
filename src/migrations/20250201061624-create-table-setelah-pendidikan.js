@@ -29,7 +29,7 @@ module.exports = {
         allowNull: true,
       },
       bekerja_penghasilan: {
-        type: Sequelize.STRING(255),
+        type: Sequelize.INTEGER,
         allowNull: true,
       },
       user_id: {

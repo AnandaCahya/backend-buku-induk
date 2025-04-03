@@ -44,7 +44,7 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: true,
       },
       bekerja_penghasilan: {
-        type: DataTypes.STRING(255),
+        type: DataTypes.INTEGER,
         allowNull: true,
       },
       user_id: {

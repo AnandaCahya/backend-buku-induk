@@ -13,7 +13,8 @@ module.exports = {
         pendidikan: null,
         pekerjaan: null,
         pengeluaran_per_bulan: null,
-        alamat_dan_no_telepon: null,
+        alamat: null,
+        no_telepon: null,
         user_id: 1,
       },
       {
@@ -25,7 +26,8 @@ module.exports = {
         pendidikan: null,
         pekerjaan: null,
         pengeluaran_per_bulan: null,
-        alamat_dan_no_telepon: null,
+        alamat: null,
+        no_telepon: null,
         user_id: 2,
       },
       {
@@ -37,7 +39,8 @@ module.exports = {
         pendidikan: null,
         pekerjaan: null,
         pengeluaran_per_bulan: null,
-        alamat_dan_no_telepon: null,
+        alamat: null,
+        no_telepon: null,
         user_id: 3,
       },
       {
@@ -49,7 +52,8 @@ module.exports = {
         pendidikan: null,
         pekerjaan: null,
         pengeluaran_per_bulan: null,
-        alamat_dan_no_telepon: null,
+        alamat: null,
+        no_telepon: null,
         user_id: 4,
       },
       {
@@ -61,7 +65,8 @@ module.exports = {
         pendidikan: null,
         pekerjaan: null,
         pengeluaran_per_bulan: null,
-        alamat_dan_no_telepon: null,
+        alamat: null,
+        no_telepon: null,
         user_id: 5,
       },
       {
@@ -73,7 +78,8 @@ module.exports = {
         pendidikan: null,
         pekerjaan: null,
         pengeluaran_per_bulan: null,
-        alamat_dan_no_telepon: null,
+        alamat: null,
+        no_telepon: null,
         user_id: 6,
       },
       {
@@ -85,7 +91,8 @@ module.exports = {
         pendidikan: null,
         pekerjaan: null,
         pengeluaran_per_bulan: null,
-        alamat_dan_no_telepon: null,
+        alamat: null,
+        no_telepon: null,
         user_id: 7,
       },
       {
@@ -96,8 +103,9 @@ module.exports = {
         kewarganegaraan: 'Indonesia',
         pendidikan: 'SMA',
         pekerjaan: 'Wiraswasta',
-        pengeluaran_per_bulan: '5.000.000',
-        alamat_dan_no_telepon: 'JL Raya Tunjungtirto No. 45, 088901234567',
+        pengeluaran_per_bulan: '5000000',
+        alamat: 'Jl. Raya Tunjungtirto',
+        no_telepon: '08123456789',
         user_id: 8,
       },
     ])

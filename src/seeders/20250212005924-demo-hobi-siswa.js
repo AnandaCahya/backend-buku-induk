@@ -35,7 +35,7 @@ module.exports = {
       {
         kesenian: null,
         olahraga: null,
-        organisasi: null,
+        organisasi: 'Pramuka',
         lain_lain: null,
         user_id: 5,
       },
@@ -55,7 +55,7 @@ module.exports = {
       },
       {
         kesenian: null,
-        olahraga: null,
+        olahraga: 'Sofball',
         organisasi: null,
         lain_lain: null,
         user_id: 8, 

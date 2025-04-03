@@ -58,6 +58,10 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
         defaultValue: 'admin',
       },
+      status: {
+        type: DataTypes.ENUM('belum aktif', 'aktif'),
+        allowNull: false,
+      },
     },
     {
       sequelize,

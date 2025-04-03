@@ -43,6 +43,10 @@ module.exports = {
         allowNull: false,
         defaultValue: 'admin',
       },
+      status: {
+        type: Sequelize.ENUM('belum aktif', 'aktif'),
+        allowNull: false,
+      },
     })
   },
 

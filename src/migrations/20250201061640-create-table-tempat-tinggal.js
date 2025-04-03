@@ -29,7 +29,7 @@ module.exports = {
         allowNull: false,
       },
       jarak_ke_sekolah: {
-        type: Sequelize.STRING(255),
+        type: Sequelize.INTEGER,
         allowNull: true,
       },
       user_id: {

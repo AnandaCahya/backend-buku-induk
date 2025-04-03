@@ -45,10 +45,14 @@ module.exports = {
         allowNull: true,
       },
       pengeluaran_per_bulan: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      alamat: {
         type: Sequelize.STRING(255),
         allowNull: true,
       },
-      alamat_dan_no_telepon: {
+      no_telepon: {
         type: Sequelize.STRING(255),
         allowNull: true,
       },

@@ -45,12 +45,16 @@ module.exports = {
         allowNull: false,
       },
       pengeluaran_per_bulan: {
-        type: Sequelize.STRING(255),
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
-      alamat_dan_no_telepon: {
+      alamat: {
         type: Sequelize.STRING(255),
-        allowNull: false,
+        allowNull: true,
+      },
+      no_telepon: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
       },
       status: {
         type: Sequelize.ENUM('masih hidup', 'meninggal'),

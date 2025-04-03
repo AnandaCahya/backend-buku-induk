@@ -65,10 +65,14 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: true,
       },
       pengeluaran_per_bulan: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      alamat: {
         type: DataTypes.STRING(255),
         allowNull: true,
       },
-      alamat_dan_no_telepon: {
+      no_telepon: {
         type: DataTypes.STRING(255),
         allowNull: true,
       },
