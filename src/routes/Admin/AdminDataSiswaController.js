@@ -12,6 +12,7 @@ const { Router } = require('express')
 const { Models } = require('../../models')
 const { Op } = require('sequelize')
 const models = require('../../models')
+const { Sequelize } = require('sequelize')
 
 const router = Router()
 
