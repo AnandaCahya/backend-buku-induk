@@ -466,7 +466,7 @@ router.put('/data-diri', async (req, res) => {
     ayah_kandung,
     ibu_kandung,
     data_diri,
-    hobi,
+    hobi_siswa,
     kesehatan,
     pendidikan,
     perkembangan,
@@ -494,8 +494,8 @@ router.put('/data-diri', async (req, res) => {
       await updateOrCreate(Models.ibu_kandung, ibu_kandung, user_id);
     }
     
-    if (hobi) {
-      await updateOrCreate(Models.hobi_siswa, hobi, user_id);
+    if (hobi_siswa) {
+      await updateOrCreate(Models.hobi_siswa, hobi_siswa, user_id);
     }
     
     if (kesehatan) {
