@@ -35,8 +35,16 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
         primaryKey: true,
       },
-      menerima_bea_siswa_tahun_kelas_dari: {
-        type: DataTypes.STRING(255),
+      menerima_bea_siswa_tahun: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      menerima_bea_siswa_kelas: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      menerima_bea_siswa_dari: {
+        type: DataTypes.STRING(50),
         allowNull: true,
       },
       meninggalkan_sekolah_ini_tanggal: {

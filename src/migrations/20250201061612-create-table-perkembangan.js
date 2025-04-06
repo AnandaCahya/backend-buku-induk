@@ -16,7 +16,15 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      menerima_bea_siswa_tahun_kelas_dari: {
+      menerima_bea_siswa_tahun: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      menerima_bea_siswa_kelas: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      menerima_bea_siswa_dari: {
         type: Sequelize.STRING(255),
         allowNull: true,
       },

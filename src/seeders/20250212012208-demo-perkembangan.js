@@ -14,7 +14,9 @@ module.exports = {
      */
     return queryInterface.bulkInsert('perkembangan', [
       {
-        menerima_bea_siswa_tahun_kelas_dari: null,
+        menerima_bea_siswa_tahun: null,
+        menerima_bea_siswa_kelas: null,
+        menerima_bea_siswa_dari: null,
         meninggalkan_sekolah_ini_tanggal: '2025-06-15',
         meninggalkan_sekolah_ini_alasan: 'Lulus',
         akhir_pendidikan_tamat_belajar_lulus_tahun: '2025',
@@ -25,7 +27,9 @@ module.exports = {
         user_id: 1,
       },
       {
-        menerima_bea_siswa_tahun_kelas_dari: null,
+        menerima_bea_siswa_tahun: null,
+        menerima_bea_siswa_kelas: null,
+        menerima_bea_siswa_dari: null,
         meninggalkan_sekolah_ini_tanggal: null,
         meninggalkan_sekolah_ini_alasan: null,
         akhir_pendidikan_tamat_belajar_lulus_tahun: null,
@@ -36,7 +40,9 @@ module.exports = {
         user_id: 2,
       },
       {
-        menerima_bea_siswa_tahun_kelas_dari: null,
+        menerima_bea_siswa_tahun: null,
+        menerima_bea_siswa_kelas: null,
+        menerima_bea_siswa_dari: null,
         meninggalkan_sekolah_ini_tanggal: null,
         meninggalkan_sekolah_ini_alasan: null,
         akhir_pendidikan_tamat_belajar_lulus_tahun: null,
@@ -47,7 +53,9 @@ module.exports = {
         user_id: 3,
       },
       {
-        menerima_bea_siswa_tahun_kelas_dari: null,
+        menerima_bea_siswa_tahun: null,
+        menerima_bea_siswa_kelas: null,
+        menerima_bea_siswa_dari: null,
         meninggalkan_sekolah_ini_tanggal: null,
         meninggalkan_sekolah_ini_alasan: null,
         akhir_pendidikan_tamat_belajar_lulus_tahun: null,
@@ -58,7 +66,9 @@ module.exports = {
         user_id: 4,
       },
       {
-        menerima_bea_siswa_tahun_kelas_dari: null,
+        menerima_bea_siswa_tahun: null,
+        menerima_bea_siswa_kelas: null,
+        menerima_bea_siswa_dari: null,
         meninggalkan_sekolah_ini_tanggal: null,
         meninggalkan_sekolah_ini_alasan: null,
         akhir_pendidikan_tamat_belajar_lulus_tahun: null,
@@ -69,7 +79,9 @@ module.exports = {
         user_id: 5,
       },
       {
-        menerima_bea_siswa_tahun_kelas_dari: null,
+        menerima_bea_siswa_tahun: null,
+        menerima_bea_siswa_kelas: null,
+        menerima_bea_siswa_dari: null,
         meninggalkan_sekolah_ini_tanggal: null,
         meninggalkan_sekolah_ini_alasan: null,
         akhir_pendidikan_tamat_belajar_lulus_tahun: null,
@@ -80,7 +92,9 @@ module.exports = {
         user_id: 6,
       },
       {
-        menerima_bea_siswa_tahun_kelas_dari: null,
+        menerima_bea_siswa_tahun: null,
+        menerima_bea_siswa_kelas: null,
+        menerima_bea_siswa_dari: null,
         meninggalkan_sekolah_ini_tanggal: null,
         meninggalkan_sekolah_ini_alasan: null,
         akhir_pendidikan_tamat_belajar_lulus_tahun: null,
@@ -91,7 +105,9 @@ module.exports = {
         user_id: 7,
       },
       {
-        menerima_bea_siswa_tahun_kelas_dari: null,
+        menerima_bea_siswa_tahun: null,
+        menerima_bea_siswa_kelas: null,
+        menerima_bea_siswa_dari: null,
         meninggalkan_sekolah_ini_tanggal: null,
         meninggalkan_sekolah_ini_alasan: null,
         akhir_pendidikan_tamat_belajar_lulus_tahun: null,
