@@ -83,18 +83,18 @@ router.post('/login-admin', loginRequest, async (req, res) => {
         action: "need_verification"
       })
     }
-    if (process.env.EMAIL == undefined) throw new Error()
+    if (process.env.USER == undefined) throw new Error()
 
     const trasnport = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.EMAIL,
+        user: process.env.USER,
         pass: process.env.PASSWORD,
       },
     })
 
     const response = trasnport.sendMail({
-      from: process.env.EMAIL,
+      from: process.env.USER,
       to: data.email,
       subject: 'Buku Induk Code',
       html: `<!DOCTYPE html>
@@ -206,8 +206,18 @@ router.post('/login-admin', loginRequest, async (req, res) => {
  * }
  */
 
-router.post("/verify/:verification_token", verificationTokenRequest, (req, res) => {
-  //Ganti status aktifasi akun 
+router.post("/verify/:verification_token", verificationTokenRequest, async (req, res) => {
+  const data = await Models.admin.findOne({
+    where: {
+      verification_token: req.params.verification_token
+    }
+  })
+
+  data.status = "aktif"
+  data.verification_token = null
+
+  data.save()
+
   res.status(200).json({
     message: "Silahkan login kembali"
    })

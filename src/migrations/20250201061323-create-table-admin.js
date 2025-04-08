@@ -38,6 +38,10 @@ module.exports = {
         type: Sequelize.STRING(5),
         allowNull: true,
       },
+      verification_token: {
+        type: Sequelize.STRING(255),
+        allowNull: true
+      },
       role: {
         type: Sequelize.STRING(50),
         allowNull: false,

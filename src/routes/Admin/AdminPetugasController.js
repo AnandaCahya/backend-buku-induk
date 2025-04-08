@@ -1,6 +1,7 @@
 const { Router } = require('express')
 const { Models } = require('../../models')
 const { v4: uuidv4 } = require('uuid')
+const nodemailer = require("nodemailer")
 
 const router = Router()
 
@@ -38,19 +39,19 @@ router.post('/petugas', async (req, res) => {
       verification_token: uuidv4()
     })
 
-    if (process.env.EMAIL == undefined) throw new Error()
+    if (process.env.USER == undefined) throw new Error()
 
     const trasnport = nodemailer.createTransport({
-      service: 'gmail',
+      service: "gmail",
       auth: {
-        user: process.env.EMAIL,
+        user: process.env.USER,
         pass: process.env.PASSWORD,
       },
     })
 
     const response = trasnport.sendMail({
-      from: process.env.EMAIL,
-      to: data.email,
+      from: process.env.USER,
+      to: newPetugas.email,
       subject: 'Buku Induk Code',
       html: `<!DOCTYPE html>
           <html>
