@@ -7,6 +7,7 @@ const {
   getMeRequest,
   loginSiswaRequest,
   codeAdminRequest,
+  verificationTokenRequest,
 } = require('../DTO/login-request')
 const nodemailer = require('nodemailer')
 const dotEnv = require('dotenv')
@@ -77,18 +78,23 @@ router.post('/login-admin', loginRequest, async (req, res) => {
   await data.save()
 
   try {
-    if (process.env.EMAIL == undefined) throw new Error()
+    if(data.role === "petugas" && data.role !== "aktif") {
+      return res.status(200).json({
+        action: "need_verification"
+      })
+    }
+    if (process.env.USER == undefined) throw new Error()
 
     const trasnport = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.EMAIL,
+        user: process.env.USER,
         pass: process.env.PASSWORD,
       },
     })
 
     const response = trasnport.sendMail({
-      from: process.env.EMAIL,
+      from: process.env.USER,
       to: data.email,
       subject: 'Buku Induk Code',
       html: `<!DOCTYPE html>
@@ -175,7 +181,46 @@ router.post('/login-admin', loginRequest, async (req, res) => {
     console.log('Error : Error send email .env is required, EMAIL, PASSWORD')
   }
 
-  res.json({ code: data.code })
+  res.json({ action: "need_code", code: data.code })
+})
+
+/**
+ * POST /auth/verify/:verification_token
+ * @summary Verifikasi akun petugas setelah masuk login
+ * @tags admin
+ * @param {string} request.params.verification_token.required - Token verifikasi yang dikirimkan ke email petugas
+ * @return {object} 200 - Token berhasil dibuat dan dikirimkan - application/json
+ * @return {object} 404 - Kode OTP salah - application/json
+ * @return {object} 500 - Terjadi kesalahan pada server - application/json
+ * @example response - 200 - Token berhasil dibuat
+ * {
+ *   "message": "Silahkan login kembali"
+ * }
+ * @example response - 404 - Verification token salah
+ * {
+ *   "message": "Verification Token tidak valid"
+ * }
+ * @example response - 500 - Kesalahan pada server
+ * {
+ *   "message": "Internal server error"
+ * }
+ */
+
+router.post("/verify/:verification_token", verificationTokenRequest, async (req, res) => {
+  const data = await Models.admin.findOne({
+    where: {
+      verification_token: req.params.verification_token
+    }
+  })
+
+  data.status = "aktif"
+  data.verification_token = null
+
+  data.save()
+
+  res.status(200).json({
+    message: "Silahkan login kembali"
+   })
 })
 
 /**
@@ -186,7 +231,7 @@ router.post('/login-admin', loginRequest, async (req, res) => {
  * @return {object} 200 - Token berhasil dibuat dan dikirimkan - application/json
  * @return {object} 404 - Kode OTP salah - application/json
  * @return {object} 500 - Terjadi kesalahan pada server - application/json
- * @example request - Verifikasi Kode OTP Admin
+ * @example request
  * {
  *   "code": "123456"
  * }

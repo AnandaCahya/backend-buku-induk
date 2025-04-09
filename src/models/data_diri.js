@@ -57,7 +57,14 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
       },
       agama: {
-        type: DataTypes.STRING(255),
+        type: DataTypes.ENUM(
+          'Islam',
+          'Kristen',
+          'Katolik',
+          'Hindu',
+          'Buddha',
+          'Konghucu',
+        ),
         allowNull: false,
       },
       kewarganegaraan: {
