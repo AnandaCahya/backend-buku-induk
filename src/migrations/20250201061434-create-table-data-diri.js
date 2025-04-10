@@ -33,7 +33,14 @@ module.exports = {
         allowNull: false,
       },
       agama: {
-        type: Sequelize.STRING(255),
+        type: Sequelize.ENUM(
+          'Islam',
+          'Kristen',
+          'Katolik',
+          'Hindu',
+          'Buddha',
+          'Konghucu',
+        ),
         allowNull: false,
       },
       kewarganegaraan: {
