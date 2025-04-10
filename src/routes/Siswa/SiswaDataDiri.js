@@ -89,7 +89,7 @@ router.get('/data-diri', async (req, res) => {
           as: 'data_diri',
           where: {
             status_data: {
-              [Op.notIn]: ['pending', 'unverified'],
+              [Op.not]: 'pending',  
             },
           },
         },
@@ -98,7 +98,7 @@ router.get('/data-diri', async (req, res) => {
           as: 'perkembangan',
           where: {
             status_data: {
-              [Op.notIn]: ['pending', 'unverified'],
+              [Op.not]: 'pending',  
             },
           },
         },
@@ -107,7 +107,7 @@ router.get('/data-diri', async (req, res) => {
           as: 'ayah_kandung',
           where: {
             status_data: {
-              [Op.notIn]: ['pending', 'unverified'],
+              [Op.not]: 'pending',  
             },
           },
         },
@@ -116,7 +116,7 @@ router.get('/data-diri', async (req, res) => {
           as: 'ibu_kandung',
           where: {
             status_data: {
-              [Op.notIn]: ['pending', 'unverified'],
+              [Op.not]: 'pending',  
             },
           },
         },
@@ -125,7 +125,7 @@ router.get('/data-diri', async (req, res) => {
           as: 'kesehatan',
           where: {
             status_data: {
-              [Op.notIn]: ['pending', 'unverified'],
+              [Op.not]: 'pending',  
             },
           },
         },
@@ -134,7 +134,7 @@ router.get('/data-diri', async (req, res) => {
           as: 'pendidikan',
           where: {
             status_data: {
-              [Op.notIn]: ['pending', 'unverified'],
+              [Op.not]: 'pending',  
             },
           },
         },
@@ -143,7 +143,7 @@ router.get('/data-diri', async (req, res) => {
           as: 'setelah_pendidikan',
           where: {
             status_data: {
-              [Op.notIn]: ['pending', 'unverified'],
+              [Op.not]: 'pending',  
             },
           },
         },
@@ -152,7 +152,7 @@ router.get('/data-diri', async (req, res) => {
           as: 'tempat_tinggal',
           where: {
             status_data: {
-              [Op.notIn]: ['pending', 'unverified'],
+              [Op.not]: 'pending',  
             },
           },
         },
@@ -161,7 +161,7 @@ router.get('/data-diri', async (req, res) => {
           as: 'wali',
           where: {
             status_data: {
-              [Op.notIn]: ['pending', 'unverified'],
+              [Op.not]: 'pending',  
             },
           },
         },
@@ -170,7 +170,7 @@ router.get('/data-diri', async (req, res) => {
           as: 'hobi_siswa',
           where: {
             status_data: {
-              [Op.notIn]: ['pending', 'unverified'],
+              [Op.not]: 'pending',  
             },
           },
         },
@@ -271,6 +271,95 @@ router.get('/data-diri', async (req, res) => {
       ],
     });
 
+    const unverifiedData = await Models.user.findOne({
+      where: {
+        id: req.user_id,
+        [Op.or]: [
+          { '$data_diri.status_data$': 'unverified' },
+          { '$perkembangan.status_data$': 'unverified' },
+          { '$ayah_kandung.status_data$': 'unverified' },
+          { '$ibu_kandung.status_data$': 'unverified' },
+          { '$kesehatan.status_data$': 'unverified' },
+          { '$pendidikan.status_data$': 'unverified' },
+          { '$setelah_pendidikan.status_data$': 'unverified' },
+          { '$tempat_tinggal.status_data$': 'unverified' },
+          { '$wali.status_data$': 'unverified' },
+          { '$hobi_siswa.status_data$': 'unverified' },
+        ]
+      },
+      include: [
+        {
+          model: Models.jurusan,
+          as: 'jurusan',
+          attributes: ['nama'],
+        },
+        {
+          model: Models.angkatan,
+          as: 'angkatan',
+          attributes: ['tahun'],
+        },
+        {
+          model: Models.data_diri,
+          as: 'data_diri',
+          where: { status_data: 'unverified' },
+          required: false,
+        },
+        {
+          model: Models.perkembangan,
+          as: 'perkembangan',
+          where: { status_data: 'unverified' },
+          required: false,
+        },
+        {
+          model: Models.ayah_kandung,
+          as: 'ayah_kandung',
+          where: { status_data: 'unverified' },
+          required: false,
+        },
+        {
+          model: Models.ibu_kandung,
+          as: 'ibu_kandung',
+          where: { status_data: 'unverified' },
+          required: false,
+        },
+        {
+          model: Models.kesehatan,
+          as: 'kesehatan',
+          where: { status_data: 'unverified' },
+          required: false,
+        },
+        {
+          model: Models.pendidikan,
+          as: 'pendidikan',
+          where: { status_data: 'unverified' },
+          required: false,
+        },
+        {
+          model: Models.setelah_pendidikan,
+          as: 'setelah_pendidikan',
+          where: { status_data: 'unverified' },
+          required: false,
+        },
+        {
+          model: Models.tempat_tinggal,
+          as: 'tempat_tinggal',
+          where: { status_data: 'unverified' },
+          required: false,
+        },
+        {
+          model: Models.wali,
+          as: 'wali',
+          where: { status_data: 'unverified' },
+          required: false,
+        },
+        {
+          model: Models.hobi_siswa,
+          as: 'hobi_siswa',
+          where: { status_data: 'unverified' },
+          required: false,
+        },
+      ],
+    });
 
     if (!user) {
       return res.status(404).json({ error: 'Data tidak ditemukan' });
@@ -279,6 +368,7 @@ router.get('/data-diri', async (req, res) => {
     res.status(200).json({
       ...user.dataValues,
       pending_changes: pendingData ? true : false,
+      need_verification: unverifiedData ? true : false,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });

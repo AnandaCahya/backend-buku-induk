@@ -744,12 +744,6 @@ router.get('/data-diri/unverified', async (req, res) => {
           required: false,
         },
         {
-          model: Models.data_diri,
-          as: 'data_diri_approved',
-          where: { status_data: 'approved' },
-          required: false,
-        },
-        {
           model: Models.perkembangan,
           as: 'perkembangan',
           where: {

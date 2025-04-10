@@ -63,90 +63,21 @@ routes.get('/akun', async (req, res) => {
           status_data: {
             [Op.not]: 'pending',
           },
-        },
-      },
-      {
-        model: Models.perkembangan,
-        as: 'perkembangan',
-        where: {
-          status_data: {
-            [Op.not]: 'pending',
-          },
-        },
-      },
-      {
-        model: Models.ayah_kandung,
-        as: 'ayah_kandung',
-        where: {
-          status_data: {
-            [Op.not]: 'pending',
-          },
-        },
-      },
-      {
-        model: Models.ibu_kandung,
-        as: 'ibu_kandung',
-        where: {
-          status_data: {
-            [Op.not]: 'pending',
-          },
-        },
-      },
-      {
-        model: Models.kesehatan,
-        as: 'kesehatan',
-        where: {
-          status_data: {
-            [Op.not]: 'pending',
-          },
-        },
-      },
-      {
-        model: Models.pendidikan,
-        as: 'pendidikan',
-        where: {
-          status_data: {
-            [Op.not]: 'pending',
-          },
-        },
-      },
-      {
-        model: Models.setelah_pendidikan,
-        as: 'setelah_pendidikan',
-        where: {
-          status_data: {
-            [Op.not]: 'pending',
-          },
-        },
-      },
-      {
-        model: Models.tempat_tinggal,
-        as: 'tempat_tinggal',
-        where: {
-          status_data: {
-            [Op.not]: 'pending',
-          },
-        },
-      },
-      {
-        model: Models.wali,
-        as: 'wali',
-        where: {
-          status_data: {
-            [Op.not]: 'pending',
-          },
-        },
-      },
-      {
-        model: Models.hobi_siswa,
-        as: 'hobi_siswa',
-        where: {
-          status_data: {
-            [Op.not]: 'pending',
-          },
+          ...(search && {
+            nama_lengkap: {
+              [Op.iLike]: `%${search}%`,
+            },
+          }),
         },
       },
     ],
+    where: {
+      ...(jurusan && { '$jurusan.nama$': jurusan }),
+      ...(angkatan && { '$angkatan.tahun$': angkatan }),
+    },
+    subQuery: false,
+    raw: true,
+    nest: true,
   })
 
   let data = userData.map((user) => {
@@ -158,13 +89,6 @@ routes.get('/akun', async (req, res) => {
       angkatan: user.angkatan.tahun,
     }
   })
-
-  if (jurusan) data = data.filter((e) => e.jurusan == jurusan)
-  if (angkatan) data = data.filter((e) => e.angkatan == angkatan)
-  if (search)
-    data = data.filter((e) =>
-      e.nama.toLowerCase().includes(search.toLowerCase())
-    )
 
   return res.json(data)
 })
@@ -282,7 +206,7 @@ routes.get('/akun/:id', async (req, res) => {
           as: 'data_diri',
           where: {
             status_data: {
-              [Op.not]: 'pending',  
+              [Op.not]: 'pending',
             },
           },
         },
@@ -291,7 +215,7 @@ routes.get('/akun/:id', async (req, res) => {
           as: 'perkembangan',
           where: {
             status_data: {
-              [Op.not]: 'pending',  
+              [Op.not]: 'pending',
             },
           },
         },
@@ -300,7 +224,7 @@ routes.get('/akun/:id', async (req, res) => {
           as: 'ayah_kandung',
           where: {
             status_data: {
-              [Op.not]: 'pending',  
+              [Op.not]: 'pending',
             },
           },
         },
@@ -309,7 +233,7 @@ routes.get('/akun/:id', async (req, res) => {
           as: 'ibu_kandung',
           where: {
             status_data: {
-              [Op.not]: 'pending',  
+              [Op.not]: 'pending',
             },
           },
         },
@@ -318,7 +242,7 @@ routes.get('/akun/:id', async (req, res) => {
           as: 'kesehatan',
           where: {
             status_data: {
-              [Op.not]: 'pending',  
+              [Op.not]: 'pending',
             },
           },
         },
@@ -327,7 +251,7 @@ routes.get('/akun/:id', async (req, res) => {
           as: 'pendidikan',
           where: {
             status_data: {
-              [Op.not]: 'pending',  
+              [Op.not]: 'pending',
             },
           },
         },
@@ -336,7 +260,7 @@ routes.get('/akun/:id', async (req, res) => {
           as: 'setelah_pendidikan',
           where: {
             status_data: {
-              [Op.not]: 'pending',  
+              [Op.not]: 'pending',
             },
           },
         },
@@ -345,7 +269,7 @@ routes.get('/akun/:id', async (req, res) => {
           as: 'tempat_tinggal',
           where: {
             status_data: {
-              [Op.not]: 'pending',  
+              [Op.not]: 'pending',
             },
           },
         },
@@ -354,7 +278,7 @@ routes.get('/akun/:id', async (req, res) => {
           as: 'wali',
           where: {
             status_data: {
-              [Op.not]: 'pending',  
+              [Op.not]: 'pending',
             },
           },
         },
@@ -363,7 +287,7 @@ routes.get('/akun/:id', async (req, res) => {
           as: 'hobi_siswa',
           where: {
             status_data: {
-              [Op.not]: 'pending',  
+              [Op.not]: 'pending',
             },
           },
         },
