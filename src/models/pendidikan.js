@@ -98,8 +98,8 @@ module.exports = function (sequelize, DataTypes) {
           key: 'id',
         },
       },
-      status_perubahan: {
-        type: DataTypes.ENUM('pending', 'approved'),
+      status_data: {
+        type: DataTypes.ENUM('pending', 'approved', 'unverified'),
         allowNull: false,
         defaultValue: "approved"
       }

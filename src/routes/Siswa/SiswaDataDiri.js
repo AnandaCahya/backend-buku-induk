@@ -88,8 +88,8 @@ router.get('/data-diri', async (req, res) => {
           model: Models.data_diri,
           as: 'data_diri',
           where: {
-            [Op.not]: {
-              status_perubahan: 'pending',
+            status_data: {
+              [Op.notIn]: ['pending', 'unverified'],
             },
           },
         },
@@ -97,8 +97,8 @@ router.get('/data-diri', async (req, res) => {
           model: Models.perkembangan,
           as: 'perkembangan',
           where: {
-            [Op.not]: {
-              status_perubahan: 'pending',
+            status_data: {
+              [Op.notIn]: ['pending', 'unverified'],
             },
           },
         },
@@ -106,8 +106,8 @@ router.get('/data-diri', async (req, res) => {
           model: Models.ayah_kandung,
           as: 'ayah_kandung',
           where: {
-            [Op.not]: {
-              status_perubahan: 'pending',
+            status_data: {
+              [Op.notIn]: ['pending', 'unverified'],
             },
           },
         },
@@ -115,8 +115,8 @@ router.get('/data-diri', async (req, res) => {
           model: Models.ibu_kandung,
           as: 'ibu_kandung',
           where: {
-            [Op.not]: {
-              status_perubahan: 'pending',
+            status_data: {
+              [Op.notIn]: ['pending', 'unverified'],
             },
           },
         },
@@ -124,8 +124,8 @@ router.get('/data-diri', async (req, res) => {
           model: Models.kesehatan,
           as: 'kesehatan',
           where: {
-            [Op.not]: {
-              status_perubahan: 'pending',
+            status_data: {
+              [Op.notIn]: ['pending', 'unverified'],
             },
           },
         },
@@ -133,8 +133,8 @@ router.get('/data-diri', async (req, res) => {
           model: Models.pendidikan,
           as: 'pendidikan',
           where: {
-            [Op.not]: {
-              status_perubahan: 'pending',
+            status_data: {
+              [Op.notIn]: ['pending', 'unverified'],
             },
           },
         },
@@ -142,8 +142,8 @@ router.get('/data-diri', async (req, res) => {
           model: Models.setelah_pendidikan,
           as: 'setelah_pendidikan',
           where: {
-            [Op.not]: {
-              status_perubahan: 'pending',
+            status_data: {
+              [Op.notIn]: ['pending', 'unverified'],
             },
           },
         },
@@ -151,8 +151,8 @@ router.get('/data-diri', async (req, res) => {
           model: Models.tempat_tinggal,
           as: 'tempat_tinggal',
           where: {
-            [Op.not]: {
-              status_perubahan: 'pending',
+            status_data: {
+              [Op.notIn]: ['pending', 'unverified'],
             },
           },
         },
@@ -160,8 +160,8 @@ router.get('/data-diri', async (req, res) => {
           model: Models.wali,
           as: 'wali',
           where: {
-            [Op.not]: {
-              status_perubahan: 'pending',
+            status_data: {
+              [Op.notIn]: ['pending', 'unverified'],
             },
           },
         },
@@ -169,8 +169,8 @@ router.get('/data-diri', async (req, res) => {
           model: Models.hobi_siswa,
           as: 'hobi_siswa',
           where: {
-            [Op.not]: {
-              status_perubahan: 'pending',
+            status_data: {
+              [Op.notIn]: ['pending', 'unverified'],
             },
           },
         },
@@ -185,16 +185,16 @@ router.get('/data-diri', async (req, res) => {
       where: {
         id: req.user_id,
         [Op.or]: [
-          { '$data_diri.status_perubahan$': 'pending' },
-          { '$perkembangan.status_perubahan$': 'pending' },
-          { '$ayah_kandung.status_perubahan$': 'pending' },
-          { '$ibu_kandung.status_perubahan$': 'pending' },
-          { '$kesehatan.status_perubahan$': 'pending' },
-          { '$pendidikan.status_perubahan$': 'pending' },
-          { '$setelah_pendidikan.status_perubahan$': 'pending' },
-          { '$tempat_tinggal.status_perubahan$': 'pending' },
-          { '$wali.status_perubahan$': 'pending' },
-          { '$hobi_siswa.status_perubahan$': 'pending' },
+          { '$data_diri.status_data$': 'pending' },
+          { '$perkembangan.status_data$': 'pending' },
+          { '$ayah_kandung.status_data$': 'pending' },
+          { '$ibu_kandung.status_data$': 'pending' },
+          { '$kesehatan.status_data$': 'pending' },
+          { '$pendidikan.status_data$': 'pending' },
+          { '$setelah_pendidikan.status_data$': 'pending' },
+          { '$tempat_tinggal.status_data$': 'pending' },
+          { '$wali.status_data$': 'pending' },
+          { '$hobi_siswa.status_data$': 'pending' },
         ]
       },
       include: [
@@ -211,61 +211,61 @@ router.get('/data-diri', async (req, res) => {
         {
           model: Models.data_diri,
           as: 'data_diri',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow data_diri to be null if no matching data found
         },
         {
           model: Models.perkembangan,
           as: 'perkembangan',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow perkembangan to be null if no matching data found
         },
         {
           model: Models.ayah_kandung,
           as: 'ayah_kandung',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow ayah_kandung to be null if no matching data found
         },
         {
           model: Models.ibu_kandung,
           as: 'ibu_kandung',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow ibu_kandung to be null if no matching data found
         },
         {
           model: Models.kesehatan,
           as: 'kesehatan',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow kesehatan to be null if no matching data found
         },
         {
           model: Models.pendidikan,
           as: 'pendidikan',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow pendidikan to be null if no matching data found
         },
         {
           model: Models.setelah_pendidikan,
           as: 'setelah_pendidikan',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow setelah_pendidikan to be null if no matching data found
         },
         {
           model: Models.tempat_tinggal,
           as: 'tempat_tinggal',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow tempat_tinggal to be null if no matching data found
         },
         {
           model: Models.wali,
           as: 'wali',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow wali to be null if no matching data found
         },
         {
           model: Models.hobi_siswa,
           as: 'hobi_siswa',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow hobi_siswa to be null if no matching data found
         },
       ],
@@ -327,16 +327,16 @@ router.get('/data-diri/pending', async (req, res) => {
       where: {
         id: userId,
         [Op.or]: [
-          { '$data_diri.status_perubahan$': 'pending' },
-          { '$perkembangan.status_perubahan$': 'pending' },
-          { '$ayah_kandung.status_perubahan$': 'pending' },
-          { '$ibu_kandung.status_perubahan$': 'pending' },
-          { '$kesehatan.status_perubahan$': 'pending' },
-          { '$pendidikan.status_perubahan$': 'pending' },
-          { '$setelah_pendidikan.status_perubahan$': 'pending' },
-          { '$tempat_tinggal.status_perubahan$': 'pending' },
-          { '$wali.status_perubahan$': 'pending' },
-          { '$hobi_siswa.status_perubahan$': 'pending' },
+          { '$data_diri.status_data$': 'pending' },
+          { '$perkembangan.status_data$': 'pending' },
+          { '$ayah_kandung.status_data$': 'pending' },
+          { '$ibu_kandung.status_data$': 'pending' },
+          { '$kesehatan.status_data$': 'pending' },
+          { '$pendidikan.status_data$': 'pending' },
+          { '$setelah_pendidikan.status_data$': 'pending' },
+          { '$tempat_tinggal.status_data$': 'pending' },
+          { '$wali.status_data$': 'pending' },
+          { '$hobi_siswa.status_data$': 'pending' },
         ]
       },
       include: [
@@ -353,61 +353,61 @@ router.get('/data-diri/pending', async (req, res) => {
         {
           model: Models.data_diri,
           as: 'data_diri',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow data_diri to be null if no matching data found
         },
         {
           model: Models.perkembangan,
           as: 'perkembangan',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow perkembangan to be null if no matching data found
         },
         {
           model: Models.ayah_kandung,
           as: 'ayah_kandung',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow ayah_kandung to be null if no matching data found
         },
         {
           model: Models.ibu_kandung,
           as: 'ibu_kandung',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow ibu_kandung to be null if no matching data found
         },
         {
           model: Models.kesehatan,
           as: 'kesehatan',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow kesehatan to be null if no matching data found
         },
         {
           model: Models.pendidikan,
           as: 'pendidikan',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow pendidikan to be null if no matching data found
         },
         {
           model: Models.setelah_pendidikan,
           as: 'setelah_pendidikan',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow setelah_pendidikan to be null if no matching data found
         },
         {
           model: Models.tempat_tinggal,
           as: 'tempat_tinggal',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow tempat_tinggal to be null if no matching data found
         },
         {
           model: Models.wali,
           as: 'wali',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow wali to be null if no matching data found
         },
         {
           model: Models.hobi_siswa,
           as: 'hobi_siswa',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow hobi_siswa to be null if no matching data found
         },
       ],
@@ -452,11 +452,11 @@ router.get('/data-diri/pending', async (req, res) => {
  * }
  */
 async function updateOrCreate(model, data, user_id) {
-  const existingData = await model.findOne({ where: { user_id, status_perubahan: 'pending' } });
+  const existingData = await model.findOne({ where: { user_id, status_data: 'pending' } });
   if (existingData) {
-    await model.update({...data, user_id }, { where: { user_id, status_perubahan: 'pending' } });
+    await model.update({ ...data, user_id }, { where: { user_id, status_data: 'pending' } });
   } else {
-    await model.create({ ...data, user_id, status_perubahan: 'pending' });
+    await model.create({ ...data, user_id, status_data: 'pending' });
   }
 }
 
@@ -481,39 +481,39 @@ router.put('/data-diri', async (req, res) => {
     if (data_diri) {
       await updateOrCreate(Models.data_diri, data_diri, user_id);
     }
-    
+
     if (wali) {
       await updateOrCreate(Models.wali, wali, user_id);
     }
-    
+
     if (ayah_kandung) {
       await updateOrCreate(Models.ayah_kandung, ayah_kandung, user_id);
     }
-    
+
     if (ibu_kandung) {
       await updateOrCreate(Models.ibu_kandung, ibu_kandung, user_id);
     }
-    
+
     if (hobi_siswa) {
       await updateOrCreate(Models.hobi_siswa, hobi_siswa, user_id);
     }
-    
+
     if (kesehatan) {
       await updateOrCreate(Models.kesehatan, kesehatan, user_id);
     }
-    
+
     if (pendidikan) {
       await updateOrCreate(Models.pendidikan, pendidikan, user_id);
     }
-    
+
     if (perkembangan) {
       await updateOrCreate(Models.perkembangan, perkembangan, user_id);
     }
-    
+
     if (setelah_pendidikan) {
       await updateOrCreate(Models.setelah_pendidikan, setelah_pendidikan, user_id);
     }
-    
+
     if (tempat_tinggal) {
       await updateOrCreate(Models.tempat_tinggal, tempat_tinggal, user_id);
     }
@@ -568,16 +568,16 @@ router.get('/data-diri/approved', async (req, res) => {
       where: {
         id: userId,
         [Op.or]: [
-          { '$data_diri.status_perubahan$': 'approved' },
-          { '$perkembangan.status_perubahan$': 'approved' },
-          { '$ayah_kandung.status_perubahan$': 'approved' },
-          { '$ibu_kandung.status_perubahan$': 'approved' },
-          { '$kesehatan.status_perubahan$': 'approved' },
-          { '$pendidikan.status_perubahan$': 'approved' },
-          { '$setelah_pendidikan.status_perubahan$': 'approved' },
-          { '$tempat_tinggal.status_perubahan$': 'approved' },
-          { '$wali.status_perubahan$': 'approved' },
-          { '$hobi_siswa.status_perubahan$': 'approved' },
+          { '$data_diri.status_data$': 'approved' },
+          { '$perkembangan.status_data$': 'approved' },
+          { '$ayah_kandung.status_data$': 'approved' },
+          { '$ibu_kandung.status_data$': 'approved' },
+          { '$kesehatan.status_data$': 'approved' },
+          { '$pendidikan.status_data$': 'approved' },
+          { '$setelah_pendidikan.status_data$': 'approved' },
+          { '$tempat_tinggal.status_data$': 'approved' },
+          { '$wali.status_data$': 'approved' },
+          { '$hobi_siswa.status_data$': 'approved' },
         ]
       },
       include: [
@@ -594,69 +594,69 @@ router.get('/data-diri/approved', async (req, res) => {
         {
           model: Models.data_diri,
           as: 'data_diri',
-          where: { status_perubahan: 'approved' },
+          where: { status_data: 'approved' },
           required: false,
         },
         {
           model: Models.perkembangan,
           as: 'perkembangan',
-          where: { status_perubahan: 'approved' },
+          where: { status_data: 'approved' },
           required: false,
         },
         {
           model: Models.ayah_kandung,
           as: 'ayah_kandung',
-          where: { status_perubahan: 'approved' },
+          where: { status_data: 'approved' },
           required: false,
         },
         {
           model: Models.ibu_kandung,
           as: 'ibu_kandung',
-          where: { status_perubahan: 'approved' },
+          where: { status_data: 'approved' },
           required: false,
         },
         {
           model: Models.kesehatan,
           as: 'kesehatan',
-          where: { status_perubahan: 'approved' },
+          where: { status_data: 'approved' },
           required: false,
         },
         {
           model: Models.pendidikan,
           as: 'pendidikan',
-          where: { status_perubahan: 'approved' },
+          where: { status_data: 'approved' },
           required: false,
         },
         {
           model: Models.setelah_pendidikan,
           as: 'setelah_pendidikan',
-          where: { status_perubahan: 'approved' },
+          where: { status_data: 'approved' },
           required: false,
         },
         {
           model: Models.tempat_tinggal,
           as: 'tempat_tinggal',
-          where: { status_perubahan: 'approved' },
+          where: { status_data: 'approved' },
           required: false,
         },
         {
           model: Models.wali,
           as: 'wali',
-          where: { status_perubahan: 'approved' },
+          where: { status_data: 'approved' },
           required: false,
         },
         {
           model: Models.hobi_siswa,
           as: 'hobi_siswa',
-          where: { status_perubahan: 'approved' },
+          where: { status_data: 'approved' },
           required: false,
         },
       ],
     });
 
     if (!approvedData) {
-      return res.status(404).json({ 
-        error: 'Tidak ada data perubahan yang telah disetujui' 
+      return res.status(404).json({
+        error: 'Tidak ada data perubahan yang telah disetujui'
       });
     }
 
@@ -664,10 +664,10 @@ router.get('/data-diri/approved', async (req, res) => {
       message: 'Data perubahan yang telah disetujui',
       data: approvedData
     });
-    
+
   } catch (error) {
     console.error('Error fetching approved data:', error);
-    return res.status(500).json({ 
+    return res.status(500).json({
       error: 'Terjadi kesalahan server saat mengambil data yang telah disetujui',
       details: error.message
     });

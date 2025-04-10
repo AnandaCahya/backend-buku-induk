@@ -77,26 +77,29 @@ router.post('/data-diri', async (req, res) => {
       const user = await Models.user.create(siswa)
   
       
-      await Models.data_diri.create({ ...data_diri, user_id: user.id })
-      await Models.hobi_siswa.create({ ...hobi, user_id: user.id })
-      await Models.ayah_kandung.create({ ...ayah_kandung, user_id: user.id })
-      await Models.ibu_kandung.create({ ...ibu_kandung, user_id: user.id })
-      await Models.kesehatan.create({ ...kesehatan, user_id: user.id })
-      await Models.pendidikan.create({ ...pendidikan, user_id: user.id })
+      await Models.data_diri.create({ ...data_diri, user_id: user.id, status_data: "unverified" })
+      await Models.hobi_siswa.create({ ...hobi, user_id: user.id, status_data: "unverified" })
+      await Models.ayah_kandung.create({ ...ayah_kandung, user_id: user.id, status_data: "unverified" })
+      await Models.ibu_kandung.create({ ...ibu_kandung, user_id: user.id, status_data: "unverified" })
+      await Models.kesehatan.create({ ...kesehatan, user_id: user.id, status_data: "unverified" })
+      await Models.pendidikan.create({ ...pendidikan, user_id: user.id, status_data: "unverified" })
       await Models.setelah_pendidikan.create({
         ...setelah_pendidikan,
         user_id: user.id,
+        status_data: "unverified"
       })
       await Models.tempat_tinggal.create({
         ...tempat_tinggal,
         user_id: user.id,
+        status_data: "unverified"
       })
       await Models.perkembangan.create({
         ...perkembangan,
-        user_id: user.id
+        user_id: user.id,
+        status_data: "unverified"
       })
   
-      await Models.wali.create({ ...wali, user_id: user.id })
+      await Models.wali.create({ ...wali, user_id: user.id, status_data: "unverified" })
   
       res.status(201).json({
         message: 'Data successfully created',
