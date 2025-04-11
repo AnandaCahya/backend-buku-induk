@@ -1031,209 +1031,55 @@ router.post('/data-diri/unverified/:id', async (req, res) => {
       }
     })
 
-    //2. Cari data non unverified buat di proses
-
-    // Fungsi untuk membersihkan data sebelum update
-    async function cleanData(data) {
-      for (const k in data) {
-        if (data[k] == null || (typeof data[k] === "string" && data[k] === "")) {
-          data[k] = null; // Set menjadi null jika kosong
-        }
-      }
-      // Hapus properti yang tidak diperlukan
-      await delete data["id"];
-      await delete data["status_data"];
-    }
-
     // 2. Cek dan proses masing-masing
     if (caripending_datadiri) {
-      let pdatadiri = caripending_datadiri.dataValues;
-      await cleanData(pdatadiri);
-      var dataterkait = await Models.data_diri.findOne({
-        where: {
-          user_id: user_id,
-          status_data: "approved"
-        }
-      });
-      await dataterkait.set(pdatadiri);
-      await dataterkait.save();
-      await Models.data_diri.destroy({
-        where: {
-          status_data: "unverified",
-          user_id: user_id
-        }
-      });
+      caripending_datadiri.status_data = "approved"
+      await caripending_datadiri.save()
     }
     
     if (caripending_ayahkandung) {
-      let payahkandung = caripending_ayahkandung.dataValues;
-      await cleanData(payahkandung);
-      var ayahkandungTerkait = await Models.ayah_kandung.findOne({
-        where: {
-          user_id: user_id,
-          status_data: "approved"
-        }
-      });
-      await ayahkandungTerkait.set(payahkandung);
-      await ayahkandungTerkait.save();
-      await Models.ayah_kandung.destroy({
-        where: {
-          status_data: "unverified",
-          user_id: user_id
-        }
-      });
+      caripending_ayahkandung.status_data = "approved"
+      await caripending_ayahkandung.save();
     }
     
     if (caripending_ibukandung) {
-      let pibukandung = caripending_ibukandung.dataValues;
-      await cleanData(pibukandung);
-      var ibukandungTerkait = await Models.ibu_kandung.findOne({
-        where: {
-          user_id: user_id,
-          status_data: "approved"
-        }
-      });
-      await ibukandungTerkait.set(pibukandung);
-      await ibukandungTerkait.save();
-      await Models.ibu_kandung.destroy({
-        where: {
-          status_data: "unverified",
-          user_id: user_id
-        }
-      });
+      caripending_ibukandung.status_data = "approved"
+      await caripending_ibukandung.save();
     }
     
     if (caripending_hobisiswa) {
-      let phobisiswa = caripending_hobisiswa.dataValues;
-      await cleanData(phobisiswa);
-      var hobisiswaTerkait = await Models.hobi_siswa.findOne({
-        where: {
-          user_id: user_id,
-          status_data: "approved"
-        }
-      });
-      await hobisiswaTerkait.set(phobisiswa);
-      await hobisiswaTerkait.save();
-      await Models.hobi_siswa.destroy({
-        where: {
-          status_data: "unverified",
-          user_id: user_id
-        }
-      });
+      caripending_hobisiswa.status_data = "approved"
+      await caripending_hobisiswa.save();
     }
     
     if (caripending_kesehatan) {
-      let pkesehatan = caripending_kesehatan.dataValues;
-      await cleanData(pkesehatan);
-      var kesehatanTerkait = await Models.kesehatan.findOne({
-        where: {
-          user_id: user_id,
-          status_data: "approved"
-        }
-      });
-      await kesehatanTerkait.set(pkesehatan);
-      await kesehatanTerkait.save();
-      await Models.kesehatan.destroy({
-        where: {
-          status_data: "unverified",
-          user_id: user_id
-        }
-      });
+      caripending_kesehatan.status_data = "approved"
+      await caripending_kesehatan.save();
     }
     
     if (caripending_pendidikan) {
-      let ppendidikan = caripending_pendidikan.dataValues;
-      await cleanData(ppendidikan);
-      var pendidikanTerkait = await Models.pendidikan.findOne({
-        where: {
-          user_id: user_id,
-          status_data: "approved"
-        }
-      });
-      await pendidikanTerkait.set(ppendidikan);
-      await pendidikanTerkait.save();
-      await Models.pendidikan.destroy({
-        where: {
-          status_data: "unverified",
-          user_id: user_id
-        }
-      });
+      caripending_pendidikan.status_data = "approved"
+      await caripending_pendidikan.save();
     }
     
     if (caripending_perkembangan) {
-      let pperkembangan = caripending_perkembangan.dataValues;
-      await cleanData(pperkembangan);
-      var perkembanganTerkait = await Models.perkembangan.findOne({
-        where: {
-          user_id: user_id,
-          status_data: "approved"
-        }
-      });
-      await perkembanganTerkait.set(pperkembangan);
-      await perkembanganTerkait.save();
-      await Models.perkembangan.destroy({
-        where: {
-          status_data: "unverified",
-          user_id: user_id
-        }
-      });
+      caripending_perkembangan.status_data = "approved"
+      await caripending_perkembangan.save();
     }
     
     if (caripending_setelahpendidikan) {
-      let psetelahpendidikan = caripending_setelahpendidikan.dataValues;
-      await cleanData(psetelahpendidikan);
-      var setelahpendidikanTerkait = await Models.setelah_pendidikan.findOne({
-        where: {
-          user_id: user_id,
-          status_data: "approved"
-        }
-      });
-      await setelahpendidikanTerkait.set(psetelahpendidikan);
-      await setelahpendidikanTerkait.save();
-      await Models.setelah_pendidikan.destroy({
-        where: {
-          status_data: "unverified",
-          user_id: user_id
-        }
-      });
+      caripending_setelahpendidikan.status_data = "approved"
+      await caripending_setelahpendidikan.save();
     }
     
     if (caripending_tempattinggal) {
-      let ptempattinggal = caripending_tempattinggal.dataValues;
-      await cleanData(ptempattinggal);
-      var tempattinggalTerkait = await Models.tempat_tinggal.findOne({
-        where: {
-          user_id: user_id,
-          status_data: "approved"
-        }
-      });
-      await tempattinggalTerkait.set(ptempattinggal);
-      await tempattinggalTerkait.save();
-      await Models.tempat_tinggal.destroy({
-        where: {
-          status_data: "unverified",
-          user_id: user_id
-        }
-      });
+      caripending_tempattinggal.status_data = "approved"
+      await caripending_tempattinggal.save();
     }
     
     if (caripending_wali) {
-      let pwali = caripending_wali.dataValues;
-      await cleanData(pwali);
-      var waliTerkait = await Models.wali.findOne({
-        where: {
-          user_id: user_id,
-          status_data: "approved"
-        }
-      });
-      await waliTerkait.set(pwali);
-      await waliTerkait.save();
-      await Models.wali.destroy({
-        where: {
-          status_data: "unverified",
-          user_id: user_id
-        }
-      });
+      caripending_wali.status_data = "approved"
+      await caripending_wali.save();
     }   
 
     return res.json({ message: 'Data successfully approved from unverified' });
@@ -1261,7 +1107,11 @@ router.delete('/data-diri/unverified/:id', async (req, res) => {
   const user_id = req.params.id;
 
   try {
-
+    await Models.user.destroy({
+      where: {
+        id: user_id
+      }
+    })
     await Models.data_diri.destroy({
       where: {
         user_id,
