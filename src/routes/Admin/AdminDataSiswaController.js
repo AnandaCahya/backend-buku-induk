@@ -1366,13 +1366,13 @@ router.get('/dashboard', async (req, res) => {
       Models.data_diri.count({ 
         where: { 
           jenis_kelamin: 'laki-laki',
-          status_perubahan: 'approved'
+          status_data: 'approved'
         } 
       }),
       Models.data_diri.count({ 
         where: { 
           jenis_kelamin: 'perempuan',
-          status_perubahan: 'approved'
+          status_data: 'approved'
         } 
       }),      
       Models.data_diri.count()
