@@ -1,8 +1,10 @@
+/* eslint-disable no-undef */
 const { Router } = require('express')
 const { Models } = require('../../models')
 const { v4: uuidv4 } = require('uuid')
 const nodemailer = require("nodemailer")
-
+const dotEnv = require('dotenv')
+dotEnv.config()
 const router = Router()
 
 /**
@@ -48,8 +50,8 @@ router.post('/petugas', async (req, res) => {
         pass: process.env.PASSWORD,
       },
     })
-
-    const response = trasnport.sendMail({
+    console.log("Sending email to:", newPetugas.email)
+    const response = await trasnport.sendMail({
       from: process.env.USER,
       to: newPetugas.email,
       subject: 'Buku Induk Code',
@@ -141,7 +143,7 @@ router.post('/petugas', async (req, res) => {
       message: "Berhasil membuat akun petugas"
     })
   } catch (error) {
-    console.error('Error creating petugas:', error)
+    console.error('Error creating petugas:', error.message)
     res.status(500).json({ message: 'Internal server error' })
   }
 })
