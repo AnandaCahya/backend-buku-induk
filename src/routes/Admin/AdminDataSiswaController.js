@@ -59,16 +59,16 @@ router.put('/data-diri/:id', async (req, res) => {
   } = req.body
 
   try {
-    await Models.ayah_kandung.update(ayah_kandung, { where: { user_id, status_perubahan: { [Op.ne]: 'pending' } } });
-    await Models.ibu_kandung.update(ibu_kandung, { where: { user_id, status_perubahan: { [Op.ne]: 'pending' } } });
-    await Models.data_diri.update(data_diri, { where: { user_id, status_perubahan: { [Op.ne]: 'pending' } } });
-    await Models.hobi_siswa.update(hobi, { where: { user_id, status_perubahan: { [Op.ne]: 'pending' } } });
-    await Models.kesehatan.update(kesehatan, { where: { user_id, status_perubahan: { [Op.ne]: 'pending' } } });
-    await Models.pendidikan.update(pendidikan, { where: { user_id, status_perubahan: { [Op.ne]: 'pending' } } });
-    await Models.perkembangan.update(perkembangan, { where: { user_id, status_perubahan: { [Op.ne]: 'pending' } } });
-    await Models.setelah_pendidikan.update(setelah_pendidikan, { where: { user_id, status_perubahan: { [Op.ne]: 'pending' } } });
-    await Models.tempat_tinggal.update(tempat_tinggal, { where: { user_id, status_perubahan: { [Op.ne]: 'pending' } } });
-    await Models.wali.update(wali, { where: { user_id, status_perubahan: { [Op.ne]: 'pending' } } });
+    await Models.ayah_kandung.update(ayah_kandung, { where: { user_id, status_data: { [Op.ne]: 'pending' } } });
+    await Models.ibu_kandung.update(ibu_kandung, { where: { user_id, status_data: { [Op.ne]: 'pending' } } });
+    await Models.data_diri.update(data_diri, { where: { user_id, status_data: { [Op.ne]: 'pending' } } });
+    await Models.hobi_siswa.update(hobi, { where: { user_id, status_data: { [Op.ne]: 'pending' } } });
+    await Models.kesehatan.update(kesehatan, { where: { user_id, status_data: { [Op.ne]: 'pending' } } });
+    await Models.pendidikan.update(pendidikan, { where: { user_id, status_data: { [Op.ne]: 'pending' } } });
+    await Models.perkembangan.update(perkembangan, { where: { user_id, status_data: { [Op.ne]: 'pending' } } });
+    await Models.setelah_pendidikan.update(setelah_pendidikan, { where: { user_id, status_data: { [Op.ne]: 'pending' } } });
+    await Models.tempat_tinggal.update(tempat_tinggal, { where: { user_id, status_data: { [Op.ne]: 'pending' } } });
+    await Models.wali.update(wali, { where: { user_id, status_data: { [Op.ne]: 'pending' } } });
 
     return res.json({ message: 'Data updated successfully' })
   } catch (error) {
@@ -105,29 +105,29 @@ router.get('/data-diri/pending', async (req, res) => {
           model: Models.data_diri,
           as: 'data_diri',
           where: {
-            status_perubahan: 'pending', // Hanya memilih yang statusnya 'pending'
+            status_data: 'pending',
           },
-          required: false, // Mengizinkan user tanpa data 'pending' di sini
+          required: false,
         },
         {
           model: Models.data_diri,
           as: 'data_diri_approved',
-          where: { status_perubahan: 'approved' },
+          where: { status_data: 'approved' },
           required: false,
         },
         {
           model: Models.perkembangan,
           as: 'perkembangan',
           where: {
-            status_perubahan: 'pending', // Hanya memilih yang statusnya 'pending'
+            status_data: 'pending',
           },
-          required: false, // Mengizinkan user tanpa data 'pending' di sini
+          required: false,
         },
         {
           model: Models.ayah_kandung,
           as: 'ayah_kandung',
           where: {
-            status_perubahan: 'pending',
+            status_data: 'pending',
           },
           required: false,
         },
@@ -135,7 +135,7 @@ router.get('/data-diri/pending', async (req, res) => {
           model: Models.ibu_kandung,
           as: 'ibu_kandung',
           where: {
-            status_perubahan: 'pending',
+            status_data: 'pending',
           },
           required: false,
         },
@@ -143,7 +143,7 @@ router.get('/data-diri/pending', async (req, res) => {
           model: Models.kesehatan,
           as: 'kesehatan',
           where: {
-            status_perubahan: 'pending',
+            status_data: 'pending',
           },
           required: false,
         },
@@ -151,7 +151,7 @@ router.get('/data-diri/pending', async (req, res) => {
           model: Models.pendidikan,
           as: 'pendidikan',
           where: {
-            status_perubahan: 'pending',
+            status_data: 'pending',
           },
           required: false,
         },
@@ -159,7 +159,7 @@ router.get('/data-diri/pending', async (req, res) => {
           model: Models.setelah_pendidikan,
           as: 'setelah_pendidikan',
           where: {
-            status_perubahan: 'pending',
+            status_data: 'pending',
           },
           required: false,
         },
@@ -167,7 +167,7 @@ router.get('/data-diri/pending', async (req, res) => {
           model: Models.tempat_tinggal,
           as: 'tempat_tinggal',
           where: {
-            status_perubahan: 'pending',
+            status_data: 'pending',
           },
           required: false,
         },
@@ -175,7 +175,7 @@ router.get('/data-diri/pending', async (req, res) => {
           model: Models.wali,
           as: 'wali',
           where: {
-            status_perubahan: 'pending',
+            status_data: 'pending',
           },
           required: false,
         },
@@ -183,23 +183,23 @@ router.get('/data-diri/pending', async (req, res) => {
           model: Models.hobi_siswa,
           as: 'hobi_siswa',
           where: {
-            status_perubahan: 'pending',
+            status_data: 'pending',
           },
           required: false,
         },
       ],
       where: {
         [Op.or]: [
-          { '$data_diri.status_perubahan$': 'pending' },
-          { '$perkembangan.status_perubahan$': 'pending' },
-          { '$ayah_kandung.status_perubahan$': 'pending' },
-          { '$ibu_kandung.status_perubahan$': 'pending' },
-          { '$kesehatan.status_perubahan$': 'pending' },
-          { '$pendidikan.status_perubahan$': 'pending' },
-          { '$setelah_pendidikan.status_perubahan$': 'pending' },
-          { '$tempat_tinggal.status_perubahan$': 'pending' },
-          { '$wali.status_perubahan$': 'pending' },
-          { '$hobi_siswa.status_perubahan$': 'pending' },
+          { '$data_diri.status_data$': 'pending' },
+          { '$perkembangan.status_data$': 'pending' },
+          { '$ayah_kandung.status_data$': 'pending' },
+          { '$ibu_kandung.status_data$': 'pending' },
+          { '$kesehatan.status_data$': 'pending' },
+          { '$pendidikan.status_data$': 'pending' },
+          { '$setelah_pendidikan.status_data$': 'pending' },
+          { '$tempat_tinggal.status_data$': 'pending' },
+          { '$wali.status_data$': 'pending' },
+          { '$hobi_siswa.status_data$': 'pending' },
         ],
       },
       distinct: true,
@@ -234,16 +234,16 @@ router.get('/data-diri/pending/:id', async (req, res) => {
       where: {
         id: user_id,
         [Op.or]: [
-          { '$data_diri.status_perubahan$': 'pending' },
-          { '$perkembangan.status_perubahan$': 'pending' },
-          { '$ayah_kandung.status_perubahan$': 'pending' },
-          { '$ibu_kandung.status_perubahan$': 'pending' },
-          { '$kesehatan.status_perubahan$': 'pending' },
-          { '$pendidikan.status_perubahan$': 'pending' },
-          { '$setelah_pendidikan.status_perubahan$': 'pending' },
-          { '$tempat_tinggal.status_perubahan$': 'pending' },
-          { '$wali.status_perubahan$': 'pending' },
-          { '$hobi_siswa.status_perubahan$': 'pending' },
+          { '$data_diri.status_data$': 'pending' },
+          { '$perkembangan.status_data$': 'pending' },
+          { '$ayah_kandung.status_data$': 'pending' },
+          { '$ibu_kandung.status_data$': 'pending' },
+          { '$kesehatan.status_data$': 'pending' },
+          { '$pendidikan.status_data$': 'pending' },
+          { '$setelah_pendidikan.status_data$': 'pending' },
+          { '$tempat_tinggal.status_data$': 'pending' },
+          { '$wali.status_data$': 'pending' },
+          { '$hobi_siswa.status_data$': 'pending' },
         ]
       },
       include: [
@@ -260,61 +260,61 @@ router.get('/data-diri/pending/:id', async (req, res) => {
         {
           model: Models.data_diri,
           as: 'data_diri',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow data_diri to be null if no matching data found
         },
         {
           model: Models.perkembangan,
           as: 'perkembangan',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow perkembangan to be null if no matching data found
         },
         {
           model: Models.ayah_kandung,
           as: 'ayah_kandung',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow ayah_kandung to be null if no matching data found
         },
         {
           model: Models.ibu_kandung,
           as: 'ibu_kandung',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow ibu_kandung to be null if no matching data found
         },
         {
           model: Models.kesehatan,
           as: 'kesehatan',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow kesehatan to be null if no matching data found
         },
         {
           model: Models.pendidikan,
           as: 'pendidikan',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow pendidikan to be null if no matching data found
         },
         {
           model: Models.setelah_pendidikan,
           as: 'setelah_pendidikan',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow setelah_pendidikan to be null if no matching data found
         },
         {
           model: Models.tempat_tinggal,
           as: 'tempat_tinggal',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow tempat_tinggal to be null if no matching data found
         },
         {
           model: Models.wali,
           as: 'wali',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow wali to be null if no matching data found
         },
         {
           model: Models.hobi_siswa,
           as: 'hobi_siswa',
-          where: { status_perubahan: 'pending' },
+          where: { status_data: 'pending' },
           required: false,  // Allow hobi_siswa to be null if no matching data found
         },
       ],
@@ -346,61 +346,61 @@ router.post('/data-diri/pending/:id', async (req, res) => {
     let caripending_datadiri = await Models.data_diri.findOne({
       where: {
         user_id: user_id,
-        status_perubahan: "pending"
+        status_data: "pending"
       }
     })
     let caripending_ayahkandung = await Models.ayah_kandung.findOne({
       where: {
         user_id: user_id,
-        status_perubahan: "pending"
+        status_data: "pending"
       }
     })
     let caripending_ibukandung = await Models.ibu_kandung.findOne({
       where: {
         user_id: user_id,
-        status_perubahan: "pending"
+        status_data: "pending"
       }
     })
     let caripending_hobisiswa = await Models.hobi_siswa.findOne({
       where: {
         user_id: user_id,
-        status_perubahan: "pending"
+        status_data: "pending"
       }
     })
     let caripending_kesehatan = await Models.kesehatan.findOne({
       where: {
         user_id: user_id,
-        status_perubahan: "pending"
+        status_data: "pending"
       }
     })
     let caripending_pendidikan = await Models.pendidikan.findOne({
       where: {
         user_id: user_id,
-        status_perubahan: "pending"
+        status_data: "pending"
       }
     })
     let caripending_perkembangan = await Models.perkembangan.findOne({
       where: {
         user_id: user_id,
-        status_perubahan: "pending"
+        status_data: "pending"
       }
     })
     let caripending_setelahpendidikan = await Models.setelah_pendidikan.findOne({
       where: {
         user_id: user_id,
-        status_perubahan: "pending"
+        status_data: "pending"
       }
     })
     let caripending_tempattinggal = await Models.tempat_tinggal.findOne({
       where: {
         user_id: user_id,
-        status_perubahan: "pending"
+        status_data: "pending"
       }
     })
     let caripending_wali = await Models.wali.findOne({
       where: {
         user_id: user_id,
-        status_perubahan: "pending"
+        status_data: "pending"
       }
     })
 
@@ -415,7 +415,7 @@ router.post('/data-diri/pending/:id', async (req, res) => {
       }
       // Hapus properti yang tidak diperlukan
       await delete data["id"];
-      await delete data["status_perubahan"];
+      await delete data["status_data"];
     }
 
     // 2. Cek dulu sikambing ini. Kalau ada lansgung update
@@ -425,14 +425,14 @@ router.post('/data-diri/pending/:id', async (req, res) => {
       var dataterkait = await Models.data_diri.findOne({
         where: {
           user_id: user_id,
-          status_perubahan: "approved"
+          status_data: "approved"
         }
       });
       await dataterkait.set(pdatadiri);
       await dataterkait.save();
       await Models.data_diri.destroy({
         where: {
-          status_perubahan: "pending",
+          status_data: "pending",
           user_id: user_id
         }
       });
@@ -444,14 +444,14 @@ router.post('/data-diri/pending/:id', async (req, res) => {
       var ayahkandungTerkait = await Models.ayah_kandung.findOne({
         where: {
           user_id: user_id,
-          status_perubahan: "approved"
+          status_data: "approved"
         }
       });
       await ayahkandungTerkait.set(payahkandung);
       await ayahkandungTerkait.save();
       await Models.ayah_kandung.destroy({
         where: {
-          status_perubahan: "pending",
+          status_data: "pending",
           user_id: user_id
         }
       });
@@ -463,14 +463,14 @@ router.post('/data-diri/pending/:id', async (req, res) => {
       var ibukandungTerkait = await Models.ibu_kandung.findOne({
         where: {
           user_id: user_id,
-          status_perubahan: "approved"
+          status_data: "approved"
         }
       });
       await ibukandungTerkait.set(pibukandung);
       await ibukandungTerkait.save();
       await Models.ibu_kandung.destroy({
         where: {
-          status_perubahan: "pending",
+          status_data: "pending",
           user_id: user_id
         }
       });
@@ -482,14 +482,14 @@ router.post('/data-diri/pending/:id', async (req, res) => {
       var hobisiswaTerkait = await Models.hobi_siswa.findOne({
         where: {
           user_id: user_id,
-          status_perubahan: "approved"
+          status_data: "approved"
         }
       });
       await hobisiswaTerkait.set(phobisiswa);
       await hobisiswaTerkait.save();
       await Models.hobi_siswa.destroy({
         where: {
-          status_perubahan: "pending",
+          status_data: "pending",
           user_id: user_id
         }
       });
@@ -501,14 +501,14 @@ router.post('/data-diri/pending/:id', async (req, res) => {
       var kesehatanTerkait = await Models.kesehatan.findOne({
         where: {
           user_id: user_id,
-          status_perubahan: "approved"
+          status_data: "approved"
         }
       });
       await kesehatanTerkait.set(pkesehatan);
       await kesehatanTerkait.save();
       await Models.kesehatan.destroy({
         where: {
-          status_perubahan: "pending",
+          status_data: "pending",
           user_id: user_id
         }
       });
@@ -520,14 +520,14 @@ router.post('/data-diri/pending/:id', async (req, res) => {
       var pendidikanTerkait = await Models.pendidikan.findOne({
         where: {
           user_id: user_id,
-          status_perubahan: "approved"
+          status_data: "approved"
         }
       });
       await pendidikanTerkait.set(ppendidikan);
       await pendidikanTerkait.save();
       await Models.pendidikan.destroy({
         where: {
-          status_perubahan: "pending",
+          status_data: "pending",
           user_id: user_id
         }
       });
@@ -539,14 +539,14 @@ router.post('/data-diri/pending/:id', async (req, res) => {
       var perkembanganTerkait = await Models.perkembangan.findOne({
         where: {
           user_id: user_id,
-          status_perubahan: "approved"
+          status_data: "approved"
         }
       });
       await perkembanganTerkait.set(pperkembangan);
       await perkembanganTerkait.save();
       await Models.perkembangan.destroy({
         where: {
-          status_perubahan: "pending",
+          status_data: "pending",
           user_id: user_id
         }
       });
@@ -558,14 +558,14 @@ router.post('/data-diri/pending/:id', async (req, res) => {
       var setelahpendidikanTerkait = await Models.setelah_pendidikan.findOne({
         where: {
           user_id: user_id,
-          status_perubahan: "approved"
+          status_data: "approved"
         }
       });
       await setelahpendidikanTerkait.set(psetelahpendidikan);
       await setelahpendidikanTerkait.save();
       await Models.setelah_pendidikan.destroy({
         where: {
-          status_perubahan: "pending",
+          status_data: "pending",
           user_id: user_id
         }
       });
@@ -577,14 +577,14 @@ router.post('/data-diri/pending/:id', async (req, res) => {
       var tempattinggalTerkait = await Models.tempat_tinggal.findOne({
         where: {
           user_id: user_id,
-          status_perubahan: "approved"
+          status_data: "approved"
         }
       });
       await tempattinggalTerkait.set(ptempattinggal);
       await tempattinggalTerkait.save();
       await Models.tempat_tinggal.destroy({
         where: {
-          status_perubahan: "pending",
+          status_data: "pending",
           user_id: user_id
         }
       });
@@ -596,14 +596,14 @@ router.post('/data-diri/pending/:id', async (req, res) => {
       var waliTerkait = await Models.wali.findOne({
         where: {
           user_id: user_id,
-          status_perubahan: "approved"
+          status_data: "approved"
         }
       });
       await waliTerkait.set(pwali);
       await waliTerkait.save();
       await Models.wali.destroy({
         where: {
-          status_perubahan: "pending",
+          status_data: "pending",
           user_id: user_id
         }
       });
@@ -639,70 +639,70 @@ router.delete('/data-diri/pending/:id', async (req, res) => {
     await Models.data_diri.destroy({
       where: {
         user_id,
-        status_perubahan: 'pending',
+        status_data: 'pending',
       }
     });
 
     await Models.ayah_kandung.destroy({
       where: {
         user_id,
-        status_perubahan: 'pending',
+        status_data: 'pending',
       }
     });
 
     await Models.ibu_kandung.destroy({
       where: {
         user_id,
-        status_perubahan: 'pending',
+        status_data: 'pending',
       }
     });
 
     await Models.hobi_siswa.destroy({
       where: {
         user_id,
-        status_perubahan: 'pending',
+        status_data: 'pending',
       }
     });
 
     await Models.kesehatan.destroy({
       where: {
         user_id,
-        status_perubahan: 'pending',
+        status_data: 'pending',
       }
     });
 
     await Models.pendidikan.destroy({
       where: {
         user_id,
-        status_perubahan: 'pending',
+        status_data: 'pending',
       }
     });
 
     await Models.perkembangan.destroy({
       where: {
         user_id,
-        status_perubahan: 'pending',
+        status_data: 'pending',
       }
     });
 
     await Models.setelah_pendidikan.destroy({
       where: {
         user_id,
-        status_perubahan: 'pending',
+        status_data: 'pending',
       }
     });
 
     await Models.tempat_tinggal.destroy({
       where: {
         user_id,
-        status_perubahan: 'pending',
+        status_data: 'pending',
       }
     });
 
     await Models.wali.destroy({
       where: {
         user_id,
-        status_perubahan: 'pending',
+        status_data: 'pending',
       }
     });
 
@@ -711,6 +711,631 @@ router.delete('/data-diri/pending/:id', async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'An error occurred while deleting the pending data' });
+  }
+});
+
+/**
+ * GET /data-diri/unverified
+ * @summary Admin melihat data siswa yang status perubahan-nya "unverified"
+ * @tags admin
+ * @return {object} 200 - Data siswa yang status perubahan-nya "unverified" - application/json
+ * @return {object} 500 - Terjadi kesalahan saat mendapatkan data - application/json
+ */
+router.get('/data-diri/unverified', async (req, res) => {
+  try {
+    const unverifiedData = await Models.user.findAll({
+      include: [
+        {
+          model: Models.jurusan,
+          as: 'jurusan',
+          attributes: ['nama'],
+        },
+        {
+          model: Models.angkatan,
+          as: 'angkatan',
+          attributes: ['tahun'],
+        },
+        {
+          model: Models.data_diri,
+          as: 'data_diri',
+          where: {
+            status_data: 'unverified',
+          },
+          required: false,
+        },
+        {
+          model: Models.perkembangan,
+          as: 'perkembangan',
+          where: {
+            status_data: 'unverified',
+          },
+          required: false,
+        },
+        {
+          model: Models.ayah_kandung,
+          as: 'ayah_kandung',
+          where: {
+            status_data: 'unverified',
+          },
+          required: false,
+        },
+        {
+          model: Models.ibu_kandung,
+          as: 'ibu_kandung',
+          where: {
+            status_data: 'unverified',
+          },
+          required: false,
+        },
+        {
+          model: Models.kesehatan,
+          as: 'kesehatan',
+          where: {
+            status_data: 'unverified',
+          },
+          required: false,
+        },
+        {
+          model: Models.pendidikan,
+          as: 'pendidikan',
+          where: {
+            status_data: 'unverified',
+          },
+          required: false,
+        },
+        {
+          model: Models.setelah_pendidikan,
+          as: 'setelah_pendidikan',
+          where: {
+            status_data: 'unverified',
+          },
+          required: false,
+        },
+        {
+          model: Models.tempat_tinggal,
+          as: 'tempat_tinggal',
+          where: {
+            status_data: 'unverified',
+          },
+          required: false,
+        },
+        {
+          model: Models.wali,
+          as: 'wali',
+          where: {
+            status_data: 'unverified',
+          },
+          required: false,
+        },
+        {
+          model: Models.hobi_siswa,
+          as: 'hobi_siswa',
+          where: {
+            status_data: 'unverified',
+          },
+          required: false,
+        },
+      ],
+      where: {
+        [Op.or]: [
+          { '$data_diri.status_data$': 'unverified' },
+          { '$perkembangan.status_data$': 'unverified' },
+          { '$ayah_kandung.status_data$': 'unverified' },
+          { '$ibu_kandung.status_data$': 'unverified' },
+          { '$kesehatan.status_data$': 'unverified' },
+          { '$pendidikan.status_data$': 'unverified' },
+          { '$setelah_pendidikan.status_data$': 'unverified' },
+          { '$tempat_tinggal.status_data$': 'unverified' },
+          { '$wali.status_data$': 'unverified' },
+          { '$hobi_siswa.status_data$': 'unverified' },
+        ],
+      },
+      distinct: true,
+    });
+
+    if (unverifiedData.length === 0) {
+      return res.status(404).json({ error: 'Tidak ada data siswa dengan status unverified' });
+    }
+
+    return res.json({ data: unverifiedData });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Terjadi kesalahan saat mendapatkan data siswa' });
+  }
+});
+
+/**
+ * GET /data-diri/unverified/{id-siswa}
+ * @summary Admin melihat data siswa tertentu yang status perubahan-nya "unverified"
+ * @tags admin
+ * @param {integer} id.path.required - ID siswa yang datanya ingin dilihat
+ * @return {object} 200 - Data siswa yang status perubahan-nya "unverified" - application/json
+ * @return {object} 404 - Data siswa tidak ditemukan atau tidak ada status unverified - application/json
+ * @return {object} 500 - Terjadi kesalahan saat mendapatkan data - application/json
+ */
+router.get('/data-diri/unverified/:id', async (req, res) => {
+  const user_id = req.params.id;
+
+  try {
+    const unverifiedData = await Models.user.findOne({
+      where: {
+        id: user_id,
+        [Op.or]: [
+          { '$data_diri.status_data$': 'unverified' },
+          { '$perkembangan.status_data$': 'unverified' },
+          { '$ayah_kandung.status_data$': 'unverified' },
+          { '$ibu_kandung.status_data$': 'unverified' },
+          { '$kesehatan.status_data$': 'unverified' },
+          { '$pendidikan.status_data$': 'unverified' },
+          { '$setelah_pendidikan.status_data$': 'unverified' },
+          { '$tempat_tinggal.status_data$': 'unverified' },
+          { '$wali.status_data$': 'unverified' },
+          { '$hobi_siswa.status_data$': 'unverified' },
+        ]
+      },
+      include: [
+        {
+          model: Models.jurusan,
+          as: 'jurusan',
+          attributes: ['nama'],
+        },
+        {
+          model: Models.angkatan,
+          as: 'angkatan',
+          attributes: ['tahun'],
+        },
+        {
+          model: Models.data_diri,
+          as: 'data_diri',
+          where: { status_data: 'unverified' },
+          required: false,
+        },
+        {
+          model: Models.perkembangan,
+          as: 'perkembangan',
+          where: { status_data: 'unverified' },
+          required: false,
+        },
+        {
+          model: Models.ayah_kandung,
+          as: 'ayah_kandung',
+          where: { status_data: 'unverified' },
+          required: false,
+        },
+        {
+          model: Models.ibu_kandung,
+          as: 'ibu_kandung',
+          where: { status_data: 'unverified' },
+          required: false,
+        },
+        {
+          model: Models.kesehatan,
+          as: 'kesehatan',
+          where: { status_data: 'unverified' },
+          required: false,
+        },
+        {
+          model: Models.pendidikan,
+          as: 'pendidikan',
+          where: { status_data: 'unverified' },
+          required: false,
+        },
+        {
+          model: Models.setelah_pendidikan,
+          as: 'setelah_pendidikan',
+          where: { status_data: 'unverified' },
+          required: false,
+        },
+        {
+          model: Models.tempat_tinggal,
+          as: 'tempat_tinggal',
+          where: { status_data: 'unverified' },
+          required: false,
+        },
+        {
+          model: Models.wali,
+          as: 'wali',
+          where: { status_data: 'unverified' },
+          required: false,
+        },
+        {
+          model: Models.hobi_siswa,
+          as: 'hobi_siswa',
+          where: { status_data: 'unverified' },
+          required: false,
+        },
+      ],
+    });
+
+    if (!unverifiedData) {
+      return res.status(404).json({ error: 'Data siswa tidak ditemukan atau tidak ada status unverified' });
+    }
+
+    return res.json({ data: unverifiedData });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Terjadi kesalahan saat mendapatkan data siswa' });
+  }
+});
+
+/**
+ * POST /data-diri/unverified/{id-siswa}
+ * @summary Admin menyetujui dan mengubah status data diri siswa yang unverified menjadi approved
+ * @tags admin
+ * @param {integer} id.path.required - ID siswa yang datanya ingin disetujui
+ * @return {object} 200 - Data berhasil disetujui - application/json
+ * @return {object} 500 - Terjadi kesalahan saat menyetujui data - application/json
+ */
+router.post('/data-diri/unverified/:id', async (req, res) => {
+  const user_id = req.params.id;
+  try {
+    //1. Cek data yang berubah
+    let caripending_datadiri = await Models.data_diri.findOne({
+      where: {
+        user_id: user_id,
+        status_data: "unverified"
+      }
+    })
+    let caripending_ayahkandung = await Models.ayah_kandung.findOne({
+      where: {
+        user_id: user_id,
+        status_data: "unverified"
+      }
+    })
+    let caripending_ibukandung = await Models.ibu_kandung.findOne({
+      where: {
+        user_id: user_id,
+        status_data: "unverified"
+      }
+    })
+    let caripending_hobisiswa = await Models.hobi_siswa.findOne({
+      where: {
+        user_id: user_id,
+        status_data: "unverified"
+      }
+    })
+    let caripending_kesehatan = await Models.kesehatan.findOne({
+      where: {
+        user_id: user_id,
+        status_data: "unverified"
+      }
+    })
+    let caripending_pendidikan = await Models.pendidikan.findOne({
+      where: {
+        user_id: user_id,
+        status_data: "unverified"
+      }
+    })
+    let caripending_perkembangan = await Models.perkembangan.findOne({
+      where: {
+        user_id: user_id,
+        status_data: "unverified"
+      }
+    })
+    let caripending_setelahpendidikan = await Models.setelah_pendidikan.findOne({
+      where: {
+        user_id: user_id,
+        status_data: "unverified"
+      }
+    })
+    let caripending_tempattinggal = await Models.tempat_tinggal.findOne({
+      where: {
+        user_id: user_id,
+        status_data: "unverified"
+      }
+    })
+    let caripending_wali = await Models.wali.findOne({
+      where: {
+        user_id: user_id,
+        status_data: "unverified"
+      }
+    })
+
+    //2. Cari data non unverified buat di proses
+
+    // Fungsi untuk membersihkan data sebelum update
+    async function cleanData(data) {
+      for (const k in data) {
+        if (data[k] == null || (typeof data[k] === "string" && data[k] === "")) {
+          data[k] = null; // Set menjadi null jika kosong
+        }
+      }
+      // Hapus properti yang tidak diperlukan
+      await delete data["id"];
+      await delete data["status_data"];
+    }
+
+    // 2. Cek dan proses masing-masing
+    if (caripending_datadiri) {
+      let pdatadiri = caripending_datadiri.dataValues;
+      await cleanData(pdatadiri);
+      var dataterkait = await Models.data_diri.findOne({
+        where: {
+          user_id: user_id,
+          status_data: "approved"
+        }
+      });
+      await dataterkait.set(pdatadiri);
+      await dataterkait.save();
+      await Models.data_diri.destroy({
+        where: {
+          status_data: "unverified",
+          user_id: user_id
+        }
+      });
+    }
+    
+    if (caripending_ayahkandung) {
+      let payahkandung = caripending_ayahkandung.dataValues;
+      await cleanData(payahkandung);
+      var ayahkandungTerkait = await Models.ayah_kandung.findOne({
+        where: {
+          user_id: user_id,
+          status_data: "approved"
+        }
+      });
+      await ayahkandungTerkait.set(payahkandung);
+      await ayahkandungTerkait.save();
+      await Models.ayah_kandung.destroy({
+        where: {
+          status_data: "unverified",
+          user_id: user_id
+        }
+      });
+    }
+    
+    if (caripending_ibukandung) {
+      let pibukandung = caripending_ibukandung.dataValues;
+      await cleanData(pibukandung);
+      var ibukandungTerkait = await Models.ibu_kandung.findOne({
+        where: {
+          user_id: user_id,
+          status_data: "approved"
+        }
+      });
+      await ibukandungTerkait.set(pibukandung);
+      await ibukandungTerkait.save();
+      await Models.ibu_kandung.destroy({
+        where: {
+          status_data: "unverified",
+          user_id: user_id
+        }
+      });
+    }
+    
+    if (caripending_hobisiswa) {
+      let phobisiswa = caripending_hobisiswa.dataValues;
+      await cleanData(phobisiswa);
+      var hobisiswaTerkait = await Models.hobi_siswa.findOne({
+        where: {
+          user_id: user_id,
+          status_data: "approved"
+        }
+      });
+      await hobisiswaTerkait.set(phobisiswa);
+      await hobisiswaTerkait.save();
+      await Models.hobi_siswa.destroy({
+        where: {
+          status_data: "unverified",
+          user_id: user_id
+        }
+      });
+    }
+    
+    if (caripending_kesehatan) {
+      let pkesehatan = caripending_kesehatan.dataValues;
+      await cleanData(pkesehatan);
+      var kesehatanTerkait = await Models.kesehatan.findOne({
+        where: {
+          user_id: user_id,
+          status_data: "approved"
+        }
+      });
+      await kesehatanTerkait.set(pkesehatan);
+      await kesehatanTerkait.save();
+      await Models.kesehatan.destroy({
+        where: {
+          status_data: "unverified",
+          user_id: user_id
+        }
+      });
+    }
+    
+    if (caripending_pendidikan) {
+      let ppendidikan = caripending_pendidikan.dataValues;
+      await cleanData(ppendidikan);
+      var pendidikanTerkait = await Models.pendidikan.findOne({
+        where: {
+          user_id: user_id,
+          status_data: "approved"
+        }
+      });
+      await pendidikanTerkait.set(ppendidikan);
+      await pendidikanTerkait.save();
+      await Models.pendidikan.destroy({
+        where: {
+          status_data: "unverified",
+          user_id: user_id
+        }
+      });
+    }
+    
+    if (caripending_perkembangan) {
+      let pperkembangan = caripending_perkembangan.dataValues;
+      await cleanData(pperkembangan);
+      var perkembanganTerkait = await Models.perkembangan.findOne({
+        where: {
+          user_id: user_id,
+          status_data: "approved"
+        }
+      });
+      await perkembanganTerkait.set(pperkembangan);
+      await perkembanganTerkait.save();
+      await Models.perkembangan.destroy({
+        where: {
+          status_data: "unverified",
+          user_id: user_id
+        }
+      });
+    }
+    
+    if (caripending_setelahpendidikan) {
+      let psetelahpendidikan = caripending_setelahpendidikan.dataValues;
+      await cleanData(psetelahpendidikan);
+      var setelahpendidikanTerkait = await Models.setelah_pendidikan.findOne({
+        where: {
+          user_id: user_id,
+          status_data: "approved"
+        }
+      });
+      await setelahpendidikanTerkait.set(psetelahpendidikan);
+      await setelahpendidikanTerkait.save();
+      await Models.setelah_pendidikan.destroy({
+        where: {
+          status_data: "unverified",
+          user_id: user_id
+        }
+      });
+    }
+    
+    if (caripending_tempattinggal) {
+      let ptempattinggal = caripending_tempattinggal.dataValues;
+      await cleanData(ptempattinggal);
+      var tempattinggalTerkait = await Models.tempat_tinggal.findOne({
+        where: {
+          user_id: user_id,
+          status_data: "approved"
+        }
+      });
+      await tempattinggalTerkait.set(ptempattinggal);
+      await tempattinggalTerkait.save();
+      await Models.tempat_tinggal.destroy({
+        where: {
+          status_data: "unverified",
+          user_id: user_id
+        }
+      });
+    }
+    
+    if (caripending_wali) {
+      let pwali = caripending_wali.dataValues;
+      await cleanData(pwali);
+      var waliTerkait = await Models.wali.findOne({
+        where: {
+          user_id: user_id,
+          status_data: "approved"
+        }
+      });
+      await waliTerkait.set(pwali);
+      await waliTerkait.save();
+      await Models.wali.destroy({
+        where: {
+          status_data: "unverified",
+          user_id: user_id
+        }
+      });
+    }   
+
+    return res.json({ message: 'Data successfully approved from unverified' });
+  } catch (error) {
+    console.error('Error:', error);
+    return res.status(500).json({ error: 'An error occurred while approving the unverified data' });
+  }
+});
+
+/**
+ * DELETE /data-diri/unverified/{id-siswa}
+ * @summary Admin menolak permintaan perubahan data dan menghapus data dengan status unverified
+ * @tags admin
+ * @param {integer} id.path.required - ID siswa yang datanya ingin ditolak
+ * @return {object} 200 - Data berhasil dihapus - application/json
+ * @return {object} 500 - Terjadi kesalahan saat menghapus data - application/json
+ * @example response - 200 - Data berhasil diperbarui
+ * { message: 'Data berhasil ditolak' }
+ * @example response - 500 - Terjadi kesalahan pada server
+ * {
+ *   "error": "An error occurred while deleting the data"
+ * }
+ */
+router.delete('/data-diri/unverified/:id', async (req, res) => {
+  const user_id = req.params.id;
+
+  try {
+
+    await Models.data_diri.destroy({
+      where: {
+        user_id,
+        status_data: 'unverified',
+      }
+    });
+
+    await Models.ayah_kandung.destroy({
+      where: {
+        user_id,
+        status_data: 'unverified',
+      }
+    });
+
+    await Models.ibu_kandung.destroy({
+      where: {
+        user_id,
+        status_data: 'unverified',
+      }
+    });
+
+    await Models.hobi_siswa.destroy({
+      where: {
+        user_id,
+        status_data: 'unverified',
+      }
+    });
+
+    await Models.kesehatan.destroy({
+      where: {
+        user_id,
+        status_data: 'unverified',
+      }
+    });
+
+    await Models.pendidikan.destroy({
+      where: {
+        user_id,
+        status_data: 'unverified',
+      }
+    });
+
+    await Models.perkembangan.destroy({
+      where: {
+        user_id,
+        status_data: 'unverified',
+      }
+    });
+
+    await Models.setelah_pendidikan.destroy({
+      where: {
+        user_id,
+        status_data: 'unverified',
+      }
+    });
+
+    await Models.tempat_tinggal.destroy({
+      where: {
+        user_id,
+        status_data: 'unverified',
+      }
+    });
+
+    await Models.wali.destroy({
+      where: {
+        user_id,
+        status_data: 'unverified',
+      }
+    });
+
+    return res.json({ message: 'Data berhasil ditolak' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'An error occurred while deleting the unverified data' });
   }
 });
 

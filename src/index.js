@@ -256,13 +256,13 @@ app.get('/view-raport', async (req, res) => {
           model: Models.data_diri,
           as: 'data_diri',
           attributes: ['nama_lengkap', 'nama_panggilan'],
-          where: { status_perubahan: 'approved' },
+          where: { status_data: 'approved' },
         },
         {
           model: Models.pendidikan,
           as: 'pendidikan',
           attributes: ['diterima_di_program_keahlian', 'diterima_di_paket_keahlian'],
-          where: { status_perubahan: 'approved' },
+          where: { status_data: 'approved' },
         },
       ],
     });

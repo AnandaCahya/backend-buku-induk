@@ -1,11 +1,11 @@
 * [33med23f90[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdarisganteng[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mbaru[m[33m)[m feat [data-diri/pending] Menambahkan bagian detail data-diri milik siswa. Siswa dapat melihat apakah dia memiliki data yang dipending atau tidak. Kemudian siswa dapat melihat perubahan datanya
 * [33ma2fa1f4[m feat [data-diri/pending] Menambahkan untuk mendapatkan detail tentang data yang dipending
 * [33m76dd5df[m feat [data-diri/pending] Menambahkan bagian pending untuk admin
-* [33m21780d5[m feat [data-diri] Menambahkan filter status_perubahan
+* [33m21780d5[m feat [data-diri] Menambahkan filter status_data
 * [33m3c4a8cb[m feat [data-diri] Merubah backend data diri
 * [33m31f27ae[m feat [migration] Mengubah beberapa migration
 * [33m51d7e96[m feat [sia] Merubah nama migration sia
-* [33mca4a159[m feat [models] Menambahkan status_perubahan untuk pemrosesan data perubahan data
+* [33mca4a159[m feat [models] Menambahkan status_data untuk pemrosesan data perubahan data
 * [33mde192dd[m fix [data-diri] Memperbaiki masalah data diri
 * [33mef3b2d8[m feat [data-diri] Menambahkan bagian edit data diri yang sesuai
 *   [33m4c92d73[m Merge branch 'main' of https://github.com/AnandaCahya/backend-buku-induk
