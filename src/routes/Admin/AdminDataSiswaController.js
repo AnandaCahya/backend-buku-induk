@@ -1213,8 +1213,18 @@ router.get('/dashboard', async (req, res) => {
   try {
     const [count_siswa, count_laki, count_perempuan, count_datainputed] = await Promise.all([
       Models.user.count(),
-      Models.data_diri.count({ where: { jenis_kelamin: 'laki-laki' } }),
-      Models.data_diri.count({ where: { jenis_kelamin: 'perempuan' } }),
+      Models.data_diri.count({ 
+        where: { 
+          jenis_kelamin: 'laki-laki',
+          status_perubahan: 'approved'
+        } 
+      }),
+      Models.data_diri.count({ 
+        where: { 
+          jenis_kelamin: 'perempuan',
+          status_perubahan: 'approved'
+        } 
+      }),      
       Models.data_diri.count()
     ]);
 

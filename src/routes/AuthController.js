@@ -57,7 +57,7 @@ function generateRandomCode(length = 5) {
 router.post('/login-admin', loginRequest, async (req, res) => {
   const { email, password } = req.body
 
-  console.log(process.env.EMAIL)
+  console.log(process.env.USER)
 
   const data = await Models.admin.findOne({
     where: {
@@ -78,7 +78,7 @@ router.post('/login-admin', loginRequest, async (req, res) => {
   await data.save()
 
   try {
-    if(data.role === "petugas" && data.role !== "aktif") {
+    if(data.role === "petugas" && data.status !== "aktif") {
       return res.status(200).json({
         action: "need_verification"
       })
