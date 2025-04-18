@@ -101,7 +101,7 @@ module.exports = {
         tanggal_lahir: '1970-05-10',
         agama: 'Islam',
         kewarganegaraan: 'Indonesia',
-        pendidikan: 'SMA',
+        pendidikan: 'SMA/SMK/MA',
         pekerjaan: 'Wiraswasta',
         pengeluaran_per_bulan: '5000000',
         alamat: 'Jl. Raya Tunjungtirto',
