@@ -92,7 +92,7 @@ module.exports = {
         nama: 'Joko Saputra',
         tempat_lahir: 'Semarang',
         tanggal_lahir: '1983-09-28',
-        agama: 'Katolik',
+        agama: 'Katholik',
         kewarganegaraan: 'Indonesia',
         pendidikan: 'SMA/SMK/MA',
         pekerjaan: 'Petani',
