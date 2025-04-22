@@ -57,7 +57,7 @@ if (process.env.NODE_ENV === 'development') {
     baseDir: __dirname,
     filesPattern: './**/*.js',
   }
-
+  
   expressJSDocSwagger(app)(options)
 } else {
   console.log('Mode Produksi')
@@ -70,6 +70,18 @@ const {
 } = require('./middleware/AuthMiddleware')
 const morgan = require('morgan')
 const { Models } = require('./models')
+
+const XLSX = require('xlsx')
+const upload = require('./middleware/upload')
+const { runBackup } = require('./utils/backupScript')
+
+
+setInterval(async () => {
+  await runBackup("daily", 24 * 60 * 60 * 1000);
+  await runBackup("weekly", 7 * 24 * 60 * 60 * 1000);
+  await runBackup("monthly", 30 * 24 * 60 * 60 * 1000);
+  await runBackup("semiAnnual", 180 * 24 * 60 * 60 * 1000);
+}, 30 * 60 * 1000);
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, '/views'))
@@ -169,7 +181,7 @@ app.get('/view-pdf/:id', async (req, res) => {
 
 app.get('/view-pdf', async (req, res) => {
   const { angkatanId, jurusanId } = req.query;
-  
+
   let data = await Models.user.findAll({
     where: {
       ...(angkatanId && { angkatan_id: angkatanId }),
@@ -414,7 +426,7 @@ app.get('/view-image-raport/:id', async (req, res) => {
     }
 
     const nilai = await Models.nilai.findAll({
-      where: { user_id: id, semester: parseInt(semester, 10) }, 
+      where: { user_id: id, semester: parseInt(semester, 10) },
       include: [
         {
           model: Models.mapel,
@@ -425,7 +437,7 @@ app.get('/view-image-raport/:id', async (req, res) => {
     });
 
     const siaData = await Models.sia.findAll({
-      where: { user_id: id, semester: parseInt(semester, 10) }, 
+      where: { user_id: id, semester: parseInt(semester, 10) },
       attributes: ['sakit', 'izin', 'alpha', 'semester'],
     });
 
@@ -440,8 +452,6 @@ app.get('/view-image-raport/:id', async (req, res) => {
   }
 });
 
-const XLSX = require('xlsx')
-const upload = require('./middleware/upload')
 
 app.post('/import-excel', upload.single('file'), async (req, res) => {
   try {
@@ -620,22 +630,22 @@ app.post('/import-raport', upload.single('file'), async (req, res) => {
       return res.status(400).json({ message: 'No file uploaded' });
     }
 
-    const { semester } = req.query; 
+    const { semester } = req.query;
     if (!semester) {
       return res.status(400).json({ message: 'Semester is required' });
     }
 
     const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
-    const sheetName = workbook.SheetNames[0]; 
+    const sheetName = workbook.SheetNames[0];
     const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
 
-    const subjectNames = data[0]; 
-    const labels = data[1]; 
-    const rows = data.slice(2); 
+    const subjectNames = data[0];
+    const labels = data[1];
+    const rows = data.slice(2);
 
     const mapelColumns = [];
     for (let i = 0; i < subjectNames.length; i++) {
-      if (labels[i] === 'Nilai R') { 
+      if (labels[i] === 'Nilai R') {
         mapelColumns.push({
           mapelName: subjectNames[i],
           nilaiIndex: i,
@@ -651,8 +661,8 @@ app.post('/import-raport', upload.single('file'), async (req, res) => {
     console.log('Mapel found in Excel:', mapelColumns.map(col => col.mapelName));
 
     for (const row of rows) {
-      const nisn = row[2]; 
-      console.log('Processing NISN:', nisn); 
+      const nisn = row[2];
+      console.log('Processing NISN:', nisn);
 
       if (!nisn) {
         console.log('Skipping row with undefined NISN:', row);
@@ -686,7 +696,7 @@ app.post('/import-raport', upload.single('file'), async (req, res) => {
           r: row[mapelColumn.nilaiIndex],
           keterangan: row[mapelColumn.keteranganIndex],
           mapel_id: mapel.id,
-          semester: parseInt(semester, 10), 
+          semester: parseInt(semester, 10),
           user_id: user.id,
         };
 
@@ -717,7 +727,7 @@ app.post('/import-raport', upload.single('file'), async (req, res) => {
         sakit: parseInteger(row[sakitIndex]),
         izin: parseInteger(row[izinIndex]),
         alpha: parseInteger(row[alphaIndex]),
-        semester: parseInt(semester, 10), 
+        semester: parseInt(semester, 10),
       };
 
       try {
@@ -754,18 +764,18 @@ app.post('/admin/import-individual-raport', upload.single('file'), async (req, r
     await Models.sia.destroy({ where: { user_id: userId } });
 
     const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
-    const sheetName = workbook.SheetNames[0]; 
+    const sheetName = workbook.SheetNames[0];
     const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
 
-    const headers = data[0]; 
-    const labels = data[1]; 
-    const rows = data.slice(2); 
+    const headers = data[0];
+    const labels = data[1];
+    const rows = data.slice(2);
 
     const semesters = [1, 2, 3, 4, 5, 6];
 
     const mapelColumns = [];
     for (let i = 1; i < headers.length; i++) { // Start from index 1 (skip first column)
-      if (labels[i] === 'Nilai R') { 
+      if (labels[i] === 'Nilai R') {
         mapelColumns.push({
           mapelName: headers[i],
           nilaiIndex: i,
