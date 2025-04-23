@@ -59,11 +59,35 @@ npm run db:seed
 Buat `.env`. Minta ke Ardian, Nanda Atau Daris
 
 ```env
-EMAIL = ""
+USER = ""
 PASSWORD = ""
 ```
 
-7. (Tambahan) Cek `src/config/config.json` sesuaikan username dan password sesuai dengan database kalian
+7. Pastikan yang satu ini sudah di konfigurasi (Catatan: Ini jika laptop atau server tidak mendeteksi mysql command)
+
+a. Pastikan sudah tau dimana xampp berada. Contohnya ini
+
+![Folder XAMPP](/assets/xampp_folder.png)
+
+b. Cari Environment dan klik yang teratas
+
+![Enviroment](/assets/start.png)
+
+c. Klik Environment Variables...
+
+![Environment click](/assets/envclick.png)
+
+d. Cari folder **/xampp/mysql/bin**. Dibuka ya. Copy yang di bagian posisi file bin nya **/xampp/mysql/bin** __dari depan sampai belakang__
+
+![Folder mysql](/assets/checkxampp.png)
+
+e. Cek **User variable for... > Path** nah disitu klik 
+
+![Path](/assets/path.png)
+
+
+
+8. (Tambahan) Cek `src/config/config.json` sesuaikan username dan password sesuai dengan database kalian
 
 ## Bagaimana cara menjalankan server?
 
