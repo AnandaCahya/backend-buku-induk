@@ -85,6 +85,10 @@ e. Cek **User variable for... > Path** nah disitu klik
 
 ![Path](/assets/path.png)
 
+f. Tambahkan disitu, tempel
+
+![Tempel directorynya](/assets/paste.png)
+
 
 
 8. (Tambahan) Cek `src/config/config.json` sesuaikan username dan password sesuai dengan database kalian
