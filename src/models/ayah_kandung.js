@@ -50,7 +50,7 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
       },
       agama: {
-        type: DataTypes.STRING(255),
+        type: DataTypes.ENUM('Islam', 'Kristen', 'Katholik', 'Hindu', 'Buddha', 'Konghucu', 'Aliran Kepercayaan'),
         allowNull: false,
       },
       kewarganegaraan: {
@@ -58,7 +58,7 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
       },
       pendidikan: {
-        type: DataTypes.STRING(255),
+        type: DataTypes.ENUM('SD', 'SMP', 'SMA/SMK/MA', 'Diploma 1 (D1)', 'Diploma 2 (D2)', 'Diploma 3 (D3)', 'Diploma 4 (D4)/Sarjana (S1)', 'Magister (S2)', 'Doktor (S3)'),
         allowNull: false,
       },
       pekerjaan: {

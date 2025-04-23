@@ -29,7 +29,7 @@ module.exports = {
         allowNull: true,
       },
       agama: {
-        type: Sequelize.STRING(255),
+        type: Sequelize.ENUM('Islam', 'Kristen', 'Katholik', 'Hindu', 'Buddha', 'Konghucu', 'Aliran Kepercayaan'),
         allowNull: true,
       },
       kewarganegaraan: {
@@ -37,7 +37,7 @@ module.exports = {
         allowNull: true,
       },
       pendidikan: {
-        type: Sequelize.STRING(255),
+        type: Sequelize.ENUM('SD', 'SMP', 'SMA/SMK/MA', 'Diploma 1 (D1)', 'Diploma 2 (D2)', 'Diploma 3 (D3)', 'Diploma 4 (D4)/Sarjana (S1)', 'Magister (S2)', 'Doktor (S3)'),
         allowNull: true,
       },
       pekerjaan: {
