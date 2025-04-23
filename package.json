@@ -1,6 +1,6 @@
 {
   "name": "backend-buku-induk",
-  "version": "1.25.1.5-dev",
+  "version": "1.25.2.O",
   "description": "",
   "main": "src/index.js",
   "scripts": {
