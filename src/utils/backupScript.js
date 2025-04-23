@@ -14,8 +14,6 @@ const now = Date.now();
 var oneMonthAgo = 30 * 24 * 60 * 60 * 1000
 
 const defaultBackupTime = {
-    minutelyBackup: now - oneMonthAgo,
-    hourlyBackup: now - oneMonthAgo,
     dailyBackup: now - oneMonthAgo,
     weeklyBackup: now - oneMonthAgo,
     monthlyBackup: now - oneMonthAgo
@@ -52,7 +50,7 @@ const runBackup = async (type, intervalMs) => {
     const now = Date.now();
     const backupTimes = loadBackupTimes();
 
-    if (now - backupTimes[`${type}Backup`] >= intervalMs) {
+    if (intervalMs && now - backupTimes[`${type}Backup`] >= intervalMs) {
         const timeString = new Date().toISOString().replace(/[:.]/g, '-');
         const folderPath = path.resolve(__dirname, '..', '..', 'backup', type);
         const filePath = path.join(folderPath, `${timeString}.sql`);
@@ -74,8 +72,49 @@ const runBackup = async (type, intervalMs) => {
             backupTimes[`${type}Backup`] = now;
             saveBackupTimes(backupTimes);
             console.log(clc.green(`✓ Backup [${type}] berhasil disimpan.`));
+            return {
+                success: true,
+                message: "Success"
+            }
         } catch (err) {
             console.error(clc.red(`✖ Gagal backup [${type}]:`), err);
+            return {
+                success: false,
+                message: err
+            }
+        }
+    } else if(!intervalMs) {
+        const timeString = new Date().toISOString().replace(/[:.]/g, '-');
+        const folderPath = path.resolve(__dirname, '..', '..', 'backup', type);
+        const filePath = path.join(folderPath, `${timeString}.sql`);
+
+        ensureDirectoryExists(folderPath);
+
+        console.log(clc.green(`→ Melakukan backup [${type}] ke ${filePath}`));
+        try {
+            await mysqldump({
+                connection: {
+                    host: dbconfig.host,
+                    user: dbconfig.username,
+                    password: dbconfig.password,
+                    database: dbconfig.database,
+                },
+                dumpToFile: filePath,
+            });
+
+            backupTimes[`${type}Backup`] = now;
+            saveBackupTimes(backupTimes);
+            console.log(clc.green(`✓ Backup [${type}] berhasil disimpan.`));
+            return {
+                success: true,
+                message: "Success"
+            }
+        } catch (err) {
+            console.error(clc.red(`✖ Gagal backup [${type}]:`), err);
+            return {
+                success: false,
+                message: err
+            }
         }
     }
 };

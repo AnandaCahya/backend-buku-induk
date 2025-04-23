@@ -4,6 +4,8 @@
 ### Node ###
 # Backup
 backup/
+backup-time.json
+src/routes/uploads
 
 # Config
 config.json*

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Admin DB Tools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
+    <div class="w-full max-w-xl bg-white rounded-lg shadow-md p-8">
+        <h1 class="text-2xl font-bold mb-6 text-gray-800">🛠️ Admin Database Tools</h1>
+
+        <!-- Export Section -->
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold mb-2 text-blue-700">📤 Export Database</h2>
+            <button id="exportBtn" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                Download Backup SQL
+            </button>
+        </div>
+
+        <!-- Import Section -->
+        <div>
+            <h2 class="text-xl font-semibold mb-2 text-green-700">📥 Import Database</h2>
+            <form id="importForm" class="space-y-4">
+                <input type="file" name="sqlfile" accept=".sql" required
+                    class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300">
+                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
+                    Import SQL
+                </button>
+            </form>
+        </div>
+
+        <!-- Notification -->
+        <div id="notification" class="mt-6 hidden p-4 rounded text-white font-medium"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('importForm');
+        const notification = document.getElementById('notification');
+
+        function showNotification(message, type = 'success') {
+            notification.classList.remove('hidden', 'bg-green-600', 'bg-red-600');
+            notification.classList.add(type === 'success' ? 'bg-green-600' : 'bg-red-600');
+            notification.innerText = message;
+
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 4000);
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            showNotification('Mengirim file...', 'success');
+
+            try {
+                const res = await fetch('http://localhost:8080/admin/database/import', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        "Authorization": "Bearer b5fb8056-7e0b-4f79-b735-fa6d0a309348"
+                    }
+                });
+
+                const text = await res.text();
+                if (res.ok) {
+                    showNotification(`✅ ${text}`, 'success');
+                } else {
+                    showNotification(`⚠️ ${text}`, 'error');
+                }
+            } catch (err) {
+                showNotification(`❌ Gagal: ${err.message}`, 'error');
+            }
+        });
+
+        document.getElementById("exportBtn").addEventListener("click", async () => {
+            try {
+                const controller = new AbortController();
+const timeout = setTimeout(() => {
+    controller.abort();
+}, 5000); // 5 detik
+
+                const res = await fetch("http://localhost:8080/admin/database/export", {
+                    headers: {
+                        "Authorization": "Bearer b5fb8056-7e0b-4f79-b735-fa6d0a309348",
+
+                    },
+                    signal: controller.signal
+                });
+
+                clearTimeout(timeout)
+
+                if (!res.ok) throw new Error("Gagal export SQL");
+
+                const blob = await res.blob();
+
+                // Ambil nama file dari header (opsional)
+                const disposition = res.headers.get("Content-Disposition");
+                const match = disposition && disposition.match(/filename="?([^"]+)"?/);
+                const filename = match ? match[1] : "backup.sql";
+
+                // Pakai blob untuk bikin URL download
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            } catch (err) {
+                alert("❌ " + err.message);
+            }
+        });
+    </script>
+</body>
+
+</html>
